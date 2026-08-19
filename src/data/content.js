@@ -193,7 +193,7 @@ export const projects = [
       'Provisioning automatizado con Bash',
       'Simulación de escenarios de falla sin riesgo',
     ],
-    links: { repo: null, demo: null },
+    links: { repo: 'https://github.com/seamnex/vagrant-lab', demo: null },
     comando: 'vagrant up --provision',
   },
   {
@@ -211,8 +211,8 @@ export const projects = [
       'Alertas basadas en SLOs, no en ruido',
       'Chaos testing básico para validar detección',
     ],
-    links: { repo: null, demo: null },
-    comando: 'docker compose up -d observability-stack',
+    links: { repo: 'https://github.com/seamnex/observability-lab', demo: null },
+    comando: 'docker compose up -d',
   },
   {
     id: 'k8s-lab',
@@ -229,8 +229,8 @@ export const projects = [
       'Health checks, readiness y liveness probes',
       'Rollback controlado de despliegues',
     ],
-    links: { repo: null, demo: null },
-    comando: 'kubectl rollout undo deployment/api',
+    links: { repo: 'https://github.com/seamnex/k8s-lab', demo: null },
+    comando: 'kubectl rollout undo deployment/demo-api',
   },
 ]
 

@@ -3,6 +3,8 @@
 Sitio personal de marca profesional: **IT Incident Manager · Incident Analyst → Junior SRE / DevOps Engineer**.
 Dark mode técnico (estilo Vercel / status page), React + Tailwind CSS + Lucide React.
 
+🔗 **En vivo:** https://portfolio-crunchy2.vercel.app
+
 ## Levantar el proyecto
 
 ```bash
