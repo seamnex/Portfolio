@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0B0F19" />
+    <!-- El SVG es el que usan los navegadores modernos; el .ico queda como
+         fallback para Safari, que no soporta favicons SVG, y para cualquier
+         cliente que pida /favicon.ico por defecto. El orden importa: el
+         navegador se queda con la última declaración que sabe interpretar. -->
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>Samuel García Baciliadis — IT Incident Manager & SRE / DevOps</title>
     <meta
       name="description"

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Terminal prompt">
+  <!-- Misma marca que el logo del nav: el prompt de terminal en cyan sobre el
+       fondo profundo del sitio.
+       Diseñado para 16 px, no para verse bien ampliado: sin borde interior
+       (a 16 px se comía 2 de cada lado y solo agregaba ruido), glifo a
+       sangre y trazos de 8/64 = 2 px reales, que es el mínimo que sobrevive
+       al antialiasing. -->
+  <rect width="64" height="64" rx="12" fill="#0B0F19"/>
+  <g fill="none" stroke="#06B6D4" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="15,19 29,32 15,45"/>
+    <line x1="38" y1="45" x2="50" y2="45"/>
+  </g>
+</svg>
