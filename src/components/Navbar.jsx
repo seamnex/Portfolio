@@ -5,6 +5,7 @@ import { profile } from '../data/content'
 const links = [
   { href: '#sobre-mi', label: 'Sobre mí' },
   { href: '#skills', label: 'Especialización' },
+  { href: '#metricas', label: 'Métricas' },
   { href: '#labs', label: 'Labs & Proyectos' },
   { href: '#trayectoria', label: 'Trayectoria' },
   { href: '#contacto', label: 'Contacto' },

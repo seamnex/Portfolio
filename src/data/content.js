@@ -46,6 +46,65 @@ export const metrics = [
   { valor: '15+', unidad: 'tools', label: 'de monitoreo, observabilidad y automatización' },
 ]
 
+// ── Métricas de los labs ─────────────────────────────────────
+// REGLA: acá va SOLO lo que está medido y tiene bitácora publicada en el repo.
+// Si un número no se puede rastrear hasta una corrida real, no entra. Un
+// entrevistador senior repregunta por el método, y "es una estimación" después
+// de haberlo puesto como resultado cuesta más caro que no haberlo puesto.
+export const labMetrics = {
+  label: 'Métricas Clave de Infraestructura',
+  titulo: 'Números que salieron de romper cosas, no de estimarlas',
+  bajada:
+    'Cada dato viene de una corrida con su bitácora publicada: entorno, método de medición y cantidad de muestras. Donde el resultado depende de una decisión de configuración, está también el costo de esa decisión.',
+  items: [
+    {
+      id: 'autohealing',
+      icono: 'HeartPulse',
+      tone: 'ok',
+      valor: '7,2',
+      unidad: 's',
+      titulo: 'Auto-healing en Kubernetes',
+      resumen: 'Recuperación a 3/3 pods Ready después de matar un pod en caliente.',
+      evidencia:
+        '66 de 66 peticiones respondieron 200: el Service sacó al pod muerto del balanceo antes de que la sonda llegara a notarlo.',
+      metodo: 'Sonda interna al Service a ~5 req/s · Kubernetes v1.36.1',
+      repo: 'https://github.com/seamnex/k8s-lab#bitácora-de-experimentos',
+    },
+    {
+      id: 'rolling',
+      icono: 'RefreshCw',
+      tone: 'accent',
+      valor: '0',
+      unidad: 'fallos',
+      titulo: 'Rolling updates sin pérdidas',
+      resumen: 'Peticiones perdidas durante el deploy, tras sumar un preStop hook de 10 s.',
+      evidencia:
+        '0 en 317 peticiones, contra 8 en 425 sin el hook (1,88 %). No eran 5xx sino código 000: kube-proxy ruteando a un nginx que ya había cerrado el listener. Se paga con un rollout ~1 s más lento.',
+      metodo: 'A/B en el mismo cluster y la misma sesión, alternando solo el hook',
+      repo: 'https://github.com/seamnex/k8s-lab#el-fix-cerrar-la-ventana-del-experimento-2',
+    },
+    {
+      id: 'mttd',
+      icono: 'Siren',
+      tone: 'crit',
+      valor: '25,6',
+      unidad: 's',
+      titulo: 'MTTD de incidentes',
+      resumen: 'Desde que la tasa de 5xx se dispara hasta que la alerta la detecta.',
+      evidencia:
+        'Baja a 11,5 s exigiendo una sola evaluación sobre el umbral, a costa de disparar con cualquier pico transitorio. MTTR total del ciclo: 75,1 s.',
+      metodo: 'Marcadores en Elasticsearch, no cronómetro · ventana 60 s, umbral 5 %',
+      repo: 'https://github.com/seamnex/observability-lab#bitácora-de-corridas',
+    },
+  ],
+  // El hallazgo que mejor distingue el perfil: cuestionar el propio instrumento.
+  nota: {
+    titulo: 'El dato que no esperaba',
+    texto:
+      '45 de los 75 segundos de MTTR no fueron el incidente: fueron mi ventana deslizante midiendo. La prueba es que ese tramo dio 45,1 s y 45,2 s en dos corridas cuyos MTTD diferían a más del doble. Es una constante del instrumento, no del sistema — y significa que parte del MTTR que se reporta al negocio es latencia de la propia observabilidad.',
+  },
+}
+
 export const about = {
   parrafos: [
     'Soy un perfil híbrido: vengo de la trinchera de la operación —la llamada a las 3 AM, el servicio caído, el cliente esperando— y hacia allí llevo las prácticas de ingeniería que evitan que esa llamada vuelva a ocurrir.',
@@ -186,15 +245,15 @@ export const projects = [
     problema:
       'Probar configuraciones de servidores y escenarios de falla en producción no es opción. Hacía falta un entorno local reproducible, descartable y versionado.',
     solucion:
-      'Laboratorio multi-VM definido por código con Vagrantfile: provisioning automatizado sobre VirtualBox, red interna entre nodos y scripts de bootstrap en Bash. Levantar el entorno completo pasó de horas de clicks a un solo comando.',
-    stack: ['Vagrant', 'VirtualBox', 'Linux', 'Bash', 'IaC'],
+      'Laboratorio multi-VM definido por código con Vagrantfile: tres nodos Ubuntu en red privada y dos capas de provisioning. Un bootstrap en Bash para el piso mínimo, y un playbook de Ansible que describe el estado final de cada rol —Nginx en los nodos app, Docker en el de monitoreo— en lugar de una secuencia de pasos.',
+    stack: ['Vagrant', 'VirtualBox', 'Ansible', 'Linux', 'Bash', 'IaC'],
     highlights: [
       'Infraestructura reproducible desde código',
-      'Provisioning automatizado con Bash',
-      'Simulación de escenarios de falla sin riesgo',
+      'Provisioning idempotente: re-ejecutable sobre un nodo en cualquier estado',
+      'Verificación real por HTTP, no solo "systemd dice started"',
     ],
     links: { repo: 'https://github.com/seamnex/vagrant-lab', demo: null },
-    comando: 'vagrant up --provision',
+    comando: 'ANSIBLE=1 vagrant up',
   },
   {
     id: 'observability-lab',
@@ -204,15 +263,15 @@ export const projects = [
     problema:
       'La detección tardía es la principal causa de un MTTR alto. Quise reproducir en laboratorio el ciclo completo: métrica → umbral → alerta → diagnóstico.',
     solucion:
-      'Stack de observabilidad containerizado con recolección de métricas y centralización de logs, dashboards de estado de servicio y alertas sobre umbrales tipo SLO. Incluye inyección deliberada de fallas para validar que la alerta dispara antes que el usuario reclame.',
-    stack: ['Docker', 'Elastic/Kibana', 'Zabbix', 'Python', 'Linux'],
+      'Stack containerizado con Elasticsearch y Kibana, más un lazo cerrado de detección y respuesta: el generador inyecta la degradación y deja un marcador, la regla de umbral la detecta y calcula el MTTD, y el runbook automático corta la falla de verdad —lo que vuelve medible el MTTR—. Los tiempos salen de restar timestamps, no de un cronómetro.',
+    stack: ['Docker', 'Elastic/Kibana', 'Python', 'Linux'],
     highlights: [
-      'Ciclo completo métrica → alerta → diagnóstico',
-      'Alertas basadas en SLOs, no en ruido',
-      'Chaos testing básico para validar detección',
+      'MTTD medido: 25,6 s — y 11,5 s con la regla más sensible',
+      'Remediación automática que actúa, no que simula',
+      'Cada parámetro de la alerta justificado, incluido el piso de muestras',
     ],
     links: { repo: 'https://github.com/seamnex/observability-lab', demo: null },
-    comando: 'docker compose up -d',
+    comando: 'python scripts/alerta_5xx.py --remediar',
   },
   {
     id: 'k8s-lab',
@@ -222,15 +281,15 @@ export const projects = [
     problema:
       'Entender la resiliencia de un sistema distribuido exige romperlo: ver qué pasa cuando un pod muere, cuando un nodo se cae o cuando un deploy sale mal.',
     solucion:
-      'Cluster local donde despliego aplicaciones containerizadas y practico self-healing, rolling updates, rollback y health checks. El objetivo es traducir cada mecanismo de Kubernetes a su equivalente operativo: cómo reduce el impacto de un incidente real.',
-    stack: ['Kubernetes', 'Docker', 'Linux', 'YAML', 'Maven'],
+      'Cluster local con cinco fallas inyectadas a mano y una bitácora de lo que midió cada una. Dos de los cinco experimentos impactaron al usuario, y uno de esos lo corregí: el rolling update perdía peticiones por una carrera entre la baja del pod del Service y el cierre del proceso. La hipótesis se verificó como A/B antes de darla por buena.',
+    stack: ['Kubernetes', 'Docker', 'GitHub Actions', 'Linux', 'YAML'],
     highlights: [
-      'Self-healing y rolling updates',
-      'Health checks, readiness y liveness probes',
-      'Rollback controlado de despliegues',
+      'preStop hook: de 8 fallos en 425 peticiones a 0 en 317',
+      'PodDisruptionBudget verificado con la Eviction API (429 al segundo desalojo)',
+      'CI que valida los manifiestos: yamllint + kubeconform en cada push',
     ],
     links: { repo: 'https://github.com/seamnex/k8s-lab', demo: null },
-    comando: 'kubectl rollout undo deployment/demo-api',
+    comando: './scripts/medir_rollout.sh nginx:1.28-alpine',
   },
 ]
 
