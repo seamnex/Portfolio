@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Github, Linkedin, Mail, MapPin, Send } from 'lucide-react'
+import { Github, Linkedin, Loader2, Mail, MapPin, Send } from 'lucide-react'
 import { contacto, profile } from '../data/content'
 import Section from './ui/Section'
 import CopyButton from './ui/CopyButton'
@@ -7,10 +7,18 @@ import StatusBadge from './ui/StatusBadge'
 
 const inicial = { nombre: '', email: '', mensaje: '' }
 
+// ID del formulario de Formspree (VITE_FORMSPREE_ID en .env / Vercel).
+// Si no está configurado, el formulario cae al comportamiento anterior —
+// abrir el cliente de correo— en vez de romperse: preferible un envío
+// incómodo a un botón que no hace nada.
+const FORMSPREE_ID = import.meta.env.VITE_FORMSPREE_ID
+const ENDPOINT = FORMSPREE_ID ? `https://formspree.io/f/${FORMSPREE_ID}` : null
+
 export default function Contact() {
   const [form, setForm] = useState(inicial)
   const [errores, setErrores] = useState({})
-  const [enviado, setEnviado] = useState(false)
+  // idle → enviando → ok | error
+  const [estado, setEstado] = useState('idle')
 
   const onChange = (e) => {
     const { name, value } = e.target
@@ -26,21 +34,48 @@ export default function Contact() {
     return e
   }
 
-  const onSubmit = (e) => {
+  const abrirMailto = () => {
+    const asunto = encodeURIComponent(`Contacto desde el portfolio — ${form.nombre}`)
+    const cuerpo = encodeURIComponent(`${form.mensaje}\n\n—\n${form.nombre}\n${form.email}`)
+    window.location.href = `mailto:${profile.email}?subject=${asunto}&body=${cuerpo}`
+  }
+
+  const onSubmit = async (e) => {
     e.preventDefault()
     const e2 = validar()
     setErrores(e2)
     if (Object.keys(e2).length) return
 
-    // Sin backend: abre el cliente de correo con el mensaje ya armado.
-    // Para producción, reemplazar por un POST a Formspree / EmailJS / API propia.
-    const asunto = encodeURIComponent(`Contacto desde el portfolio — ${form.nombre}`)
-    const cuerpo = encodeURIComponent(`${form.mensaje}\n\n—\n${form.nombre}\n${form.email}`)
-    window.location.href = `mailto:${profile.email}?subject=${asunto}&body=${cuerpo}`
+    // Sin ID configurado el sitio sigue funcionando como antes, con mailto.
+    if (!ENDPOINT) {
+      abrirMailto()
+      setEstado('ok')
+      setForm(inicial)
+      setTimeout(() => setEstado('idle'), 6000)
+      return
+    }
 
-    setEnviado(true)
-    setForm(inicial)
-    setTimeout(() => setEnviado(false), 6000)
+    setEstado('enviando')
+    try {
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          nombre: form.nombre,
+          email: form.email,
+          mensaje: form.mensaje,
+          _subject: `Contacto desde el portfolio — ${form.nombre}`,
+        }),
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      setEstado('ok')
+      setForm(inicial)
+      setTimeout(() => setEstado('idle'), 8000)
+    } catch {
+      // Sin backend propio no hay reintento que valga: lo honesto es avisar
+      // y dejar la vía directa a mano, no tragarse el error en silencio.
+      setEstado('error')
+    }
   }
 
   const inputCls = (campo) =>
@@ -108,6 +143,17 @@ export default function Contact() {
         {/* Formulario */}
         <form onSubmit={onSubmit} noValidate className="card p-6">
           <div className="space-y-4">
+            {/* Honeypot: los bots completan todo, las personas no ven este campo.
+                Formspree descarta el envío si viene con contenido. */}
+            <input
+              type="text"
+              name="_gotcha"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="hidden"
+            />
+
             <div>
               <label htmlFor="nombre" className="mb-2 block font-mono text-[11px] uppercase tracking-wider text-slate-500">
                 Nombre
@@ -156,18 +202,50 @@ export default function Contact() {
               {errores.mensaje && <p className="mt-1.5 font-mono text-[11px] text-crit">{errores.mensaje}</p>}
             </div>
 
-            <button type="submit" className="btn-primary w-full">
-              <Send size={16} /> Enviar mensaje
+            <button
+              type="submit"
+              disabled={estado === 'enviando'}
+              className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {estado === 'enviando' ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" /> Enviando…
+                </>
+              ) : (
+                <>
+                  <Send size={16} /> Enviar mensaje
+                </>
+              )}
             </button>
 
-            {enviado && (
-              <p className="rounded-lg border border-ok/30 bg-ok/10 px-4 py-3 text-center font-mono text-[12px] text-ok">
-                Mensaje preparado en tu cliente de correo. ¡Gracias por escribir!
-              </p>
-            )}
+            <div aria-live="polite">
+              {estado === 'ok' && (
+                <p className="rounded-lg border border-ok/30 bg-ok/10 px-4 py-3 text-center font-mono text-[12px] text-ok">
+                  {ENDPOINT
+                    ? 'Mensaje enviado. Te respondo dentro de las próximas 24 h hábiles.'
+                    : 'Mensaje preparado en tu cliente de correo. ¡Gracias por escribir!'}
+                </p>
+              )}
+
+              {estado === 'error' && (
+                <p className="rounded-lg border border-crit/30 bg-crit/10 px-4 py-3 text-center font-mono text-[12px] text-crit">
+                  No se pudo enviar el mensaje.{' '}
+                  <button
+                    type="button"
+                    onClick={abrirMailto}
+                    className="underline underline-offset-2 hover:text-crit/80"
+                  >
+                    Escribime por correo
+                  </button>{' '}
+                  o copiá {profile.email}.
+                </p>
+              )}
+            </div>
 
             <p className="text-center font-mono text-[10.5px] text-slate-600">
-              El formulario abre tu cliente de correo. También podés escribirme directo a {profile.email}
+              {ENDPOINT
+                ? `Respondo a la casilla que dejes acá. También podés escribirme directo a ${profile.email}`
+                : `El formulario abre tu cliente de correo. También podés escribirme directo a ${profile.email}`}
             </p>
           </div>
         </form>
