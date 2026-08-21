@@ -51,9 +51,11 @@ public/
    reales con bitácora. Pendiente: la terminal del hero sigue mostrando
    `MTTR promedio → ↓ reducción sostenida`, que es cualitativo. Si hay una cifra dura
    que se pueda compartir sin romper confidencialidad, va ahí; si no, se queda como está.
-3. **Proyectos** (`projects`): los tres labs ya tienen `links.repo`. El único con
-   `repo: null` es *MrJuan-Web* — las tarjetas ocultan el botón hasta que haya URL.
-   Nunca poner `'#'`: renderiza un botón muerto.
+3. **Proyectos** (`projects`): los tres labs tienen su `links.repo`. Al sumar uno
+   nuevo, nunca poner `'#'` — renderiza un botón muerto; con `null` la tarjeta oculta
+   el botón sola, y el CI rechaza los `'#'`.
+   La barra de filtros se arma desde las categorías que existen en `projects`: si vuelve
+   a haber un proyecto que no sea un lab, la pestaña *Proyectos Web* reaparece sola.
 4. **Formulario de contacto**: envía por **Formspree**. Requiere `VITE_FORMSPREE_ID`
    (ver `.env.example`). Sin esa variable el formulario no se rompe: vuelve al
    `mailto:` de antes.
