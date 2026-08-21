@@ -8,3 +8,6 @@ dist-ssr
 .DS_Store
 .vscode/*
 !.vscode/extensions.json
+
+# cache de fuentes del generador de la card OG (se baja solo con npm run og)
+scripts/.fuentes
