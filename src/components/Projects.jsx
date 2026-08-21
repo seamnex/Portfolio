@@ -4,11 +4,19 @@ import { projects } from '../data/content'
 import Section from './ui/Section'
 import CopyButton from './ui/CopyButton'
 
-const filtros = [
-  { id: 'todos', label: 'Todos' },
+const FILTROS_POSIBLES = [
   { id: 'DevOps Lab', label: 'DevOps Labs' },
   { id: 'Proyecto Web', label: 'Proyectos Web' },
 ]
+
+// Se ofrecen solo los filtros que tienen al menos un proyecto detrás: una
+// pestaña que no muestra nada es peor que no tener la pestaña. Y si queda una
+// sola categoría, la barra entera sobra — filtrar tres items entre "Todos" y su
+// única categoría no decide nada.
+const disponibles = FILTROS_POSIBLES.filter((f) =>
+  projects.some((p) => p.categoria.startsWith(f.id)),
+)
+const filtros = disponibles.length > 1 ? [{ id: 'todos', label: 'Todos' }, ...disponibles] : []
 
 function ProjectCard({ p }) {
   const activo = p.estado === 'Activo'
@@ -110,26 +118,28 @@ export default function Projects() {
   return (
     <Section
       id="labs"
-      label="DevOps Labs & Proyectos"
+      label="DevOps Labs"
       titulo="Lo que construyo para entender cómo se rompe"
       bajada="Cada laboratorio nace de una pregunta operativa concreta. No son ejercicios de curso: son entornos donde reproduzco fallas, mido detección y valido que la respuesta funcione antes de necesitarla en producción."
     >
-      <div className="mb-8 flex flex-wrap gap-2">
-        {filtros.map((f) => (
-          <button
-            key={f.id}
-            type="button"
-            onClick={() => setFiltro(f.id)}
-            className={`rounded-lg border px-4 py-2 font-mono text-[11.5px] transition-all ${
-              filtro === f.id
-                ? 'border-accent/50 bg-accent/10 text-accent'
-                : 'border-base-600 text-slate-400 hover:border-accent/30 hover:text-white'
-            }`}
-          >
-            {f.label}
-          </button>
-        ))}
-      </div>
+      {filtros.length > 0 && (
+        <div className="mb-8 flex flex-wrap gap-2">
+          {filtros.map((f) => (
+            <button
+              key={f.id}
+              type="button"
+              onClick={() => setFiltro(f.id)}
+              className={`rounded-lg border px-4 py-2 font-mono text-[11.5px] transition-all ${
+                filtro === f.id
+                  ? 'border-accent/50 bg-accent/10 text-accent'
+                  : 'border-base-600 text-slate-400 hover:border-accent/30 hover:text-white'
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="grid gap-5 md:grid-cols-2">
         {visibles.map((p) => (

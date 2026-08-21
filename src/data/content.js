@@ -220,24 +220,6 @@ export const skills = [
 
 export const projects = [
   {
-    id: 'cerberus',
-    titulo: 'Play Cerberus',
-    categoria: 'Proyecto Web · Full Stack',
-    estado: 'Activo',
-    problema:
-      'Necesitaba un proyecto real —no un tutorial— para consolidar frontend moderno y despliegue: un portal de juegos con catálogo dinámico, navegación fluida y backend propio.',
-    solucion:
-      'Construí el sitio con React en el front y Node.js del lado del servidor, con componentes reutilizables, ruteo y estilos propios. Sirvió además como banco de pruebas de build, deploy y control de versiones.',
-    stack: ['React', 'Node.js', 'JavaScript', 'HTML5', 'CSS3', 'Git'],
-    highlights: [
-      'Arquitectura de componentes reutilizables',
-      'Backend propio con Node.js',
-      'Despliegue y versionado con Git',
-    ],
-    // Cuando publiques el repo, poné la URL acá y el botón "Código" aparece solo.
-    links: { repo: null, demo: null },
-  },
-  {
     id: 'vagrant-lab',
     titulo: 'Entorno de Virtualización con Vagrant + VirtualBox',
     categoria: 'DevOps Lab · Infrastructure as Code',
