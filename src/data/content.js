@@ -7,6 +7,11 @@
 // resta más de lo que suma en una búsqueda de SRE/DevOps.
 // Poné GITHUB_PUBLICO en true cuando haya al menos un repo con README:
 // ahí aparecen solos el ícono del nav, el del hero, el del contacto y el del footer.
+// Dato medido en observability-lab. Vive en una sola constante porque lo usan
+// el hero y labMetrics: dos copias del mismo numero se desincronizan en cuanto
+// una corrida nueva lo mueva, y la que quede vieja no avisa.
+const MTTD_MEDIDO = '25,6'
+
 const GITHUB_URL = 'https://github.com/seamnex'
 const GITHUB_PUBLICO = true
 
@@ -31,7 +36,7 @@ export const hero = {
     prompt: 'samuel@sre-lab:~$',
     comando: 'kubectl get incidents --severity=P1 --status=resolved',
     salida: [
-      { k: 'MTTR promedio', v: '↓ reducción sostenida', tone: 'ok' },
+      { k: 'MTTD medido en lab', v: `${MTTD_MEDIDO} s — con bitácora`, tone: 'ok' },
       { k: 'War Rooms liderados', v: 'Fintech · Telco', tone: 'accent' },
       { k: 'Ciclo de mejora', v: 'Detectar → Mitigar → RCA → Prevenir', tone: 'muted' },
       { k: 'Estado', v: 'ONLINE — abierto a propuestas', tone: 'ok' },
@@ -87,7 +92,7 @@ export const labMetrics = {
       id: 'mttd',
       icono: 'Siren',
       tone: 'crit',
-      valor: '25,6',
+      valor: MTTD_MEDIDO,
       unidad: 's',
       titulo: 'MTTD de incidentes',
       resumen: 'Desde que la tasa de 5xx se dispara hasta que la alerta la detecta.',

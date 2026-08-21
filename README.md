@@ -47,10 +47,10 @@ public/
      links a GitHub se muestran en nav, hero, contacto y footer.
    - `email`, `ubicacion`: confirmados.
    - `cv`: el PDF vive en `public/cv-samuel-garcia-baciliadis.pdf`.
-2. **Métricas del Hero** (`metrics`): los valores de `labMetrics` ya salen de corridas
-   reales con bitácora. Pendiente: la terminal del hero sigue mostrando
-   `MTTR promedio → ↓ reducción sostenida`, que es cualitativo. Si hay una cifra dura
-   que se pueda compartir sin romper confidencialidad, va ahí; si no, se queda como está.
+2. **Métricas del Hero** (`metrics`): los valores de `labMetrics` salen de corridas
+   reales con bitácora, y la terminal del hero ya abre con el MTTD medido en vez de un
+   texto cualitativo. Ese número vive en la constante `MTTD_MEDIDO` de `content.js`:
+   lo usan el hero y `labMetrics`, así que se cambia en un solo lugar.
 3. **Proyectos** (`projects`): los tres labs tienen su `links.repo`. Al sumar uno
    nuevo, nunca poner `'#'` — renderiza un botón muerto; con `null` la tarjeta oculta
    el botón sola, y el CI rechaza los `'#'`.
