@@ -31,6 +31,11 @@ src/
     ui/Section.jsx       wrapper de sección (label + título + bajada)
     ui/StatusBadge.jsx   badge "Available" con punto titilante
     ui/CopyButton.jsx    copia rápida al portapapeles
+scripts/
+  generar-og.mjs         genera public/og-card.png desde content.js
+public/
+  og-card.png            vista previa al compartir el link (1200×630)
+  cv-samuel-garcia-baciliadis.pdf
 ```
 
 ## Antes de publicar — checklist
@@ -67,6 +72,24 @@ contra bots.
    volver a buildear no cambia nada en el sitio publicado.
 
 Para probar en local: copiar `.env.example` a `.env` y completar el ID.
+
+## Vista previa al compartir (Open Graph)
+
+`public/og-card.png` (1200×630) es lo que muestran LinkedIn, WhatsApp, Slack y X cuando
+se comparte el link. **No se edita a mano**: se genera desde `src/data/content.js`, así
+que el headline y las tres métricas de la card son literalmente los mismos datos que
+publica el sitio.
+
+```bash
+npm run og    # regenera public/og-card.png
+```
+
+La primera corrida baja Inter y JetBrains Mono a `scripts/.fuentes/` (ignorado por git)
+para que la card salga con la tipografía real del sitio y no con la del sistema.
+
+> Al cambiar la imagen, subir el `?v=` de `og:image` en `index.html`. Los scrapers
+> cachean por URL y sin eso siguen mostrando la card vieja durante días.
+> Para forzar el refresco: [Post Inspector de LinkedIn](https://www.linkedin.com/post-inspector/).
 
 ## Deploy
 
