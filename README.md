@@ -36,22 +36,42 @@ src/
 ## Antes de publicar — checklist
 
 1. **`src/data/content.js` → `profile`**
-   - `GITHUB_URL` ya apunta a `https://github.com/seamnex`, pero **`GITHUB_PUBLICO` está en `false`**
-     porque la cuenta todavía no tiene repos públicos. El sitio oculta todos los links a GitHub
-     mientras esté en `false`. Pasalo a `true` recién cuando haya al menos un repo con README.
-   - `email`, `ubicacion`: confirmar.
-   - `cv`: dejar el PDF en `public/cv-samuel-garcia-baciliadis.pdf`.
-2. **Métricas del Hero** (`metrics`): ajustar `+8 años` y los valores a tus números reales.
-   Si tenés cifras duras de MTTR o disponibilidad que podés compartir, reemplazá los textos
-   cualitativos — un número concreto vale más que "reducción sostenida".
-3. **Proyectos** (`projects`): `links.repo` y `links.demo` están en `null`; las tarjetas ocultan
-   los botones hasta que pongas la URL real. Nunca dejes `'#'`: renderiza un botón muerto.
-4. **Formulario**: hoy abre el cliente de correo vía `mailto:`. Para recibir mensajes sin eso,
-   cambiá el `onSubmit` de `Contact.jsx` por un `POST` a Formspree, EmailJS o una función serverless.
+   - `GITHUB_PUBLICO` ya está en `true`: la cuenta tiene los tres labs públicos y los
+     links a GitHub se muestran en nav, hero, contacto y footer.
+   - `email`, `ubicacion`: confirmados.
+   - `cv`: el PDF vive en `public/cv-samuel-garcia-baciliadis.pdf`.
+2. **Métricas del Hero** (`metrics`): los valores de `labMetrics` ya salen de corridas
+   reales con bitácora. Pendiente: la terminal del hero sigue mostrando
+   `MTTR promedio → ↓ reducción sostenida`, que es cualitativo. Si hay una cifra dura
+   que se pueda compartir sin romper confidencialidad, va ahí; si no, se queda como está.
+3. **Proyectos** (`projects`): los tres labs ya tienen `links.repo`. El único con
+   `repo: null` es *MrJuan-Web* — las tarjetas ocultan el botón hasta que haya URL.
+   Nunca poner `'#'`: renderiza un botón muerto.
+4. **Formulario de contacto**: envía por **Formspree**. Requiere `VITE_FORMSPREE_ID`
+   (ver `.env.example`). Sin esa variable el formulario no se rompe: vuelve al
+   `mailto:` de antes.
+
+## Formulario de contacto
+
+`Contact.jsx` postea a `https://formspree.io/f/$VITE_FORMSPREE_ID` y maneja cuatro
+estados: `idle → enviando → ok | error`. En `error` ofrece el mailto como salida, para
+que un fallo de red no se lleve puesto el contacto. Incluye un honeypot (`_gotcha`)
+contra bots.
+
+**Puesta en marcha:**
+
+1. Crear el formulario en [formspree.io](https://formspree.io) apuntando a la casilla propia.
+2. Copiar el ID del endpoint (`https://formspree.io/f/`**`abcdwxyz`**).
+3. Cargarlo en Vercel → *Settings* → *Environment Variables* como `VITE_FORMSPREE_ID`.
+4. **Redeploy.** Vite hornea las `VITE_*` en tiempo de build; cargar la variable sin
+   volver a buildear no cambia nada en el sitio publicado.
+
+Para probar en local: copiar `.env.example` a `.env` y completar el ID.
 
 ## Deploy
 
 **Vercel**: importá el repo → framework *Vite* → build `npm run build`, output `dist`.
+Cargar `VITE_FORMSPREE_ID` en *Environment Variables* antes del primer build.
 **Netlify**: build `npm run build`, publish directory `dist`.
 
 ## Paleta
