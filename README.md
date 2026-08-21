@@ -33,6 +33,8 @@ src/
     ui/CopyButton.jsx    copia rápida al portapapeles
 scripts/
   generar-og.mjs         genera public/og-card.png desde content.js
+.github/workflows/
+  ci.yml                 build + verificación de artefactos en cada push
 public/
   og-card.png            vista previa al compartir el link (1200×630)
   cv-samuel-garcia-baciliadis.pdf
@@ -90,6 +92,21 @@ para que la card salga con la tipografía real del sitio y no con la del sistema
 > Al cambiar la imagen, subir el `?v=` de `og:image` en `index.html`. Los scrapers
 > cachean por URL y sin eso siguen mostrando la card vieja durante días.
 > Para forzar el refresco: [Post Inspector de LinkedIn](https://www.linkedin.com/post-inspector/).
+
+## CI
+
+`.github/workflows/ci.yml` corre en cada push y PR a `main`: `npm ci` + `npm run build`
+desde cero, y después verifica que el build haya salido completo — que `og-card.png` y
+el CV estén en `dist/`, que `og:image` sea absoluta y apunte a un archivo que existe, y
+que ningún link de `content.js` haya quedado en `'#'`.
+
+Vercel también buildea en cada push, pero avisa tarde y por mail: para cuando llega la
+notificación, el commit roto ya es el que está publicado.
+
+Lo que el CI **no** valida: que la card se vea bien ni que sus números sigan
+coincidiendo con `content.js`. `npm run og` es manual a propósito — resvg no rasteriza
+byte a byte igual en Linux que en Windows, así que comparar el PNG generado en CI
+contra el versionado daría un rojo permanente y mentiroso.
 
 ## Deploy
 

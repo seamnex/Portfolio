@@ -1,0 +1,101 @@
+# Verifica en cada push y PR a main que el sitio compile y salga completo.
+#
+# Vercel ya buildea en cada push, pero avisa tarde y por mail: para cuando
+# llega la notificación, el commit roto es el que está publicado. Esto corre
+# antes y falla en el PR.
+#
+# Tres capas, porque atrapan cosas distintas:
+#
+#   npm ci + build  -> el proyecto compila desde cero con el lock tal como
+#                      está versionado. Atrapa el import roto y el "en mi
+#                      máquina anda" por un node_modules desactualizado.
+#   artefactos      -> el build produjo lo que el HTML promete. Un og:image
+#                      apuntando a un archivo que no se copió a dist/ da 200
+#                      en el sitio y una card vacía en LinkedIn.
+#   enlaces         -> ningún link del contenido quedó en '#'.
+#
+# Lo que NO detecta: que la card se vea bien, ni que sus números sigan
+# coincidiendo con content.js. `npm run og` es manual a propósito — resvg no
+# rasteriza byte a byte igual en Linux que en Windows, así que comparar el PNG
+# generado en CI contra el versionado daría un rojo permanente y mentiroso.
+
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Solo lectura: este workflow no escribe nada en el repo.
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build del sitio
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Preparar Node
+        uses: actions/setup-node@v4
+        with:
+          # Misma mayor que usa Vercel para buildear el proyecto.
+          node-version: '22'
+          cache: npm
+
+      - name: Instalar dependencias
+        # `npm ci` y no `npm install`: instala exactamente el lock y falla si
+        # está desincronizado de package.json, en vez de arreglarlo en silencio
+        # y dejar que CI pruebe un árbol distinto al del repo.
+        run: npm ci
+
+      - name: Buildear
+        # Sin VITE_FORMSPREE_ID a propósito: así CI ejercita el camino de
+        # respaldo del formulario, que es el que ve cualquiera que clone el
+        # repo sin configurar nada.
+        run: npm run build
+
+      - name: Verificar los artefactos del build
+        run: |
+          set -euo pipefail
+
+          test -f dist/index.html || { echo "::error::falta dist/index.html"; exit 1; }
+
+          # La card OG tiene que estar en dist/, no solo en public/.
+          test -f dist/og-card.png || { echo "::error::falta dist/og-card.png"; exit 1; }
+
+          # og:image absoluta: los scrapers de LinkedIn y WhatsApp no resuelven
+          # rutas relativas, y una card rota no avisa — simplemente no aparece.
+          grep -q 'property="og:image" content="https://' dist/index.html \
+            || { echo "::error::og:image ausente o con URL relativa"; exit 1; }
+
+          # Y que el archivo que promete el meta exista de verdad en dist/.
+          imagen=$(grep -oP 'property="og:image" content="https://[^"]+' dist/index.html \
+                   | head -1 | sed 's/.*\///; s/?.*//')
+          test -f "dist/${imagen}" \
+            || { echo "::error::og:image apunta a ${imagen}, que no está en dist/"; exit 1; }
+
+          # El CV es el destino del botón de descarga del hero.
+          test -f dist/cv-samuel-garcia-baciliadis.pdf \
+            || { echo "::error::falta el CV en dist/"; exit 1; }
+
+          echo "✔ index.html, og-card.png (${imagen}) y CV presentes en dist/"
+
+      - name: Verificar que no haya enlaces muertos en el contenido
+        run: |
+          set -euo pipefail
+
+          # Un link en '#' renderiza un botón que no lleva a ningún lado. Es
+          # peor que no mostrarlo: el visitante hace clic y se queda ahí.
+          # Las tarjetas ocultan el botón cuando el valor es null, así que la
+          # ausencia de repo ya está contemplada y no necesita un placeholder.
+          if grep -nE "(repo|demo|href):\s*'#'" src/data/content.js; then
+            echo "::error::hay enlaces en '#' en content.js — usá null para ocultar el botón"
+            exit 1
+          fi
+
+          echo "✔ sin enlaces en '#'"
