@@ -206,9 +206,12 @@ para que la card salga con la tipografía real del sitio y no con la del sistema
 `.github/workflows/ci.yml` corre en cada push y PR a `main`, en cuatro capas:
 
 1. **Contenido** — `npm run verificar`: los dos diccionarios son espejo, ningún enlace
-   quedó en `'#'`, los post-mortems están completos y los CV que promete `profile.cv`
-   existen. Va antes del build a propósito: si falta una traducción, el error tiene que
-   decir eso y no aparecer como una página en blanco veinte segundos después.
+   quedó en `'#'` y los post-mortems están completos. Va antes del build a propósito: si
+   falta una traducción, el error tiene que decir eso y no aparecer como una página en
+   blanco veinte segundos después. Por eso mismo **no** exige que los PDF del CV existan:
+   en un checkout limpio todavía no se generaron, y que el archivo que promete
+   `profile.cv` haya llegado a `dist/` es una pregunta que recién tiene respuesta después
+   de buildear — la contesta el paso 3.
 2. **Build** — `npm ci` + `npm run build` desde cero, sin `VITE_FORMSPREE_ID`, para
    ejercitar el camino de respaldo del formulario.
 3. **Artefactos** — `og-card.png` y los dos CV están en `dist/`, y `og:image` es absoluta
