@@ -110,21 +110,24 @@ for (const idioma of [
   }
 }
 
-// ── 7. Los CV que promete el contenido existen ───────────────
+// ── 7. Aviso si los CV todavía no se generaron ───────────────
+// NO es un error: los PDF son un derivado que produce `npm run build`, así
+// que en un checkout limpio no existen todavía y este script corre antes del
+// build a propósito. Que el archivo prometido por `profile.cv` termine en
+// dist/ lo verifica el CI después de buildear, que es el momento en el que
+// esa pregunta tiene respuesta.
 {
   const { existsSync } = await import('node:fs')
   const { join, dirname } = await import('node:path')
   const { fileURLToPath } = await import('node:url')
   const publico = join(dirname(fileURLToPath(import.meta.url)), '..', 'public')
 
-  for (const idioma of [
-    { nombre: 'es', datos: es },
-    { nombre: 'en', datos: en },
-  ]) {
-    const archivo = join(publico, idioma.datos.profile.cv)
-    if (!existsSync(archivo)) {
-      falla(`${idioma.nombre}: profile.cv apunta a ${idioma.datos.profile.cv}, que no está en public/ — corré \`npm run cv\``)
-    }
+  const faltantes = [es, en]
+    .map((datos) => datos.profile.cv)
+    .filter((ruta) => !existsSync(join(publico, ruta)))
+
+  if (faltantes.length) {
+    avisos.push(`CV sin generar todavía (${faltantes.join(', ')}): los produce \`npm run build\` o \`npm run cv\`.`)
   }
 }
 
