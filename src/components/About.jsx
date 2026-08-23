@@ -1,15 +1,12 @@
 import { ArrowRightLeft, CheckCircle2 } from 'lucide-react'
-import { about } from '../data/content'
+import { useContenido } from '../i18n/LanguageProvider'
 import Section from './ui/Section'
 
 export default function About() {
+  const { about } = useContenido()
+
   return (
-    <Section
-      id="sobre-mi"
-      label="Sobre mí"
-      titulo="Perfil híbrido: quien apaga el incendio sabe dónde estaba el cortocircuito"
-      bajada="La experiencia en gestión de incidentes no es un paso previo a SRE: es exactamente el insumo que hace valiosa la práctica SRE."
-    >
+    <Section id="sobre-mi" label={about.label} titulo={about.titulo} bajada={about.bajada}>
       <div className="grid gap-12 lg:grid-cols-[1.15fr_.85fr]">
         <div className="space-y-5">
           {about.parrafos.map((p, i) => (
@@ -20,23 +17,23 @@ export default function About() {
 
           {/* Puente conceptual ITIL → SRE */}
           <div className="card mt-8 p-6">
-            <p className="section-label">El puente</p>
+            <p className="section-label">{about.puente.label}</p>
             <div className="mt-5 grid items-center gap-5 sm:grid-cols-[1fr_auto_1fr]">
               <div className="rounded-lg border border-crit/25 bg-crit/[0.06] p-4">
-                <p className="font-mono text-[11px] uppercase tracking-wider text-crit">Reactivo · ITIL</p>
-                <p className="mt-2 text-sm text-slate-300">Detectar, mitigar y restaurar el servicio bajo presión</p>
+                <p className="font-mono text-[11px] uppercase tracking-wider text-crit">{about.puente.reactivo.etiqueta}</p>
+                <p className="mt-2 text-sm text-slate-300">{about.puente.reactivo.texto}</p>
               </div>
               <ArrowRightLeft size={20} className="mx-auto hidden text-accent sm:block" />
               <div className="rounded-lg border border-ok/25 bg-ok/[0.06] p-4">
-                <p className="font-mono text-[11px] uppercase tracking-wider text-ok">Preventivo · SRE</p>
-                <p className="mt-2 text-sm text-slate-300">Instrumentar, automatizar y diseñar para que no vuelva a pasar</p>
+                <p className="font-mono text-[11px] uppercase tracking-wider text-ok">{about.puente.preventivo.etiqueta}</p>
+                <p className="mt-2 text-sm text-slate-300">{about.puente.preventivo.texto}</p>
               </div>
             </div>
           </div>
         </div>
 
         <div className="space-y-4">
-          <p className="section-label">Cómo trabajo</p>
+          <p className="section-label">{about.comoTrabajo}</p>
           {about.principios.map((pr) => (
             <article key={pr.titulo} className="card card-hover p-5">
               <h3 className="flex items-start gap-2.5 text-sm font-semibold text-white">

@@ -1,5 +1,5 @@
 import { ArrowUpRight, FlaskConical, HeartPulse, RefreshCw, Siren } from 'lucide-react'
-import { labMetrics } from '../data/content'
+import { useContenido } from '../i18n/LanguageProvider'
 import Section from './ui/Section'
 
 const iconos = { HeartPulse, RefreshCw, Siren }
@@ -24,7 +24,7 @@ const tonos = {
   },
 }
 
-function MetricCard({ m }) {
+function MetricCard({ m, verBitacora }) {
   const Icono = iconos[m.icono]
   const tono = tonos[m.tone] ?? tonos.accent
 
@@ -58,7 +58,7 @@ function MetricCard({ m }) {
           rel="noreferrer noopener"
           className="mt-3 inline-flex items-center gap-1.5 font-mono text-[11.5px] text-slate-400 transition-colors hover:text-accent"
         >
-          Ver la bitácora
+          {verBitacora}
           <ArrowUpRight size={13} className="transition-transform group-hover:translate-x-0.5" />
         </a>
       </div>
@@ -67,6 +67,8 @@ function MetricCard({ m }) {
 }
 
 export default function LabMetrics() {
+  const { labMetrics } = useContenido()
+
   return (
     <Section
       id="metricas"
@@ -76,7 +78,7 @@ export default function LabMetrics() {
     >
       <div className="grid gap-5 md:grid-cols-3">
         {labMetrics.items.map((m) => (
-          <MetricCard key={m.id} m={m} />
+          <MetricCard key={m.id} m={m} verBitacora={labMetrics.verBitacora} />
         ))}
       </div>
 

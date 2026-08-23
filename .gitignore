@@ -11,3 +11,11 @@ dist-ssr
 
 # cache de fuentes del generador de la card OG (se baja solo con npm run og)
 scripts/.fuentes
+
+# Los CV en PDF los produce `npm run cv`, que además corre solo en cada build.
+# No se versionan a propósito: son un derivado determinista de content.js, y un
+# binario versionado junto a su fuente es un binario que queda viejo en
+# silencio. La card de Open Graph sí se versiona, porque resvg no rasteriza
+# igual en Linux que en Windows y compararla en CI daría un rojo mentiroso.
+public/cv-samuel-garcia-baciliadis-sre.pdf
+public/cv-samuel-garcia-baciliadis-sre-en.pdf

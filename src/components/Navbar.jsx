@@ -1,17 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Github, Linkedin, Menu, Terminal, X } from 'lucide-react'
-import { profile } from '../data/content'
+import { useContenido } from '../i18n/LanguageProvider'
+import LangToggle from './ui/LangToggle'
 
-const links = [
-  { href: '#sobre-mi', label: 'Sobre mí' },
-  { href: '#skills', label: 'Especialización' },
-  { href: '#metricas', label: 'Métricas' },
-  { href: '#labs', label: 'DevOps Labs' },
-  { href: '#trayectoria', label: 'Trayectoria' },
-  { href: '#contacto', label: 'Contacto' },
-]
+// Los ids son la clave de traducción: así el nav y `ui.nav` no pueden
+// desincronizarse sin que salte a la vista.
+const SECCIONES = ['sobre-mi', 'skills', 'metricas', 'postmortems', 'labs', 'consola', 'trayectoria', 'contacto']
 
 export default function Navbar() {
+  const { profile, ui } = useContenido()
   const [scrolled, setScrolled] = useState(false)
   const [abierto, setAbierto] = useState(false)
   const [activo, setActivo] = useState('')
@@ -25,14 +22,12 @@ export default function Navbar() {
 
   // Scroll-spy: marca la sección visible en el nav
   useEffect(() => {
-    const secciones = links
-      .map((l) => document.querySelector(l.href))
-      .filter(Boolean)
+    const secciones = SECCIONES.map((id) => document.getElementById(id)).filter(Boolean)
 
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
-          if (e.isIntersecting) setActivo(`#${e.target.id}`)
+          if (e.isIntersecting) setActivo(e.target.id)
         })
       },
       { rootMargin: '-45% 0px -50% 0px' },
@@ -47,8 +42,8 @@ export default function Navbar() {
         scrolled ? 'border-b border-base-600/80 bg-base-900/85 backdrop-blur-lg' : 'border-b border-transparent'
       }`}
     >
-      <nav className="container-x flex h-16 items-center justify-between">
-        <a href="#inicio" className="group flex items-center gap-2.5">
+      <nav className="container-x flex h-16 items-center justify-between gap-3">
+        <a href="#inicio" className="group flex shrink-0 items-center gap-2.5">
           <span className="flex h-8 w-8 items-center justify-center rounded-md border border-accent/40 bg-accent/10 text-accent transition-colors group-hover:bg-accent/20">
             <Terminal size={16} />
           </span>
@@ -58,29 +53,34 @@ export default function Navbar() {
           </span>
         </a>
 
-        <ul className="hidden items-center gap-1 md:flex">
-          {links.map((l) => (
-            <li key={l.href}>
+        {/* El nav completo aparece recién en lg: con ocho secciones, en md se
+            apretaba contra el logo y el bloque de acciones. Hasta ahí manda el
+            menú desplegable, que las muestra todas sin comprimir nada. */}
+        <ul className="hidden items-center gap-0.5 lg:flex">
+          {SECCIONES.map((id) => (
+            <li key={id}>
               <a
-                href={l.href}
-                className={`rounded-md px-3 py-2 text-sm transition-colors ${
-                  activo === l.href ? 'text-accent' : 'text-slate-400 hover:text-white'
+                href={`#${id}`}
+                className={`rounded-md px-2.5 py-2 text-[13px] transition-colors ${
+                  activo === id ? 'text-accent' : 'text-slate-400 hover:text-white'
                 }`}
               >
-                {l.label}
+                {ui.nav[id]}
               </a>
             </li>
           ))}
         </ul>
 
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="flex shrink-0 items-center gap-2">
+          <LangToggle />
+
           {profile.github && (
             <a
               href={profile.github}
               target="_blank"
               rel="noreferrer noopener"
               aria-label="GitHub"
-              className="rounded-md border border-base-600 p-2 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent"
+              className="hidden rounded-md border border-base-600 p-2 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent lg:inline-flex"
             >
               <Github size={16} />
             </a>
@@ -90,37 +90,37 @@ export default function Navbar() {
             target="_blank"
             rel="noreferrer noopener"
             aria-label="LinkedIn"
-            className="rounded-md border border-base-600 p-2 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent"
+            className="hidden rounded-md border border-base-600 p-2 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent lg:inline-flex"
           >
             <Linkedin size={16} />
           </a>
-          <a href="#contacto" className="btn-primary px-4 py-2 text-xs">
-            Contactar
+          <a href="#contacto" className="btn-primary hidden px-4 py-2 text-xs lg:inline-flex">
+            {ui.nav.cta}
           </a>
-        </div>
 
-        <button
-          type="button"
-          onClick={() => setAbierto((v) => !v)}
-          aria-label="Abrir menú"
-          aria-expanded={abierto}
-          className="rounded-md border border-base-600 p-2 text-slate-300 md:hidden"
-        >
-          {abierto ? <X size={18} /> : <Menu size={18} />}
-        </button>
+          <button
+            type="button"
+            onClick={() => setAbierto((v) => !v)}
+            aria-label={abierto ? ui.nav.cerrar : ui.nav.abrir}
+            aria-expanded={abierto}
+            className="rounded-md border border-base-600 p-2 text-slate-300 lg:hidden"
+          >
+            {abierto ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        </div>
       </nav>
 
       {abierto && (
-        <div className="border-t border-base-600 bg-base-900/95 backdrop-blur-lg md:hidden">
+        <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-base-600 bg-base-900/95 backdrop-blur-lg lg:hidden">
           <ul className="container-x flex flex-col py-3">
-            {links.map((l) => (
-              <li key={l.href}>
+            {SECCIONES.map((id) => (
+              <li key={id}>
                 <a
-                  href={l.href}
+                  href={`#${id}`}
                   onClick={() => setAbierto(false)}
                   className="block border-b border-base-700/60 py-3 text-sm text-slate-300 hover:text-accent"
                 >
-                  {l.label}
+                  {ui.nav[id]}
                 </a>
               </li>
             ))}

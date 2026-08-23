@@ -1,5 +1,5 @@
 import { ArrowRight, Download, FolderGit2, Linkedin, MapPin, Github } from 'lucide-react'
-import { hero, metrics, profile } from '../data/content'
+import { useContenido } from '../i18n/LanguageProvider'
 import StatusBadge from './ui/StatusBadge'
 import CopyButton from './ui/CopyButton'
 
@@ -11,6 +11,8 @@ const toneMap = {
 }
 
 export default function Hero() {
+  const { hero, metrics, profile, ui } = useContenido()
+
   return (
     <section id="inicio" className="relative z-10 overflow-hidden pb-20 pt-32 sm:pt-40">
       <div className="container-x">
@@ -35,14 +37,17 @@ export default function Hero() {
             <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-400">{hero.subtitle}</p>
 
             <div className="mt-9 flex flex-wrap gap-3">
-              <a href={profile.cv} download className="btn-primary">
-                <Download size={16} /> Descargar CV
+              {/* `download` con nombre explícito: el archivo servido se llama
+                  cv-…-sre.pdf, pero en la carpeta de descargas de un reclutador
+                  conviene que se llame por la persona y el rol. */}
+              <a href={profile.cv} download={profile.cvArchivo} className="btn-primary">
+                <Download size={16} /> {ui.acciones.descargarCV}
               </a>
               <a href="#labs" className="btn-ghost">
-                <FolderGit2 size={16} /> Ver Labs & Proyectos
+                <FolderGit2 size={16} /> {ui.acciones.verLabs}
               </a>
               <a href="#contacto" className="btn-ghost">
-                Contactar <ArrowRight size={16} />
+                {ui.acciones.contactar} <ArrowRight size={16} />
               </a>
             </div>
 
@@ -79,7 +84,7 @@ export default function Hero() {
                 <span className="h-2.5 w-2.5 rounded-full bg-crit/70" />
                 <span className="h-2.5 w-2.5 rounded-full bg-warn/70" />
                 <span className="h-2.5 w-2.5 rounded-full bg-ok/70" />
-                <span className="ml-2 font-mono text-[11px] text-slate-500">incident-console — bash</span>
+                <span className="ml-2 font-mono text-[11px] text-slate-500">{hero.terminal.titulo}</span>
               </div>
 
               <div className="relative p-5 font-mono text-[12.5px] leading-relaxed sm:text-[13px]">
