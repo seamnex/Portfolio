@@ -1,15 +1,12 @@
 import { Briefcase, GraduationCap } from 'lucide-react'
-import { timeline } from '../data/content'
+import { useContenido } from '../i18n/LanguageProvider'
 import Section from './ui/Section'
 
 export default function Timeline() {
+  const { timeline, timelineMeta } = useContenido()
+
   return (
-    <Section
-      id="trayectoria"
-      label="Trayectoria & aprendizaje"
-      titulo="Mapa de carrera: de la mesa de ayuda al diseño de resiliencia"
-      bajada="Una progresión deliberada: primero entender al usuario, después el sistema, después el incidente y hoy la ingeniería que lo previene."
-    >
+    <Section id="trayectoria" label={timelineMeta.label} titulo={timelineMeta.titulo} bajada={timelineMeta.bajada}>
       <ol className="relative space-y-6 border-l border-base-600 pl-8 sm:pl-10">
         {timeline.map((item, i) => {
           const esFormacion = item.tipo === 'formacion'

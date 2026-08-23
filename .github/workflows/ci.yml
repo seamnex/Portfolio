@@ -4,20 +4,29 @@
 # llega la notificación, el commit roto es el que está publicado. Esto corre
 # antes y falla en el PR.
 #
-# Tres capas, porque atrapan cosas distintas:
+# Cuatro capas, porque atrapan cosas distintas:
 #
+#   contenido       -> los dos diccionarios de idioma son espejo y no hay
+#                      enlaces muertos. Es el único chequeo que caza el bug
+#                      típico de un sitio bilingüe: una clave agregada en
+#                      español y olvidada en inglés no rompe el build, pinta
+#                      un hueco en la mitad del sitio que su autor no mira.
 #   npm ci + build  -> el proyecto compila desde cero con el lock tal como
-#                      está versionado. Atrapa el import roto y el "en mi
-#                      máquina anda" por un node_modules desactualizado.
+#                      está versionado, y de paso genera los CV. Atrapa el
+#                      import roto y el "en mi máquina anda" por un
+#                      node_modules desactualizado.
 #   artefactos      -> el build produjo lo que el HTML promete. Un og:image
 #                      apuntando a un archivo que no se copió a dist/ da 200
 #                      en el sitio y una card vacía en LinkedIn.
-#   enlaces         -> ningún link del contenido quedó en '#'.
+#   consola         -> el intérprete de comandos responde en los dos idiomas
+#                      sin romperse ni filtrar `undefined` a la pantalla.
 #
-# Lo que NO detecta: que la card se vea bien, ni que sus números sigan
+# Lo que NO detecta: que la card OG se vea bien, ni que sus números sigan
 # coincidiendo con content.js. `npm run og` es manual a propósito — resvg no
 # rasteriza byte a byte igual en Linux que en Windows, así que comparar el PNG
 # generado en CI contra el versionado daría un rojo permanente y mentiroso.
+# El CV no tiene ese problema: lo genera el propio build, así que no puede
+# quedar viejo respecto de content.js.
 
 name: ci
 
@@ -53,10 +62,16 @@ jobs:
         # y dejar que CI pruebe un árbol distinto al del repo.
         run: npm ci
 
+      - name: Verificar el contenido y la paridad de idiomas
+        # Antes del build: si falta una traducción o hay un link muerto, el
+        # error tiene que decir eso, no aparecer como una página en blanco
+        # veinte segundos después.
+        run: npm run verificar
+
       - name: Buildear
         # Sin VITE_FORMSPREE_ID a propósito: así CI ejercita el camino de
         # respaldo del formulario, que es el que ve cualquiera que clone el
-        # repo sin configurar nada.
+        # repo sin configurar nada. El build genera también los dos CV.
         run: npm run build
 
       - name: Verificar los artefactos del build
@@ -79,23 +94,27 @@ jobs:
           test -f "dist/${imagen}" \
             || { echo "::error::og:image apunta a ${imagen}, que no está en dist/"; exit 1; }
 
-          # El CV es el destino del botón de descarga del hero.
-          test -f dist/cv-samuel-garcia-baciliadis.pdf \
-            || { echo "::error::falta el CV en dist/"; exit 1; }
+          # Los CV son el destino del botón de descarga del hero, uno por
+          # idioma. Las rutas NO se escriben acá: se leen de content.js, que es
+          # quien las decide. Hardcodearlas sería tener el nombre del archivo
+          # en dos lugares y descubrir el desacople recién en producción.
+          node --input-type=module -e '
+            const es = await import("./src/data/content.js")
+            const en = await import("./src/data/content.en.js")
+            console.log(es.profile.cv)
+            console.log(en.profile.cv)
+          ' > /tmp/cv-rutas.txt
 
-          echo "✔ index.html, og-card.png (${imagen}) y CV presentes en dist/"
+          while read -r ruta; do
+            test -f "dist${ruta}" \
+              || { echo "::error::profile.cv apunta a ${ruta}, que no está en dist/"; exit 1; }
+            echo "  ✔ dist${ruta}"
+          done < /tmp/cv-rutas.txt
 
-      - name: Verificar que no haya enlaces muertos en el contenido
-        run: |
-          set -euo pipefail
+          echo "✔ index.html, og-card.png (${imagen}) y los CV presentes en dist/"
 
-          # Un link en '#' renderiza un botón que no lleva a ningún lado. Es
-          # peor que no mostrarlo: el visitante hace clic y se queda ahí.
-          # Las tarjetas ocultan el botón cuando el valor es null, así que la
-          # ausencia de repo ya está contemplada y no necesita un placeholder.
-          if grep -nE "(repo|demo|href):\s*'#'" src/data/content.js; then
-            echo "::error::hay enlaces en '#' en content.js — usá null para ocultar el botón"
-            exit 1
-          fi
-
-          echo "✔ sin enlaces en '#'"
+      - name: Verificar la consola interactiva
+        # El intérprete es una función pura, así que se ejercita sin navegador:
+        # todos los comandos, en los dos idiomas y con el panel de estado en
+        # sus tres situaciones (consultando, todo verde, con fallos).
+        run: npm run verificar:consola

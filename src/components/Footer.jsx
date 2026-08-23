@@ -1,7 +1,9 @@
 import { ArrowUp, Github, Linkedin, Mail } from 'lucide-react'
-import { profile } from '../data/content'
+import { useContenido } from '../i18n/LanguageProvider'
 
 export default function Footer() {
+  const { profile, ui } = useContenido()
+
   return (
     <footer className="relative z-10 border-t border-base-600 bg-base-900/60">
       <div className="container-x flex flex-col items-center justify-between gap-6 py-10 sm:flex-row">
@@ -14,7 +16,7 @@ export default function Footer() {
             {profile.rol} · {profile.target}
           </p>
           <p className="mt-3 font-mono text-[11px] text-slate-600">
-            © {new Date().getFullYear()} — Construido con React, Tailwind CSS y Lucide.
+            © {new Date().getFullYear()} — {ui.footer.construido}
           </p>
         </div>
 
@@ -48,7 +50,7 @@ export default function Footer() {
           )}
           <a
             href="#inicio"
-            aria-label="Volver arriba"
+            aria-label={ui.nav.volverArriba}
             className="rounded-md border border-base-600 p-2.5 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent"
           >
             <ArrowUp size={16} />

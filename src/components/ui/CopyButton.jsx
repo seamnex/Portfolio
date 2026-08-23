@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Check, Copy } from 'lucide-react'
+import { useContenido } from '../../i18n/LanguageProvider'
 
 /** Copia rápida de comandos, mails o handles. */
-export default function CopyButton({ value, label = 'Copiar', className = '' }) {
+export default function CopyButton({ value, label, className = '' }) {
+  const { ui } = useContenido()
   const [copiado, setCopiado] = useState(false)
+  // Sin `label` explícito muestra "Copiar" en el idioma activo; con él —el
+  // caso del email en el hero— muestra el valor y traduce solo el aria-label.
+  const etiqueta = label ?? ui.acciones.copiar
 
   useEffect(() => {
     if (!copiado) return
@@ -30,11 +35,11 @@ export default function CopyButton({ value, label = 'Copiar', className = '' }) 
     <button
       type="button"
       onClick={copiar}
-      aria-label={`${label}: ${value}`}
+      aria-label={`${ui.acciones.copiar}: ${value}`}
       className={`inline-flex items-center gap-1.5 rounded-md border border-base-600 px-2.5 py-1.5 font-mono text-[11px] text-slate-400 transition-colors hover:border-accent/50 hover:text-accent ${className}`}
     >
       {copiado ? <Check size={13} className="text-ok" /> : <Copy size={13} />}
-      {copiado ? 'Copiado' : label}
+      {copiado ? ui.acciones.copiado : etiqueta}
     </button>
   )
 }

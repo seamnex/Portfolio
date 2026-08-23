@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Activity, ChevronDown, Container, ShieldAlert, Terminal } from 'lucide-react'
-import { skills } from '../data/content'
+import { useContenido } from '../i18n/LanguageProvider'
 import Section from './ui/Section'
 
 const iconos = { ShieldAlert, Activity, Container, Terminal }
@@ -66,15 +66,11 @@ function SkillCard({ skill, abierto, onToggle }) {
 }
 
 export default function Skills() {
+  const { skills, skillsMeta } = useContenido()
   const [abierto, setAbierto] = useState('incident')
 
   return (
-    <Section
-      id="skills"
-      label="Áreas de especialización"
-      titulo="Stack técnico y dominios de trabajo"
-      bajada="Cuatro bloques que se refuerzan entre sí: lo que detecto con observabilidad, lo gestiono con procesos de incidentes, lo previengo con prácticas DevOps y lo automatizo con código."
-    >
+    <Section id="skills" label={skillsMeta.label} titulo={skillsMeta.titulo} bajada={skillsMeta.bajada}>
       <div className="grid gap-5 lg:grid-cols-2">
         {skills.map((s) => (
           <SkillCard
@@ -87,7 +83,7 @@ export default function Skills() {
       </div>
 
       <p className="mt-6 text-center font-mono text-[11px] text-slate-600">
-        Hacé click en cada tarjeta para desplegar el detalle de herramientas
+        {skillsMeta.hint}
       </p>
     </Section>
   )
