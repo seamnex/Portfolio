@@ -50,10 +50,12 @@ function caminos(objeto, prefijo = '') {
 
 // ── 3. Las secciones del nav tienen etiqueta en los dos idiomas ──
 {
-  // Mismo listado que usa Navbar.jsx. Duplicarlo acá es a propósito: si el
-  // nav suma una sección y nadie traduce su etiqueta, esto lo caza.
-  const SECCIONES = ['sobre-mi', 'skills', 'metricas', 'telemetria', 'postmortems', 'labs', 'caos', 'consola', 'trayectoria', 'contacto']
-  for (const id of SECCIONES) {
+  // Mismo listado que usa Navbar.jsx, en sus dos niveles. Duplicarlo acá es a
+  // propósito: si el nav suma una sección —o un rótulo de grupo— y nadie
+  // traduce su etiqueta, esto lo caza.
+  const RAIZ = ['sobre-mi', 'skills', 'observabilidad', 'labs', 'trayectoria', 'contacto']
+  const AGRUPADAS = ['metricas', 'telemetria', 'postmortems', 'caos', 'consola']
+  for (const id of [...RAIZ, ...AGRUPADAS]) {
     if (!es.ui.nav[id]) falla(`ui.nav["${id}"] sin etiqueta en español`)
     if (!en.ui.nav[id]) falla(`ui.nav["${id}"] sin etiqueta en inglés`)
   }

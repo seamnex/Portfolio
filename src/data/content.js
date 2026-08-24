@@ -482,6 +482,9 @@ export const ui = {
     inicio: 'Inicio',
     'sobre-mi': 'Perfil',
     skills: 'Skills',
+    // Rótulo del grupo del header: no es una sección, no tiene ancla propia.
+    // Junta las cinco de abajo, que salen todas del mismo laboratorio.
+    observabilidad: 'Observabilidad',
     metricas: 'Métricas',
     telemetria: 'Telemetría',
     postmortems: 'Post-mortems',
