@@ -408,6 +408,7 @@ export const ui = {
     inicio: 'Home',
     'sobre-mi': 'Profile',
     skills: 'Skills',
+    observabilidad: 'Observability',
     metricas: 'Metrics',
     telemetria: 'Telemetry',
     postmortems: 'Post-mortems',
