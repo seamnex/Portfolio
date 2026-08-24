@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
-import { ChevronDown, Info, RefreshCw } from 'lucide-react'
+import { ChevronDown, FlaskConical, Info, RefreshCw } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useEstado } from '../estado/EstadoProvider'
+import { useCaos } from '../caos/CaosProvider'
+import { resultadoSimulado } from '../lib/caos.js'
 
 // Igual que en el resto del sitio: las clases van completas porque Tailwind
 // purga por coincidencia textual y `border-${tono}/40` no la encuentra.
@@ -39,6 +41,16 @@ function motivoLegible(resultado, ui) {
 /** La línea de detalle de cada servicio: lo que efectivamente se midió. */
 function detalle(resultado, ui) {
   if (resultado.estado === 'consultando') return ui.estado.etiquetas.consultando
+  // Durante un simulacro el valor es inventado y tiene que decirlo en la
+  // misma línea donde aparece. Quien saque una captura de este panel se
+  // lleva la aclaración adentro de la captura, no en otra parte de la página.
+  if (resultado.simulado) {
+    const medida =
+      resultado.tipo === 'origen'
+        ? `${resultado.latencia ?? '—'} ms · HTTP ${resultado.codigo ?? '—'}`
+        : ui.estado.sinRed
+    return `${medida} · ${ui.caos.valorSimulado}`
+  }
   if (resultado.tipo === 'origen') {
     if (resultado.estado === 'ok') return `${resultado.latencia} ms · HTTP ${resultado.codigo} · ${resultado.entorno}`
     return motivoLegible(resultado, ui)
@@ -63,8 +75,17 @@ function etiquetaEstado(estado, ui) {
 
 export default function SystemStatus() {
   const { ui } = useContenido()
-  const { servicios, resultados, agregado, cargando, verificadoEn, refrescar } = useEstado()
+  const { servicios, resultados: reales, agregado: agregadoReal, cargando, verificadoEn, refrescar } = useEstado()
+  const { escenario } = useCaos()
   const [abierto, setAbierto] = useState(false)
+
+  // El simulacro se pinta ENCIMA de los chequeos reales, sin reemplazarlos:
+  // por debajo se siguen ejecutando, y al terminar el simulacro no hay nada
+  // que restaurar porque el dato verdadero nunca se perdió.
+  const agregado = escenario ? escenario.impacto : agregadoReal
+  const resultados = escenario
+    ? { ...reales, [escenario.servicio]: resultadoSimulado(escenario, reales[escenario.servicio]) }
+    : reales
 
   // "Verificado hace 40 s" tiene que envejecer solo, o miente a los dos
   // minutos. Un tick cada 20 s alcanza para la resolución que muestra.
@@ -97,6 +118,13 @@ export default function SystemStatus() {
                   {antiguedad != null && ` · ${ui.estado.chequeadoEn} ${ui.estado.hace(antiguedad)}`}
                 </p>
               </div>
+
+              {escenario && (
+                <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-warn/40 bg-warn/10 px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-warn">
+                  <FlaskConical size={11} aria-hidden="true" />
+                  {ui.caos.simulacro}
+                </span>
+              )}
             </div>
 
             <div className="flex items-center gap-2">
@@ -155,7 +183,7 @@ export default function SystemStatus() {
 
               <p className="flex items-start gap-2 border-t border-base-600/70 px-5 py-3 text-[11.5px] leading-relaxed text-slate-500">
                 <Info size={13} className="mt-0.5 shrink-0 text-slate-600" aria-hidden="true" />
-                {ui.estado.aviso}
+                {escenario ? ui.caos.avisoPanel : ui.estado.aviso}
               </p>
             </div>
           </div>

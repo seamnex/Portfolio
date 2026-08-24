@@ -298,7 +298,7 @@ export const timeline = timelineEs.map((item, i) => ({
       ],
     },
     {
-      periodo: 'Fintech',
+      periodo: 'May 2024 – Present',
       rol: 'IT Incident Manager · Incident Analyst',
       org: 'Personal Pay',
       resumen:
@@ -409,8 +409,10 @@ export const ui = {
     'sobre-mi': 'Profile',
     skills: 'Skills',
     metricas: 'Metrics',
+    telemetria: 'Telemetry',
     postmortems: 'Post-mortems',
     labs: 'Labs',
+    caos: 'Chaos',
     consola: 'Console',
     trayectoria: 'Career',
     contacto: 'Contact',
@@ -428,6 +430,14 @@ export const ui = {
     copiado: 'Copied',
     abrir: 'open →',
     cerrar: 'Close',
+  },
+
+  duracion: {
+    anio: 'year',
+    anios: 'years',
+    mes: 'month',
+    meses: 'months',
+    union: 'and',
   },
 
   estado: {
@@ -463,6 +473,119 @@ export const ui = {
     rama: 'branch',
     limiteApi: 'The public GitHub API rate-limits by IP. Try again in a few minutes.',
     sinRed: 'The service could not be reached from this browser.',
+  },
+
+  caos: {
+    label: 'Chaos engineering',
+    titulo: 'Break this site on purpose',
+    bajada:
+      'A full incident drill in ten seconds: the fault is injected, the alert fires, the status panel turns red, the log records every phase, and auto-healing brings the service back without anyone touching a thing.',
+    aviso:
+      'This is a drill and it is labelled as one everywhere: nothing breaks, no other visitor is affected, and the real checks keep running underneath. What turns red is the scenario, not the site.',
+    simulacro: 'Drill',
+    valorSimulado: 'simulated value',
+    avisoPanel:
+      'A chaos engineering drill is running: the flagged service is showing a deliberately fabricated value. The others are still real checks, and the measured value comes back as soon as the drill ends.',
+    inyectar: 'Inject fault',
+    enCurso: 'Injected',
+    activo: (titulo) => `Drill running · ${titulo}`,
+    listo: 'No drill running',
+    listoDetalle: 'Pick a scenario to inject a controlled fault.',
+    fase: 'Phase',
+    restaurar: 'Restore now',
+    autoHealing: (s) => `Auto-healing in ${s}s`,
+    bitacoraVacia:
+      'The drill log is written here. The same lines also land in the console further down.',
+    nombresFase: {
+      inyeccion: 'injection',
+      deteccion: 'detection',
+      diagnostico: 'diagnosis',
+      remediacion: 'remediation',
+      recuperado: 'recovered',
+    },
+    escenarios: {
+      latencia: {
+        titulo: 'Inject latency',
+        descripcion:
+          'The origin still answers 200, but it takes four seconds. The hardest kind of fault to catch: nothing is down, everything is slow.',
+      },
+      'api-caida': {
+        titulo: 'Simulate API outage',
+        descripcion:
+          'The external dependency stops responding. The site has to degrade without dragging down the parts that still work.',
+      },
+      'error-500': {
+        titulo: 'Simulate 500 error',
+        descripcion:
+          'A bad deploy starts returning 5xx. The threshold rule catches it and the rollback closes the loop.',
+      },
+    },
+    fases: {
+      inyeccion: (e) => `chaos: injecting "${e.id}" into ${e.servicio} · severity ${e.severidad}`,
+      deteccion: (e) => `alert fired · ${e.senal}`,
+      diagnostico: (e) => `diagnosis: the ${e.servicio} check confirms the condition · opening runbook`,
+      remediacion: (e) => `automated remediation · ${e.remedio}`,
+      recuperado: (e) => `${e.servicio} operational · auto-healing closed the loop with no manual intervention`,
+      restaurado: (e) => `manual restore · "${e.id}" cancelled before auto-healing`,
+    },
+    consola: {
+      titulo: 'Chaos engineering scenarios',
+      pista: 'Use `chaos <id>` to inject, and `chaos heal` to restore early.',
+      sinEscenario: 'No drill running.',
+      enCurso: (id) => `drill "${id}" running · the red below belongs to the scenario, not the site`,
+      inyectando: (id) => `Injecting scenario "${id}"…`,
+      restaurando: (id) => `Restoring "${id}" without waiting for auto-healing…`,
+      nadaQueRestaurar: 'There is no drill running.',
+      noExiste: (id) => `chaos: no scenario named "${id}". Try \`chaos\`.`,
+      seguiEnPanel: 'The phases are written here and in the Chaos section.',
+    },
+  },
+
+  telemetria: {
+    label: 'Telemetry & DORA',
+    titulo: 'The dashboard this site points at itself',
+    bajada:
+      'DORA metrics computed over the pipeline that publishes this page, plus the latency your browser is measuring right now. Every tile shows the measured value on top and the declared target underneath: when they disagree, you can see it.',
+    tablero: 'dora-board · portfolio',
+    ventana: (d) => `${d}d window`,
+    fuenteActions: 'source: github actions · main',
+    objetivo: 'Target',
+    cumple: 'met',
+    noCumple: 'missed',
+    sinDatos: 'no data',
+    midiendo: 'measuring…',
+    comoSeMide: 'How it is measured',
+    aviso:
+      'Deployment frequency, lead time and change failure rate come from the public GitHub Actions API, over the real runs on main. MTTD comes from the observability-lab, with its log published. The p95 latency is measured by your own browser while you look at this panel. The target is a declared goal, not a result, which is why it is labelled separately.',
+    duranteSimulacro:
+      'A chaos engineering drill is running. This dashboard deliberately ignores it: these numbers are real measurements and a drill does not change them.',
+    muestras: (n) => `p95 over ${n} samples from this browser`,
+    medianaDe: (n) => `median of ${n} deploys with a dated commit`,
+    corridasVerdes: (n) => `${n} green runs on main`,
+    fallidasDe: (f, t) => `${f} failed of ${t} completed runs`,
+    mttdDetalle: (ventana, umbral) => `rule: ${umbral}% of 5xx over a ${ventana}s window`,
+    tiles: {
+      despliegues: 'Deployment frequency',
+      leadTime: 'Lead time for changes',
+      cfr: 'Change failure rate',
+      mttd: 'MTTD · detection',
+      p95: 'Client p95 latency',
+    },
+    cadencia: {
+      diario: 'daily cadence',
+      semanal: 'weekly cadence',
+      mensual: 'monthly cadence',
+      esporadico: 'sporadic cadence',
+    },
+    unidades: {
+      despliegues: (d) => `/ ${d}d`,
+    },
+    motivo: {
+      limite: 'The public GitHub API rate-limited this IP. Try again in a few minutes.',
+      red: 'The API could not be reached from this browser.',
+      timeout: 'The API call took too long.',
+      api: 'The API returned something unexpected.',
+    },
   },
 
   ci: {
@@ -502,6 +625,9 @@ export const ui = {
         ['kubectl get nodes', 'nodes of the lab cluster'],
         ['curl /health', 'health check assembled from the live checks'],
         ['curl /metrics', 'the same metrics in Prometheus format'],
+        ['chaos', 'available chaos engineering scenarios'],
+        ['chaos <id>', 'injects a simulated fault (auto-healing after 10s)'],
+        ['chaos heal', 'restores without waiting for auto-healing'],
         ['whoami', 'who writes all of this'],
         ['cv', 'download the CV'],
         ['contact', 'contact details'],

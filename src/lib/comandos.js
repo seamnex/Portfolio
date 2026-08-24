@@ -12,8 +12,11 @@
 //   · `metrics` y `curl /metrics` salen de `medidas.js`.
 //   · `kubectl` reproduce corridas registradas en los labs y lo dice en la
 //     propia salida, no solo en el aviso de la cabecera.
+//   · `chaos` inyecta un simulacro y lo rotula como tal en cada línea que
+//     imprime, incluida la de `status` mientras dura.
 // ─────────────────────────────────────────────────────────────
 import { MEDIDAS, num } from '../data/medidas.js'
+import { ESCENARIOS, escenarioPorId } from './caos.js'
 
 /** Comandos ofrecidos al autocompletado, en el orden en que se sugieren. */
 export const COMANDOS = [
@@ -27,6 +30,11 @@ export const COMANDOS = [
   'kubectl get nodes',
   'curl /health',
   'curl /metrics',
+  'chaos',
+  'chaos latencia',
+  'chaos api-caida',
+  'chaos error-500',
+  'chaos heal',
   'whoami',
   'cv',
   'contact',
@@ -98,12 +106,25 @@ function cmdHelp(ui) {
 }
 
 function cmdStatus(ctx) {
-  const { ui, estado } = ctx
+  const { ui, estado, caos } = ctx
+  const escenario = caos?.escenario ?? null
+
+  // Con un simulacro activo, el panel muestra rojo. Si `status` mostrara lo
+  // mismo sin aclarar nada, la salida que alguien copia y pega diría que el
+  // sitio se cayó. La aclaración va arriba de todo y en la línea afectada.
+  const linea = (s) => {
+    if (escenario && s.id === escenario.servicio) {
+      return kv(s.etiqueta, `${ui.estado.etiquetas.fallo} · ${ui.caos.valorSimulado}`, 'warn')
+    }
+    return lineaServicio(s, estado.resultados[s.id] ?? { estado: 'consultando' }, ui)
+  }
+
   return [
     titulo(ui.consola.status.titulo),
-    ...estado.servicios.map((s) => lineaServicio(s, estado.resultados[s.id] ?? { estado: 'consultando' }, ui)),
+    ...(escenario ? [texto(ui.caos.consola.enCurso(escenario.id), 'warn')] : []),
+    ...estado.servicios.map(linea),
     vacio(),
-    texto(ui.estado.aviso, 'muted'),
+    texto(escenario ? ui.caos.avisoPanel : ui.estado.aviso, 'muted'),
   ]
 }
 
@@ -189,23 +210,31 @@ function cmdKubectlNodes(ctx) {
 
 /** Health check armado en el momento con los chequeos reales del panel. */
 function cmdCurlHealth(ctx) {
-  const { estado } = ctx
+  const { estado, caos } = ctx
+  const escenario = caos?.escenario ?? null
+  const agregado = escenario ? escenario.impacto : estado.agregado
+
   const cuerpo = {
     status:
-      estado.agregado === 'ok'
+      agregado === 'ok'
         ? 'operational'
-        : estado.agregado === 'degradado'
+        : agregado === 'degradado'
           ? 'degraded'
-          : estado.agregado === 'caido'
+          : agregado === 'caido'
             ? 'outage'
             : 'partial',
     checked_at: estado.verificadoEn ? new Date(estado.verificadoEn).toISOString() : null,
     source: 'browser-side checks',
+    // El flag va en el JSON y no solo en un comentario: si alguien pega esta
+    // salida en un ticket, el simulacro viaja con ella.
+    ...(escenario ? { chaos_drill: { scenario: escenario.id, simulated: true } } : {}),
     services: estado.servicios.map((s) => {
       const r = estado.resultados[s.id] ?? { estado: 'consultando' }
+      const simulado = escenario?.servicio === s.id
       return {
         name: s.etiqueta,
-        state: r.estado,
+        state: simulado ? 'fallo' : r.estado,
+        ...(simulado ? { simulated: true } : {}),
         ...(r.latencia != null ? { latency_ms: r.latencia } : {}),
         ...(r.numero != null ? { run: r.numero } : {}),
         ...(r.motivo ? { reason: r.motivo } : {}),
@@ -249,6 +278,56 @@ function cmdCurlMetrics() {
     `lab_instrument_latency_seconds{lab="observability-lab",run="2"} ${M.ventanaInstrumento[1]}`,
   ]
   return lineas.map((l) => raw(l, l.startsWith('#') ? 'muted' : undefined))
+}
+
+/**
+ * Sandbox de chaos engineering desde la consola.
+ *
+ *   chaos              → lista los escenarios y el estado actual
+ *   chaos <id>         → inyecta el fallo
+ *   chaos heal|stop    → restaura sin esperar al auto-healing
+ */
+function cmdChaos(ctx, argumento) {
+  const { ui, caos } = ctx
+  const t = ui.caos
+  const arg = (argumento ?? '').trim().toLowerCase()
+
+  if (!arg) {
+    const ancho = Math.max(...ESCENARIOS.map((e) => e.id.length)) + 2
+    return {
+      lineas: [
+        titulo(t.consola.titulo),
+        ...ESCENARIOS.map((e) =>
+          raw(`  ${columna(e.id, ancho)}[${e.severidad}]  ${t.escenarios[e.id].titulo}`),
+        ),
+        vacio(),
+        caos?.escenario
+          ? texto(t.consola.enCurso(caos.escenario.id), 'warn')
+          : texto(t.consola.sinEscenario, 'muted'),
+        texto(t.consola.pista, 'muted'),
+      ],
+    }
+  }
+
+  if (arg === 'heal' || arg === 'stop' || arg === 'restore') {
+    if (!caos?.escenario) return { lineas: [texto(t.consola.nadaQueRestaurar, 'muted')] }
+    return {
+      lineas: [texto(t.consola.restaurando(caos.escenario.id), 'ok')],
+      accion: { tipo: 'restaurar-caos' },
+    }
+  }
+
+  const escenario = escenarioPorId(arg)
+  if (!escenario) return { lineas: [texto(t.consola.noExiste(arg), 'crit')] }
+
+  return {
+    lineas: [
+      texto(t.consola.inyectando(escenario.id), 'warn'),
+      raw(`  ${escenario.senal}`, 'muted'),
+      texto(t.consola.seguiEnPanel, 'muted'),
+    ],
+    accion: { tipo: 'inyectar-caos', escenario: escenario.id },
+  }
 }
 
 function cmdWhoami(ctx) {
@@ -337,6 +416,7 @@ export function ejecutar(entrada, ctx) {
       break
   }
 
+  if (comando.toLowerCase() === 'chaos') return cmdChaos(ctx, argumento)
   if (comando.toLowerCase() === 'incident') return cmdIncident(ctx, argumento)
   if (comando.toLowerCase() === 'lang') return cmdLang(ctx, argumento)
 

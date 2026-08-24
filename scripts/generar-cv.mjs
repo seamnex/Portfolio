@@ -26,6 +26,7 @@ import { fileURLToPath } from 'node:url'
 
 import * as es from '../src/data/content.js'
 import * as en from '../src/data/content.en.js'
+import { periodoCon } from '../src/lib/periodo.js'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
 
@@ -272,7 +273,10 @@ function experiencia(lienzo, contenido) {
   lienzo.seccion(cv.secciones.experiencia)
 
   for (const item of timeline.filter((t) => t.tipo === 'trabajo')) {
-    lienzo.puesto(`${item.rol} — ${item.org}`, item.periodo)
+    // El período sale de la misma función que usa el sitio: si el CV
+    // dijera una antigüedad y la web otra, el desacople lo descubre quien
+    // tiene los dos abiertos, que es exactamente el reclutador.
+    lienzo.puesto(`${item.rol} — ${item.org}`, periodoCon(item, contenido.ui.duracion))
     lienzo.parrafo(item.resumen, { tamano: 8.8, color: C.tenue, interlineado: 1.4 })
     lienzo.avanzar(3)
     for (const bullet of item.bullets) lienzo.vineta(bullet)

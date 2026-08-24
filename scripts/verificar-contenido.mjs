@@ -52,7 +52,7 @@ function caminos(objeto, prefijo = '') {
 {
   // Mismo listado que usa Navbar.jsx. Duplicarlo acá es a propósito: si el
   // nav suma una sección y nadie traduce su etiqueta, esto lo caza.
-  const SECCIONES = ['sobre-mi', 'skills', 'metricas', 'postmortems', 'labs', 'consola', 'trayectoria', 'contacto']
+  const SECCIONES = ['sobre-mi', 'skills', 'metricas', 'telemetria', 'postmortems', 'labs', 'caos', 'consola', 'trayectoria', 'contacto']
   for (const id of SECCIONES) {
     if (!es.ui.nav[id]) falla(`ui.nav["${id}"] sin etiqueta en español`)
     if (!en.ui.nav[id]) falla(`ui.nav["${id}"] sin etiqueta en inglés`)

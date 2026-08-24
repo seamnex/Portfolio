@@ -14,6 +14,8 @@
 //  vuelo. Nunca se degrada un 'desconocido' a verde por comodidad.
 // ─────────────────────────────────────────────────────────────
 
+import { normalizarCorrida } from './dora.js'
+
 const TIMEOUT_MS = 8000
 
 /** Cuánto vale una respuesta antes de volver a pedirla. */
@@ -176,4 +178,69 @@ export function agregar(resultados) {
   if (fallos > 0) return fallos === estados.length ? 'caido' : 'degradado'
   if (estados.some((e) => e === 'desconocido' || e === 'consultando')) return 'desconocido'
   return 'ok'
+}
+
+/**
+ * Historial de corridas en `main` para calcular las métricas DORA.
+ *
+ * Es una consulta más contra la misma API pública que ya usa el panel, así
+ * que va por el mismo cache de sesión: sin él, abrir el sitio dos veces
+ * costaría el doble de las 60 consultas por hora que da GitHub por IP.
+ *
+ * Se piden 100 corridas de una y el recorte por ventana lo hace
+ * `calcularDora`. Paginar para cubrir treinta días exactos gastaría varias
+ * consultas por una precisión que el tablero no usa: si un repo tiene más
+ * de 100 corridas en la ventana, la frecuencia de despliegue ya está muy
+ * por encima de cualquier objetivo que valga la pena mirar.
+ */
+export async function historialActions(repo, { usarCache = true, porPagina = 100 } = {}) {
+  const clave = `${repo}:historial`
+  if (usarCache) {
+    const guardado = leerCache(clave)
+    if (guardado) return { ...guardado, deCache: true }
+  }
+
+  let res
+  try {
+    res = await fetchConTimeout(
+      `https://api.github.com/repos/${repo}/actions/runs?branch=main&per_page=${porPagina}`,
+      { headers: { Accept: 'application/vnd.github+json' } },
+    )
+  } catch (error) {
+    return { estado: 'desconocido', motivo: error?.name === 'AbortError' ? 'timeout' : 'red', repo }
+  }
+
+  if (res.status === 403 || res.status === 429) return { estado: 'desconocido', motivo: 'limite', repo }
+  if (!res.ok) return { estado: 'desconocido', motivo: 'api', codigo: res.status, repo }
+
+  let datos
+  try {
+    datos = await res.json()
+  } catch {
+    return { estado: 'desconocido', motivo: 'api', repo }
+  }
+
+  const corridas = datos?.workflow_runs ?? []
+  const resultado = { estado: 'ok', repo, corridas: corridas.map(normalizarCorrida) }
+  guardarCache(clave, resultado)
+  return resultado
+}
+
+/**
+ * Una muestra de latencia contra el origen, sin el resto del chequeo.
+ *
+ * El p95 del tablero se arma con muchas de estas: una sola petición no es
+ * un percentil, y presentarla como tal sería inventar precisión. Devuelve
+ * `null` si la petición falló, para que una caída de red no entre en la
+ * muestra como una latencia buena.
+ */
+export async function muestraLatencia(recurso = '/favicon.svg') {
+  const arranque = performance.now()
+  try {
+    const res = await fetchConTimeout(`${recurso}?t=${Date.now()}`, { cache: 'no-store' })
+    if (!res.ok) return null
+    return performance.now() - arranque
+  } catch {
+    return null
+  }
 }

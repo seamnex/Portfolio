@@ -2,8 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { CornerDownLeft, Eraser, Info, TerminalSquare } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useEstado } from '../estado/EstadoProvider'
+import { useCaos } from '../caos/CaosProvider'
 import { usePostMortem } from '../postmortem/PostMortemProvider'
 import { COMANDOS, ejecutar } from '../lib/comandos'
+import { reloj } from '../lib/caos.js'
 import Section from './ui/Section'
 
 const TONO = {
@@ -56,6 +58,7 @@ export default function Console() {
   const contenido = useContenido()
   const { ui, lang, cambiar } = contenido
   const estado = useEstado()
+  const caos = useCaos()
   const { abrir } = usePostMortem()
 
   const [entradas, setEntradas] = useState([])
@@ -79,7 +82,7 @@ export default function Console() {
 
   const correr = useCallback(
     (entrada) => {
-      const { lineas, accion } = ejecutar(entrada, { ui, lang, contenido, estado })
+      const { lineas, accion } = ejecutar(entrada, { ui, lang, contenido, estado, caos })
 
       if (accion?.tipo === 'limpiar') {
         setEntradas([])
@@ -93,6 +96,12 @@ export default function Console() {
           break
         case 'cambiar-idioma':
           cambiar(accion.lang)
+          break
+        case 'inyectar-caos':
+          caos.inyectar(accion.escenario)
+          break
+        case 'restaurar-caos':
+          caos.restaurar()
           break
         case 'descargar-cv': {
           // Mismo camino que el botón del hero: un <a download> temporal. El
@@ -109,8 +118,43 @@ export default function Console() {
           break
       }
     },
-    [ui, lang, contenido, estado, abrir, cambiar],
+    [ui, lang, contenido, estado, caos, abrir, cambiar],
   )
+
+  // ── Bitácora del sandbox de caos ───────────────────────────
+  // Las fases de un simulacro se escriben acá aunque se haya disparado desde
+  // el panel de más arriba: si los logs quedaran solo en el panel, la consola
+  // mostraría un `status` en rojo sin nada que explique por qué.
+  //
+  // Se lleva el id de la última línea impresa y no un contador: el registro
+  // del proveedor tiene tope y descarta las viejas, así que su longitud no
+  // crece indefinidamente y un contador terminaría dando por impresas líneas
+  // que nunca llegaron a la pantalla.
+  const ultimaImpresa = useRef(null)
+  useEffect(() => {
+    const registro = caos.registro
+    if (!registro.length) {
+      ultimaImpresa.current = null
+      return
+    }
+
+    const desde = ultimaImpresa.current
+      ? registro.findIndex((l) => l.id === ultimaImpresa.current) + 1
+      : 0
+    // findIndex devuelve -1 si la línea ya se descartó por el tope; el +1 lo
+    // convierte en 0, que es justo lo que se quiere: imprimir todo lo que hay.
+    const nuevas = registro.slice(desde)
+    if (!nuevas.length) return
+
+    ultimaImpresa.current = registro.at(-1).id
+    setEntradas((prev) => [
+      ...prev,
+      {
+        comando: null,
+        lineas: nuevas.map((l) => ({ t: 'raw', texto: `[${reloj(l.ts)}] ${l.texto}`, tone: l.nivel })),
+      },
+    ])
+  }, [caos.registro])
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -202,10 +246,12 @@ export default function Console() {
 
           {entradas.map((entrada, i) => (
             <div key={i} className="mt-3">
-              <p className="text-slate-500">
-                <span className="text-ok">{ui.consola.prompt}</span>{' '}
-                <span className="text-slate-300">{entrada.comando}</span>
-              </p>
+              {entrada.comando != null && (
+                <p className="text-slate-500">
+                  <span className="text-ok">{ui.consola.prompt}</span>{' '}
+                  <span className="text-slate-300">{entrada.comando}</span>
+                </p>
+              )}
               <div className="mt-1">
                 {entrada.lineas.map((linea, j) => (
                   <Linea key={j} linea={linea} />
