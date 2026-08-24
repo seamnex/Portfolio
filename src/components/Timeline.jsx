@@ -1,9 +1,10 @@
 import { Briefcase, GraduationCap } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
+import { periodoCon } from '../lib/periodo.js'
 import Section from './ui/Section'
 
 export default function Timeline() {
-  const { timeline, timelineMeta } = useContenido()
+  const { timeline, timelineMeta, ui } = useContenido()
 
   return (
     <Section id="trayectoria" label={timelineMeta.label} titulo={timelineMeta.titulo} bajada={timelineMeta.bajada}>
@@ -37,7 +38,7 @@ export default function Timeline() {
                       esFormacion ? 'border-ok/30 bg-ok/10 text-ok' : 'border-base-600 bg-base-800 text-slate-400'
                     }`}
                   >
-                    {item.periodo}
+                    {periodoCon(item, ui.duracion)}
                   </span>
                 </div>
 

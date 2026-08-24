@@ -5,7 +5,7 @@ import LangToggle from './ui/LangToggle'
 
 // Los ids son la clave de traducción: así el nav y `ui.nav` no pueden
 // desincronizarse sin que salte a la vista.
-const SECCIONES = ['sobre-mi', 'skills', 'metricas', 'postmortems', 'labs', 'consola', 'trayectoria', 'contacto']
+const SECCIONES = ['sobre-mi', 'skills', 'metricas', 'telemetria', 'postmortems', 'labs', 'caos', 'consola', 'trayectoria', 'contacto']
 
 export default function Navbar() {
   const { profile, ui } = useContenido()

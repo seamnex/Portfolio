@@ -350,7 +350,11 @@ export const timeline = [
     tags: ['Docker', 'Kubernetes', 'Linux', 'Python', 'CI/CD'],
   },
   {
-    periodo: 'Fintech',
+    periodo: 'Mayo 2024 – Presente',
+    // La antigüedad NO se escribe acá: la calcula `lib/periodo.js` a partir
+    // de este mes, para el sitio y para el CV. Un "2 años y 4 meses" a mano
+    // envejece en treinta días y nadie vuelve a mirarlo.
+    desde: '2024-05',
     rol: 'IT Incident Manager · Incident Analyst',
     org: 'Personal Pay',
     tipo: 'trabajo',
@@ -479,8 +483,10 @@ export const ui = {
     'sobre-mi': 'Perfil',
     skills: 'Skills',
     metricas: 'Métricas',
+    telemetria: 'Telemetría',
     postmortems: 'Post-mortems',
     labs: 'Labs',
+    caos: 'Chaos',
     consola: 'Consola',
     trayectoria: 'Trayectoria',
     contacto: 'Contacto',
@@ -498,6 +504,17 @@ export const ui = {
     copiado: 'Copiado',
     abrir: 'abrir →',
     cerrar: 'Cerrar',
+  },
+
+  // ── Antigüedad de los puestos ───────────────────────────────
+  // Los usa `lib/periodo.js` para armar "2 años y 3 meses" a partir del mes
+  // de ingreso. El texto se traduce; la cuenta, no.
+  duracion: {
+    anio: 'año',
+    anios: 'años',
+    mes: 'mes',
+    meses: 'meses',
+    union: 'y',
   },
 
   // ── Panel de estado en vivo ─────────────────────────────────
@@ -536,6 +553,124 @@ export const ui = {
     rama: 'rama',
     limiteApi: 'La API pública de GitHub limita las consultas por IP. Volvé a intentar en unos minutos.',
     sinRed: 'No se pudo alcanzar el servicio desde este navegador.',
+  },
+
+  // ── Sandbox de chaos engineering ────────────────────────────
+  caos: {
+    label: 'Chaos engineering',
+    titulo: 'Rompé el sitio a propósito',
+    bajada:
+      'Un simulacro de incidente completo en diez segundos: se inyecta el fallo, salta la alerta, el panel de estado se pone en rojo, la bitácora registra cada fase y el auto-healing devuelve el servicio sin que nadie toque nada.',
+    aviso:
+      'Es un simulacro y está rotulado como tal en todas partes: no rompe nada, no afecta a otros visitantes y los chequeos reales siguen corriendo por debajo. Lo que se pone en rojo es el escenario, no el sitio.',
+    simulacro: 'Simulacro',
+    valorSimulado: 'valor simulado',
+    avisoPanel:
+      'Hay un simulacro de chaos engineering en curso: el servicio marcado muestra un valor inventado a propósito. Los demás siguen siendo chequeos reales, y al terminar el simulacro vuelve a verse el valor medido.',
+    inyectar: 'Inyectar fallo',
+    enCurso: 'Inyectado',
+    activo: (titulo) => `Simulacro en curso · ${titulo}`,
+    listo: 'Sin simulacro activo',
+    listoDetalle: 'Elegí un escenario para inyectar un fallo controlado.',
+    fase: 'Fase',
+    restaurar: 'Restaurar ahora',
+    autoHealing: (s) => `Auto-healing en ${s} s`,
+    bitacoraVacia:
+      'Acá se escribe la bitácora del simulacro. Las mismas líneas salen en la consola de más abajo.',
+    nombresFase: {
+      inyeccion: 'inyección',
+      deteccion: 'detección',
+      diagnostico: 'diagnóstico',
+      remediacion: 'remediación',
+      recuperado: 'recuperado',
+    },
+    escenarios: {
+      latencia: {
+        titulo: 'Inyectar latencia',
+        descripcion:
+          'El origen sigue respondiendo 200, pero tarda cuatro segundos. Es el fallo más difícil de detectar: nada está caído, todo está lento.',
+      },
+      'api-caida': {
+        titulo: 'Simular caída de API',
+        descripcion:
+          'La dependencia externa deja de responder. El sitio tiene que degradarse sin arrastrar consigo lo que sí funciona.',
+      },
+      'error-500': {
+        titulo: 'Simular error 500',
+        descripcion:
+          'Un despliegue malo empieza a devolver 5xx. La regla de umbral lo detecta y el rollback cierra el ciclo.',
+      },
+    },
+    // Las líneas de la bitácora. Reciben el escenario y sacan de él lo
+    // técnico, que no se traduce: la señal es la misma expresión en los dos
+    // idiomas porque así se escribiría en una regla de alerta de verdad.
+    fases: {
+      inyeccion: (e) => `chaos: inyectando "${e.id}" sobre ${e.servicio} · severidad ${e.severidad}`,
+      deteccion: (e) => `alerta disparada · ${e.senal}`,
+      diagnostico: (e) => `diagnóstico: el chequeo de ${e.servicio} confirma la condición · abriendo runbook`,
+      remediacion: (e) => `remediación automática · ${e.remedio}`,
+      recuperado: (e) => `${e.servicio} operativo · el auto-healing cerró el ciclo sin intervención manual`,
+      restaurado: (e) => `restauración manual · "${e.id}" cancelado antes del auto-healing`,
+    },
+    consola: {
+      titulo: 'Escenarios de chaos engineering',
+      pista: 'Usá `chaos <id>` para inyectar, y `chaos heal` para restaurar antes de tiempo.',
+      sinEscenario: 'Sin simulacro activo.',
+      enCurso: (id) => `simulacro "${id}" en curso · el rojo de abajo es del escenario, no del sitio`,
+      inyectando: (id) => `Inyectando el escenario "${id}"…`,
+      restaurando: (id) => `Restaurando "${id}" sin esperar al auto-healing…`,
+      nadaQueRestaurar: 'No hay ningún simulacro activo.',
+      noExiste: (id) => `chaos: no existe el escenario "${id}". Probá \`chaos\`.`,
+      seguiEnPanel: 'Las fases se escriben acá y en la sección Chaos.',
+    },
+  },
+
+  // ── Tablero de telemetría y métricas DORA ───────────────────
+  telemetria: {
+    label: 'Telemetría & DORA',
+    titulo: 'El tablero con el que este sitio se mira a sí mismo',
+    bajada:
+      'Las métricas DORA calculadas sobre el pipeline que publica esta página, más la latencia que está midiendo tu navegador ahora mismo. Cada tile muestra arriba el valor medido y abajo el objetivo declarado: cuando no coinciden, se ve.',
+    tablero: 'dora-board · portfolio',
+    ventana: (d) => `ventana ${d} d`,
+    fuenteActions: 'fuente: github actions · main',
+    objetivo: 'Objetivo',
+    cumple: 'cumple',
+    noCumple: 'fuera',
+    sinDatos: 'sin datos',
+    midiendo: 'midiendo…',
+    comoSeMide: 'Cómo se mide',
+    aviso:
+      'Frecuencia de despliegue, lead time y change failure rate salen de la API pública de GitHub Actions, sobre las corridas reales de main. El MTTD sale del observability-lab, con su bitácora publicada. La latencia p95 la mide tu propio navegador mientras mirás este panel. El objetivo es una meta declarada, no un resultado, y por eso va rotulado aparte.',
+    duranteSimulacro:
+      'Hay un simulacro de chaos engineering en curso. Este tablero no lo refleja a propósito: sus números son mediciones reales y un simulacro no las cambia.',
+    muestras: (n) => `p95 sobre ${n} muestras desde este navegador`,
+    medianaDe: (n) => `mediana de ${n} despliegues con commit fechado`,
+    corridasVerdes: (n) => `${n} corridas verdes en main`,
+    fallidasDe: (f, t) => `${f} fallidas de ${t} corridas completadas`,
+    mttdDetalle: (ventana, umbral) => `regla: ${umbral} % de 5xx en ventana de ${ventana} s`,
+    tiles: {
+      despliegues: 'Deployment frequency',
+      leadTime: 'Lead time for changes',
+      cfr: 'Change failure rate',
+      mttd: 'MTTD · detección',
+      p95: 'Latencia cliente p95',
+    },
+    cadencia: {
+      diario: 'cadencia diaria',
+      semanal: 'cadencia semanal',
+      mensual: 'cadencia mensual',
+      esporadico: 'cadencia esporádica',
+    },
+    unidades: {
+      despliegues: (d) => `/ ${d} d`,
+    },
+    motivo: {
+      limite: 'La API pública de GitHub cortó por límite de consultas. Volvé en unos minutos.',
+      red: 'No se pudo alcanzar la API desde este navegador.',
+      timeout: 'La consulta a la API tardó demasiado.',
+      api: 'La API respondió algo inesperado.',
+    },
   },
 
   // ── Badges de CI en las tarjetas de proyecto ────────────────
@@ -577,6 +712,9 @@ export const ui = {
         ['kubectl get nodes', 'nodos del cluster de laboratorio'],
         ['curl /health', 'health check armado con los chequeos en vivo'],
         ['curl /metrics', 'las mismas métricas en formato Prometheus'],
+        ['chaos', 'escenarios de chaos engineering disponibles'],
+        ['chaos <id>', 'inyecta un fallo simulado (auto-healing a los 10 s)'],
+        ['chaos heal', 'restaura sin esperar al auto-healing'],
         ['whoami', 'quién escribe todo esto'],
         ['cv', 'descarga el CV'],
         ['contact', 'datos de contacto'],
