@@ -414,6 +414,8 @@ export const ui = {
     postmortems: 'Post-mortems',
     labs: 'Labs',
     caos: 'Chaos',
+    slo: 'SLO & Budget',
+    playbooks: 'Runbooks',
     consola: 'Console',
     trayectoria: 'Career',
     contacto: 'Contact',
@@ -598,6 +600,197 @@ export const ui = {
     },
   },
 
+  // ── Command Center · incident runbooks ─────────────────────
+  playbooks: {
+    label: 'Command Center',
+    titulo: 'The runbook, one step at a time, in the console below',
+    bajada:
+      'Three symptoms that show up on any on-call rotation: the process eating memory, the one eating CPU, and the exhausted connection pool. Each opens its runbook and runs one step at a time, in the order you would actually follow — diagnosis before mitigation, because restarting first destroys the evidence and guarantees the incident comes back.',
+    aviso:
+      'This is procedure, not a recorded run: the commands are the ones you would type, and the outputs are illustrative. There is no live cluster behind this, and every block the console prints says so in its own header. The incidents that did happen, with logs and measured numbers, are in the post-mortems section.',
+    abrir: 'Open runbook',
+    abierto: 'Open',
+    pasosCount: (n) => `${n} steps`,
+    sinPlaybook: 'No runbook open',
+    sinPlaybookDetalle: 'Pick a symptom to open its procedure.',
+    elegiUno: 'Pick one of the three runbooks above to open it here.',
+    listoParaCorrer: 'Open, no step executed yet.',
+    paso: 'Step',
+    correrPrimero: 'Run first step',
+    correrSiguiente: 'Next step',
+    finalizado: 'Runbook complete',
+    reiniciar: 'Restart the runbook',
+    cerrar: 'Close the runbook',
+    salidaEnConsola: 'Each step writes its output to the console further down.',
+    completado: 'Runbook complete: the service was verified, not just mitigated.',
+    escenarios: {
+      'memory-leak': {
+        titulo: 'Memory leak in the application',
+        descripcion:
+          'The pod grows to its limit and the kernel kills it. It restarts, grows again, and the graph draws a sawtooth.',
+        hipotesis:
+          'The first hypothesis to rule out is the cheapest one: that this is not a leak but a badly set limit. Only if usage grows monotonically between restarts is there something worth chasing in the heap.',
+        pasos: {
+          confirmar: {
+            titulo: 'Confirm which pod, and how much',
+            porQue:
+              'Before calling it a leak you need to know whether usage is spread out or concentrated in one replica. If all three grow together the problem is the limit; if only one grows, it is that instance.',
+          },
+          evidencia: {
+            titulo: 'Find the OOMKill in the previous state',
+            porQue:
+              'A pod that "restarted by itself" tells you nothing. `Reason: OOMKilled` with exit code 137 does: the kernel killed it for memory, which rules out an application crash.',
+          },
+          capturar: {
+            titulo: 'Capture the heap BEFORE restarting',
+            porQue:
+              'This is the step everyone skips. The rollout restart below brings the service back and destroys the only evidence that explains why memory filled up. Without the dump, the incident closes as "restarted" and returns next week.',
+          },
+          mitigar: {
+            titulo: 'Bring the service back',
+            porQue:
+              'With the evidence already saved, mitigating is cheap. The rollout restart replaces pods one at a time, so the service stays up while memory is reclaimed.',
+          },
+          verificar: {
+            titulo: 'Verify, do not assume',
+            porQue:
+              'An incident does not close when the mitigation runs: it closes when the measurement confirms it. If usage returns to baseline the mitigation worked, and the dump analysis stays open.',
+          },
+        },
+      },
+      'high-cpu': {
+        titulo: 'CPU pinned in production',
+        descripcion:
+          'All three replicas at 95% of their limit, latency through the roof and nothing down: the service answers, just late.',
+        hipotesis:
+          'With all three replicas identical at the same moment, the cause is almost never one sick instance: it is something that reached all of them at once. A deploy, or a traffic shift.',
+        pasos: {
+          confirmar: {
+            titulo: 'Check whether it is one replica or all of them',
+            porQue:
+              'How the symptom is distributed is the first piece of the diagnosis. Three identical replicas pinned at once rules out a local problem and points at a common change.',
+          },
+          correlacionar: {
+            titulo: 'Correlate with the last deploy',
+            porQue:
+              'The highest-yield question of any on-call shift: what changed? A rollout six minutes before the alert does not prove causation, but it orders the rest of the investigation and unlocks the rollback as a mitigation.',
+          },
+          culpable: {
+            titulo: 'Find where the CPU is going',
+            porQue:
+              'A profiler on the live process turns the suspicion into a function name. Without this step the rollback fixes the symptom and nobody learns what caused it.',
+          },
+          mitigar: {
+            titulo: 'Go back to the previous revision',
+            porQue:
+              'With the cause narrowed to the change, the rollback is the fastest and lowest-risk mitigation. Scaling out would have bought time while paying twice the infrastructure for the same bug.',
+          },
+          verificar: {
+            titulo: 'Confirm it is back to baseline',
+            porQue:
+              'CPU back in the tens of millicores is what closes the mitigation. What follows is the fix for the pattern being recompiled on every request, and that is no longer on-call: that is backlog.',
+          },
+        },
+      },
+      'db-connections': {
+        titulo: 'Connection pool exhausted',
+        descripcion:
+          'The database refuses new connections, the application returns 500s, and the pool is full of sessions doing nothing.',
+        hipotesis:
+          'A full pool rarely means too much traffic. It almost always means transactions nobody closed: connections taken, idle, and never returned.',
+        pasos: {
+          confirmar: {
+            titulo: 'Measure how close to the ceiling it is',
+            porQue:
+              'Before touching anything you need to know whether you are ten connections short or two. 198 out of 200 explains the 500s without reading a single application log.',
+          },
+          quienes: {
+            titulo: 'See what state those connections are in',
+            porQue:
+              'This is the figure that decides everything else. 171 in `idle in transaction` against 19 active says the problem is not load: these are open transactions the application never closed.',
+          },
+          contener: {
+            titulo: 'Release the stuck sessions',
+            porQue:
+              'Killing only the ones idle for more than five minutes brings the service back without touching the 19 doing real work. This is containment, not a fix: kill and stop there, and the pool fills up again.',
+          },
+          mitigar: {
+            titulo: 'Lower the per-replica pool',
+            porQue:
+              'Three replicas with a pool of 60 each ask a 200-connection database for 180. Lowering the per-replica maximum attacks the structural cause, and the rollout is verified before calling the incident contained.',
+          },
+          verificar: {
+            titulo: 'Confirm the state settled',
+            porQue:
+              'With no `idle in transaction` left in the listing, containment worked. The real fix — the block that fails to close the transaction on error — becomes a post-mortem action item.',
+          },
+        },
+      },
+    },
+    consola: {
+      titulo: 'Incident runbooks available',
+      pista: 'Use `playbook <id>` to open one and `playbook next` to run the following step.',
+      sinPlaybook: 'No runbook open.',
+      nadaAbierto: 'There is no runbook open. Try `playbook`.',
+      yaTerminado: 'The runbook already reached its last step. Try `playbook restart`.',
+      noExiste: (id) => `playbook: no runbook named "${id}". Try \`playbook\`.`,
+      abriendo: (titulo) => `runbook opened · ${titulo}`,
+      abiertoEn: (titulo, paso, total) => `open: ${titulo} · step ${paso}/${total}`,
+      aviso: '# procedure · illustrative outputs, there is no live cluster behind this',
+      senal: 'firing signal',
+      paso: (n, total) => `step ${n}/${total}`,
+      terminado: (titulo) => `runbook complete · ${titulo} · service verified, not just mitigated`,
+      reiniciado: (titulo) => `runbook restarted · ${titulo}`,
+      cerrado: (titulo) => `runbook closed · ${titulo}`,
+    },
+  },
+
+  // ── SLO and error budget ───────────────────────────────────
+  slo: {
+    label: 'SLO & Error Budget',
+    titulo: 'How many minutes of downtime each nine buys you',
+    bajada:
+      'An SLO is not a promise: it is a budget. Pick the target and see how much downtime it allows per period — and how much of that budget was eaten by the chaos engineering drills you ran in this session.',
+    tablero: 'slo-calculator · allowed downtime',
+    elegirObjetivo: 'Choose an availability target',
+    elegirPeriodo: 'Choose the budget period',
+    tablaAria: 'Maximum allowed downtime by period and availability target',
+    periodo: 'Period',
+    sinDatos: 'no data',
+    periodos: {
+      dia: 'per day',
+      semana: 'per week',
+      mes: 'per month',
+      anio: 'per year',
+    },
+    notaTabla:
+      'Pure arithmetic: (1 − target) × period. A month is 30 days and a year 365, which is the convention these tables are published with. The highlighted column is the chosen target; the other three sit beside it on purpose, because the question that matters is not how much 99.9% allows but what the next nine costs.',
+    presupuestoDe: (objetivo, periodo) => `${objetivo} budget ${periodo}`,
+    tiles: {
+      presupuesto: 'Budget',
+      consumido: 'Consumed',
+      restante: 'Remaining',
+    },
+    niveles: {
+      sano: 'Budget healthy',
+      atencion: 'Budget needs attention',
+      critico: 'Budget critical',
+      agotado: 'Budget exhausted',
+    },
+    simulacrosCorridos: (n) => (n === 1 ? '1 drill in this session' : `${n} drills in this session`),
+    sinSimulacros: 'you have not run any drill yet',
+    porcentajeGastado: (p) => `${p}% of the budget`,
+    desglose: {
+      caido: (d) => `full outage: ${d}`,
+      degradado: (d) => `degradation: ${d}`,
+      enCurso: 'drill running · counting',
+    },
+    avisoSinSimulacros:
+      'The consumption comes from the drills in the chaos engineering sandbox above. Inject one and watch it eat the budget in real time: ten seconds of drill are ten seconds of a 99.99% month.',
+    avisoConSimulacros:
+      'These seconds are wall-clock and measured, but the incident that produced them was simulated: this is budget spent on a drill, not on an outage. A drill counts in full, whether outage or degradation — weighting degradation would require knowing what fraction of requests failed, and that was not measured here.',
+  },
+
   // ── Live topology (inside the telemetry section) ────────────
   topologia: {
     tablero: 'topology · live',
@@ -696,6 +889,9 @@ export const ui = {
         ['chaos', 'available chaos engineering scenarios'],
         ['chaos <id>', 'injects a simulated fault (auto-healing after 10s)'],
         ['chaos heal', 'restores without waiting for auto-healing'],
+        ['playbook', 'incident runbooks available'],
+        ['playbook <id>', 'opens a runbook (illustrative outputs)'],
+        ['playbook next', 'runs the runbook\u2019s next step'],
         ['whoami', 'who writes all of this'],
         ['cv', 'download the CV'],
         ['contact', 'contact details'],

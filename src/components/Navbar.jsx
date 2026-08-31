@@ -10,9 +10,12 @@ import LangToggle from './ui/LangToggle'
 //  desincronizarse sin que salte a la vista.
 //
 //  Un ítem con `hijos` es un grupo. Se agrupa porque diez enlaces sueltos
-//  en la barra no son diez caminos: son un muro que nadie lee. Las cinco
+//  en la barra no son diez caminos: son un muro que nadie lee. Las siete
 //  secciones que salen del mismo laboratorio —lo que se mide, lo que se
-//  rompe a propósito y lo que se consulta— entran bajo un solo rótulo.
+//  rompe a propósito, lo que eso cuesta en presupuesto, el procedimiento
+//  para arreglarlo y lo que se consulta— entran bajo un solo rótulo.
+//  Siete es mucho para una barra y poco para un desplegable, que es
+//  justamente el motivo por el que están en un desplegable.
 //
 //  `destino` es adónde apunta el rótulo del grupo cuando alguien lo toca
 //  en vez de abrirlo: la primera de sus secciones, que es la que ordena
@@ -24,7 +27,7 @@ const NAV = [
   {
     id: 'observabilidad',
     destino: 'metricas',
-    hijos: ['metricas', 'telemetria', 'postmortems', 'caos', 'consola'],
+    hijos: ['metricas', 'telemetria', 'postmortems', 'caos', 'slo', 'playbooks', 'consola'],
   },
   { id: 'labs' },
   { id: 'trayectoria' },

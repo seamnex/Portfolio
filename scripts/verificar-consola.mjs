@@ -17,6 +17,8 @@
 import { COMANDOS, ejecutar } from '../src/lib/comandos.js'
 import { servicios } from '../src/data/servicios.js'
 import { ESCENARIOS, FASES, lineaDeFase, resultadoSimulado } from '../src/lib/caos.js'
+import { PLAYBOOKS } from '../src/data/playbooks.js'
+import { lineaCierre, lineasApertura, lineasDePaso, quedanPasos } from '../src/lib/runbook.js'
 import * as es from '../src/data/content.js'
 import * as en from '../src/data/content.en.js'
 
@@ -62,6 +64,15 @@ const ENTRADAS = [
   'chaos heal',
   'chaos no-existe',
   'CHAOS LATENCIA',
+  'playbook memory-leak',
+  'playbook high-cpu',
+  'playbook db-connections',
+  'playbook next',
+  'playbook n',
+  'playbook restart',
+  'playbook stop',
+  'playbook no-existe',
+  'PLAYBOOK NEXT',
   'incident inc-rolling',
   'incident INC-2026-01',
   'incident no-existe',
@@ -84,6 +95,20 @@ const CAOS = {
   'con-simulacro': { escenario: ESCENARIOS[0] },
 }
 
+// El Command Center suma su propia dimensión: `playbook next` contesta una
+// cosa sin runbook abierto, otra con uno a mitad de camino y otra con uno
+// que ya llegó al último paso. Las tres pasan por textos distintos, y la
+// tercera es la que nadie prueba a mano.
+const PLAYBOOK = {
+  'sin-runbook': { activo: null, paso: -1, total: 0 },
+  'runbook-a-medias': { activo: PLAYBOOKS[0], paso: 1, total: PLAYBOOKS[0].pasos.length },
+  'runbook-terminado': {
+    activo: PLAYBOOKS[0],
+    paso: PLAYBOOKS[0].pasos.length - 1,
+    total: PLAYBOOKS[0].pasos.length,
+  },
+}
+
 const errores = []
 let ejecuciones = 0
 
@@ -95,11 +120,12 @@ for (const [lang, contenido] of [
     const estado = { servicios, ...parcial }
 
     for (const [situacion, caos] of Object.entries(CAOS)) {
+      for (const [runbook, playbook] of Object.entries(PLAYBOOK)) {
       for (const entrada of ENTRADAS) {
-        const donde = `[${lang}/${escenario}/${situacion}] "${entrada}"`
+        const donde = `[${lang}/${escenario}/${situacion}/${runbook}] "${entrada}"`
         let resultado
         try {
-          resultado = ejecutar(entrada, { ui: contenido.ui, lang, contenido, estado, caos })
+          resultado = ejecutar(entrada, { ui: contenido.ui, lang, contenido, estado, caos, playbook })
         } catch (e) {
           errores.push(`${donde} lanzó: ${e.message}`)
           continue
@@ -121,6 +147,7 @@ for (const [lang, contenido] of [
 
         ejecuciones++
       }
+      }
     }
   }
 }
@@ -140,8 +167,36 @@ for (const [lang, contenido] of [
     ['chaos heal', 'restaurar-caos', { escenario: ESCENARIOS[0] }],
   ]
   for (const [entrada, tipo, caos] of esperado) {
-    const { accion } = ejecutar(entrada, { ...base, caos })
+    const { accion } = ejecutar(entrada, { ...base, caos, playbook: PLAYBOOK['sin-runbook'] })
     if (accion?.tipo !== tipo) errores.push(`"${entrada}" debía devolver la acción "${tipo}" y devolvió ${JSON.stringify(accion)}`)
+  }
+
+  // Command Center: abrir siempre devuelve acción; avanzar, reiniciar y
+  // cerrar solo con un runbook abierto. Sin esto la consola diría "paso
+  // siguiente" sobre un runbook que nadie abrió.
+  const esperadoPlaybook = [
+    [`playbook ${PLAYBOOKS[0].id}`, 'playbook-iniciar', PLAYBOOK['sin-runbook']],
+    ['playbook next', 'playbook-siguiente', PLAYBOOK['runbook-a-medias']],
+    ['playbook restart', 'playbook-reiniciar', PLAYBOOK['runbook-a-medias']],
+    ['playbook stop', 'playbook-cerrar', PLAYBOOK['runbook-a-medias']],
+  ]
+  for (const [entrada, tipo, playbook] of esperadoPlaybook) {
+    const { accion } = ejecutar(entrada, { ...base, caos: { escenario: null }, playbook })
+    if (accion?.tipo !== tipo) {
+      errores.push(`"${entrada}" debía devolver la acción "${tipo}" y devolvió ${JSON.stringify(accion)}`)
+    }
+  }
+
+  // Y al revés: los cuatro casos en los que NO puede haber acción.
+  const sinAccionPlaybook = [
+    ['playbook next', PLAYBOOK['sin-runbook']],
+    ['playbook next', PLAYBOOK['runbook-terminado']],
+    ['playbook stop', PLAYBOOK['sin-runbook']],
+    ['playbook no-existe', PLAYBOOK['sin-runbook']],
+  ]
+  for (const [entrada, playbook] of sinAccionPlaybook) {
+    const { accion } = ejecutar(entrada, { ...base, caos: { escenario: null }, playbook })
+    if (accion) errores.push(`"${entrada}" no debía devolver acción y devolvió ${JSON.stringify(accion)}`)
   }
 
   // Y al revés: restaurar sin simulacro NO puede devolver una acción, o la
@@ -187,6 +242,66 @@ for (const [lang, contenido] of [
   }
 }
 
+// Los textos del Command Center tampoco pasan por el intérprete: los arma
+// el proveedor cuando se corre cada paso. Mismo barrido que el del caos, y
+// por el mismo motivo: un paso sin traducir sale como `undefined` en el
+// medio de un runbook que pretende parecer un procedimiento real.
+let lineasPlaybook = 0
+for (const [lang, contenido] of [
+  ['es', es],
+  ['en', en],
+]) {
+  const t = contenido.ui.playbooks
+  for (const pb of PLAYBOOKS) {
+    // Se corre el runbook ENTERO, como lo haría el proveedor: apertura,
+    // los cinco pasos en orden y los tres cierres posibles. Es la única
+    // forma de tocar el texto del paso 4 de un runbook que nadie abre.
+    const lineas = [
+      ...lineasApertura(pb, contenido.ui),
+      ...pb.pasos.flatMap((_, i) => lineasDePaso(pb, i, contenido.ui)),
+      ...['terminado', 'reiniciado', 'cerrado'].map((m) => lineaCierre(pb, m, contenido.ui)),
+    ]
+
+    for (const linea of lineas) {
+      if (linea.texto === undefined || String(linea.texto).includes('undefined')) {
+        errores.push(
+          `[${lang}] playbook "${pb.id}" (${linea.tipo}): texto sin traducir -> ${JSON.stringify(linea.texto)}`,
+        )
+      }
+      lineasPlaybook++
+    }
+
+    // Ids únicos dentro de la tanda: la consola se guía por el id de la
+    // última línea impresa, y dos iguales le harían saltear un bloque.
+    const ids = new Set(lineas.map((l) => l.id))
+    if (ids.size !== lineas.length) {
+      errores.push(`[${lang}] playbook "${pb.id}": ids de línea repetidos (${lineas.length - ids.size})`)
+    }
+
+    // Y el recorrido tiene fin: quedan pasos hasta el anteúltimo índice
+    // y no queda ninguno después del último.
+    if (!quedanPasos(pb, -1)) errores.push(`playbook "${pb.id}": no arranca con pasos por correr`)
+    if (quedanPasos(pb, pb.pasos.length - 1)) {
+      errores.push(`playbook "${pb.id}": sigue ofreciendo pasos después del último`)
+    }
+
+    // Los rótulos que NO pasan por el registro: tarjeta y listado.
+    for (const rotulo of [
+      t.escenarios[pb.id]?.titulo,
+      t.escenarios[pb.id]?.descripcion,
+      t.escenarios[pb.id]?.hipotesis,
+      t.pasosCount(pb.pasos.length),
+      t.consola.abiertoEn(t.escenarios[pb.id]?.titulo, 1, pb.pasos.length),
+      t.consola.noExiste(pb.id),
+    ]) {
+      if (rotulo === undefined || String(rotulo).includes('undefined')) {
+        errores.push(`[${lang}] playbook "${pb.id}": rótulo sin traducir -> ${JSON.stringify(rotulo)}`)
+      }
+      lineasPlaybook++
+    }
+  }
+}
+
 if (errores.length) {
   console.error(`\n✖ ${errores.length} problema(s) en la consola:\n`)
   for (const e of errores) console.error(`  - ${e}`)
@@ -194,6 +309,7 @@ if (errores.length) {
 }
 
 console.log(
-  `✔ consola verificada: ${ejecuciones} ejecuciones en 2 idiomas × 3 escenarios × 2 situaciones de caos,` +
-    ` más ${lineasCaos} rótulos del sandbox de caos, sin errores`,
+  `✔ consola verificada: ${ejecuciones} ejecuciones en 2 idiomas × 3 escenarios × 2 situaciones de caos` +
+    ` × 3 estados de runbook, más ${lineasCaos} rótulos del sandbox de caos` +
+    ` y ${lineasPlaybook} del Command Center, sin errores`,
 )

@@ -490,6 +490,8 @@ export const ui = {
     postmortems: 'Post-mortems',
     labs: 'Labs',
     caos: 'Chaos',
+    slo: 'SLO & Budget',
+    playbooks: 'Runbooks',
     consola: 'Consola',
     trayectoria: 'Trayectoria',
     contacto: 'Contacto',
@@ -688,6 +690,197 @@ export const ui = {
     },
   },
 
+  // ── Command Center · runbooks de incidente ─────────────────
+  playbooks: {
+    label: 'Command Center',
+    titulo: 'El runbook, paso a paso y en la consola de abajo',
+    bajada:
+      'Tres síntomas que aparecen en cualquier guardia: el proceso que se come la memoria, el que se come el CPU y el pool de conexiones agotado. Cada uno abre su runbook y se ejecuta un paso por vez, en el orden en que se haría de verdad — con el diagnóstico antes de la mitigación, porque reiniciar primero borra la evidencia y garantiza que el incidente vuelva.',
+    aviso:
+      'Esto es procedimiento, no una corrida registrada: los comandos son los que se escribirían, y las salidas son ilustrativas. No hay un cluster en vivo detrás y cada bloque que imprime la consola lo dice en su propia cabecera. Los incidentes que sí ocurrieron, con bitácora y números medidos, están en la sección de post-mortems.',
+    abrir: 'Abrir runbook',
+    abierto: 'Abierto',
+    pasosCount: (n) => `${n} pasos`,
+    sinPlaybook: 'Ningún runbook abierto',
+    sinPlaybookDetalle: 'Elegí un síntoma para abrir su procedimiento.',
+    elegiUno: 'Elegí uno de los tres runbooks de arriba para abrirlo acá.',
+    listoParaCorrer: 'Abierto, sin ejecutar ningún paso todavía.',
+    paso: 'Paso',
+    correrPrimero: 'Ejecutar primer paso',
+    correrSiguiente: 'Siguiente paso',
+    finalizado: 'Runbook completo',
+    reiniciar: 'Reiniciar el runbook',
+    cerrar: 'Cerrar el runbook',
+    salidaEnConsola: 'La salida de cada paso se escribe en la consola de más abajo.',
+    completado: 'Runbook completo: el servicio quedó verificado, no solo mitigado.',
+    escenarios: {
+      'memory-leak': {
+        titulo: 'Memory leak en la aplicación',
+        descripcion:
+          'El pod crece hasta el límite y el kernel lo mata. Reinicia, vuelve a crecer, y el gráfico dibuja una sierra.',
+        hipotesis:
+          'La hipótesis a descartar primero es la más barata: que no sea un leak sino un límite mal puesto. Recién si el consumo crece de forma monótona entre reinicios hay algo que perseguir en el heap.',
+        pasos: {
+          confirmar: {
+            titulo: 'Confirmar cuál pod y cuánto',
+            porQue:
+              'Antes de hablar de leak hay que ver si el consumo está repartido o concentrado en una réplica. Si crecen las tres parejo, el problema es el límite; si crece una sola, es esa instancia.',
+          },
+          evidencia: {
+            titulo: 'Buscar el OOMKill en el estado anterior',
+            porQue:
+              'Un pod que "se reinició solo" no dice nada. `Reason: OOMKilled` con exit code 137 sí: el kernel lo mató por memoria, y eso descarta un crash de la aplicación.',
+          },
+          capturar: {
+            titulo: 'Capturar el heap ANTES de reiniciar',
+            porQue:
+              'Este es el paso que se saltea siempre. El rollout restart de abajo devuelve el servicio y borra la única evidencia que explica por qué se llenó. Sin el dump, el incidente se cierra como "reiniciado" y vuelve la semana que viene.',
+          },
+          mitigar: {
+            titulo: 'Devolver el servicio',
+            porQue:
+              'Con la evidencia ya guardada, mitigar es barato. El rollout restart reemplaza los pods de a uno, así que el servicio no se corta mientras se recupera la memoria.',
+          },
+          verificar: {
+            titulo: 'Verificar, no suponer',
+            porQue:
+              'Un incidente no se cierra cuando se ejecuta la mitigación: se cierra cuando la medición lo confirma. Si el consumo vuelve a la línea base, la mitigación funcionó y queda abierto el análisis del dump.',
+          },
+        },
+      },
+      'high-cpu': {
+        titulo: 'CPU al tope en producción',
+        descripcion:
+          'Las tres réplicas al 95 % de su límite, latencia por las nubes y ninguna caída: el servicio responde, pero tarde.',
+        hipotesis:
+          'Con las tres réplicas iguales al mismo tiempo, la causa casi nunca es una instancia enferma: es algo que entró para todas a la vez. Un despliegue o un cambio de tráfico.',
+        pasos: {
+          confirmar: {
+            titulo: 'Ver si es una réplica o son todas',
+            porQue:
+              'La distribución del síntoma es el primer dato del diagnóstico. Tres réplicas idénticas al tope descartan el problema local y apuntan a un cambio común.',
+          },
+          correlacionar: {
+            titulo: 'Correlacionar con el último despliegue',
+            porQue:
+              'La pregunta más rentable de toda la guardia: ¿qué cambió? Un rollout seis minutos antes de la alerta no prueba la causa, pero ordena el resto de la investigación y habilita el rollback como mitigación.',
+          },
+          culpable: {
+            titulo: 'Encontrar dónde se va el CPU',
+            porQue:
+              'Un profiler sobre el proceso vivo convierte la sospecha en un nombre de función. Sin este paso, el rollback arregla el síntoma y nadie aprende qué lo causó.',
+          },
+          mitigar: {
+            titulo: 'Volver a la revisión anterior',
+            porQue:
+              'Con la causa acotada al cambio, el rollback es la mitigación más rápida y la de menor riesgo. Escalar horizontalmente habría comprado tiempo pagando el doble de infraestructura por el mismo bug.',
+          },
+          verificar: {
+            titulo: 'Confirmar que volvió a la línea base',
+            porQue:
+              'El CPU de vuelta en decenas de milicores es lo que cierra la mitigación. Lo que sigue es el fix del patrón que se recompilaba en cada request, y eso ya no es guardia: es backlog.',
+          },
+        },
+      },
+      'db-connections': {
+        titulo: 'Pool de conexiones agotado',
+        descripcion:
+          'La base rechaza conexiones nuevas, la aplicación devuelve 500 y el pool está lleno de sesiones que no hacen nada.',
+        hipotesis:
+          'Un pool lleno rara vez significa demasiado tráfico. Casi siempre significa transacciones que nadie cerró: conexiones tomadas, ociosas y sin devolver.',
+        pasos: {
+          confirmar: {
+            titulo: 'Medir cuán cerca del techo está',
+            porQue:
+              'Antes de tocar nada hay que saber si faltan diez conexiones o dos. 198 de 200 explica los 500 sin necesidad de mirar los logs de la aplicación.',
+          },
+          quienes: {
+            titulo: 'Ver en qué estado están esas conexiones',
+            porQue:
+              'Es el dato que decide el resto. 171 en `idle in transaction` contra 19 activas dice que el problema no es carga: son transacciones abiertas que la aplicación nunca cerró.',
+          },
+          contener: {
+            titulo: 'Liberar las sesiones colgadas',
+            porQue:
+              'Cortar solo las ociosas de más de cinco minutos devuelve el servicio sin tocar las 19 que están trabajando. Es contención, no solución: si se corta y nada más, el pool se vuelve a llenar.',
+          },
+          mitigar: {
+            titulo: 'Bajar el pool por réplica',
+            porQue:
+              'Tres réplicas con un pool de 60 cada una piden 180 conexiones a una base que da 200. Bajar el máximo por réplica ataca la causa estructural, y el rollout se verifica antes de dar el incidente por controlado.',
+          },
+          verificar: {
+            titulo: 'Confirmar que el estado se estabilizó',
+            porQue:
+              'Sin `idle in transaction` en el listado, la contención funcionó. El fix definitivo —el bloque que no cierra la transacción cuando falla— queda como acción del post-mortem.',
+          },
+        },
+      },
+    },
+    consola: {
+      titulo: 'Runbooks de incidente disponibles',
+      pista: 'Usá `playbook <id>` para abrirlo y `playbook next` para correr el paso siguiente.',
+      sinPlaybook: 'Ningún runbook abierto.',
+      nadaAbierto: 'No hay ningún runbook abierto. Probá `playbook`.',
+      yaTerminado: 'El runbook ya llegó al último paso. Probá `playbook restart`.',
+      noExiste: (id) => `playbook: no existe el runbook "${id}". Probá \`playbook\`.`,
+      abriendo: (titulo) => `runbook abierto · ${titulo}`,
+      abiertoEn: (titulo, paso, total) => `abierto: ${titulo} · paso ${paso}/${total}`,
+      aviso: '# procedimiento · salidas ilustrativas, no hay un cluster en vivo detrás',
+      senal: 'señal que dispara',
+      paso: (n, total) => `paso ${n}/${total}`,
+      terminado: (titulo) => `runbook completo · ${titulo} · servicio verificado, no solo mitigado`,
+      reiniciado: (titulo) => `runbook reiniciado · ${titulo}`,
+      cerrado: (titulo) => `runbook cerrado · ${titulo}`,
+    },
+  },
+
+  // ── SLO y error budget ─────────────────────────────────────
+  slo: {
+    label: 'SLO & Error Budget',
+    titulo: 'Cuántos minutos de caída compra cada nueve',
+    bajada:
+      'Un SLO no es una promesa: es un presupuesto. Elegí el objetivo y mirá cuánto tiempo caído permite en cada período — y cuánto de ese presupuesto se comieron los simulacros de chaos engineering que corriste en esta sesión.',
+    tablero: 'slo-calculator · downtime permitido',
+    elegirObjetivo: 'Elegir objetivo de disponibilidad',
+    elegirPeriodo: 'Elegir período del presupuesto',
+    tablaAria: 'Caída máxima permitida por período y objetivo de disponibilidad',
+    periodo: 'Período',
+    sinDatos: 'sin datos',
+    periodos: {
+      dia: 'por día',
+      semana: 'por semana',
+      mes: 'por mes',
+      anio: 'por año',
+    },
+    notaTabla:
+      'Aritmética pura: (1 − objetivo) × período. El mes son 30 días y el año 365, que es la convención con la que se publican estas tablas. La columna resaltada es la del objetivo elegido; las otras tres están al lado a propósito, porque la pregunta que importa no es cuánto permite 99,9 sino cuánto cuesta el nueve que sigue.',
+    presupuestoDe: (objetivo, periodo) => `presupuesto de ${objetivo} ${periodo}`,
+    tiles: {
+      presupuesto: 'Presupuesto',
+      consumido: 'Consumido',
+      restante: 'Restante',
+    },
+    niveles: {
+      sano: 'Presupuesto sano',
+      atencion: 'Presupuesto en atención',
+      critico: 'Presupuesto crítico',
+      agotado: 'Presupuesto agotado',
+    },
+    simulacrosCorridos: (n) => (n === 1 ? '1 simulacro en esta sesión' : `${n} simulacros en esta sesión`),
+    sinSimulacros: 'todavía no corriste ningún simulacro',
+    porcentajeGastado: (p) => `${p} % del presupuesto`,
+    desglose: {
+      caido: (d) => `caída total: ${d}`,
+      degradado: (d) => `degradación: ${d}`,
+      enCurso: 'simulacro en curso · sumando',
+    },
+    avisoSinSimulacros:
+      'El consumo lo generan los simulacros del sandbox de chaos engineering de más arriba. Inyectá uno y mirá cómo se come el presupuesto en tiempo real: diez segundos de simulacro son diez segundos de un mes de 99,99 %.',
+    avisoConSimulacros:
+      'Estos segundos son de reloj y están medidos, pero el incidente que los produjo fue simulado: es presupuesto gastado en un simulacro, no en una caída. Un simulacro cuenta entero, sea caída o degradación — ponderar la degradación exigiría saber qué fracción de las peticiones falló, y eso acá no se midió.',
+  },
+
   // ── Topología en vivo (dentro de la sección de telemetría) ──
   topologia: {
     tablero: 'topology · live',
@@ -788,6 +981,9 @@ export const ui = {
         ['chaos', 'escenarios de chaos engineering disponibles'],
         ['chaos <id>', 'inyecta un fallo simulado (auto-healing a los 10 s)'],
         ['chaos heal', 'restaura sin esperar al auto-healing'],
+        ['playbook', 'runbooks de incidente disponibles'],
+        ['playbook <id>', 'abre un runbook (salidas ilustrativas)'],
+        ['playbook next', 'ejecuta el paso siguiente del runbook'],
         ['whoami', 'quién escribe todo esto'],
         ['cv', 'descarga el CV'],
         ['contact', 'datos de contacto'],

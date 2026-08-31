@@ -11,6 +11,8 @@
 // ─────────────────────────────────────────────────────────────
 import * as es from '../src/data/content.js'
 import * as en from '../src/data/content.en.js'
+import { PLAYBOOKS } from '../src/data/playbooks.js'
+import { ESCENARIOS } from '../src/lib/caos.js'
 
 const errores = []
 const avisos = []
@@ -54,7 +56,7 @@ function caminos(objeto, prefijo = '') {
   // propósito: si el nav suma una sección —o un rótulo de grupo— y nadie
   // traduce su etiqueta, esto lo caza.
   const RAIZ = ['sobre-mi', 'skills', 'observabilidad', 'labs', 'trayectoria', 'contacto']
-  const AGRUPADAS = ['metricas', 'telemetria', 'postmortems', 'caos', 'consola']
+  const AGRUPADAS = ['metricas', 'telemetria', 'postmortems', 'caos', 'slo', 'playbooks', 'consola']
   for (const id of [...RAIZ, ...AGRUPADAS]) {
     if (!es.ui.nav[id]) falla(`ui.nav["${id}"] sin etiqueta en español`)
     if (!en.ui.nav[id]) falla(`ui.nav["${id}"] sin etiqueta en inglés`)
@@ -91,7 +93,40 @@ for (const idioma of [
   }
 }
 
-// ── 6. Ningún enlace muerto ──────────────────────────────────
+// ── 6. Runbooks y escenarios de caos, traducidos por id ──────
+// El chequeo de caminos de arriba compara los dos idiomas entre sí, pero no
+// contra el catálogo técnico: si `playbooks.js` suma un paso y nadie lo
+// traduce en NINGUNO de los dos idiomas, los dos siguen siendo espejo y el
+// paso sale en pantalla con el título vacío. Esto lo caza.
+for (const idioma of [
+  { nombre: 'es', datos: es },
+  { nombre: 'en', datos: en },
+]) {
+  for (const pb of PLAYBOOKS) {
+    const texto = idioma.datos.ui.playbooks.escenarios[pb.id]
+    if (!texto) {
+      falla(`ui.playbooks.escenarios["${pb.id}"] no existe en ${idioma.nombre}`)
+      continue
+    }
+    for (const campo of ['titulo', 'descripcion', 'hipotesis']) {
+      if (!texto[campo]) falla(`ui.playbooks.escenarios["${pb.id}"].${campo} vacío en ${idioma.nombre}`)
+    }
+    for (const paso of pb.pasos) {
+      const tp = texto.pasos?.[paso.id]
+      if (!tp?.titulo || !tp?.porQue) {
+        falla(`ui.playbooks.escenarios["${pb.id}"].pasos["${paso.id}"] incompleto en ${idioma.nombre}`)
+      }
+    }
+  }
+
+  for (const e of ESCENARIOS) {
+    if (!idioma.datos.ui.caos.escenarios[e.id]?.titulo) {
+      falla(`ui.caos.escenarios["${e.id}"] sin título en ${idioma.nombre}`)
+    }
+  }
+}
+
+// ── 7. Ningún enlace muerto ──────────────────────────────────
 // Un link en '#' renderiza un botón que no lleva a ningún lado, que es peor
 // que no mostrarlo: el visitante hace clic y se queda donde estaba.
 for (const idioma of [
@@ -112,7 +147,7 @@ for (const idioma of [
   }
 }
 
-// ── 7. Aviso si los CV todavía no se generaron ───────────────
+// ── 8. Aviso si los CV todavía no se generaron ───────────────
 // NO es un error: los PDF son un derivado que produce `npm run build`, así
 // que en un checkout limpio no existen todavía y este script corre antes del
 // build a propósito. Que el archivo prometido por `profile.cv` termine en
@@ -133,7 +168,7 @@ for (const idioma of [
   }
 }
 
-// ── 8. Avisos: cosas que no rompen pero conviene mirar ───────
+// ── 9. Avisos: cosas que no rompen pero conviene mirar ───────
 if (!process.env.VITE_FORMSPREE_ID) {
   avisos.push('VITE_FORMSPREE_ID sin definir: el formulario usa el respaldo por mailto.')
 }
