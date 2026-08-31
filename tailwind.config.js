@@ -40,12 +40,27 @@ export default {
           '0%, 49%': { opacity: '1' },
           '50%, 100%': { opacity: '0' },
         },
+        // El paquete del diagrama de topología. Dos keyframes y no uno con
+        // transform porque el conector cambia de eje según el breakpoint:
+        // vertical apilado en móvil, horizontal en escritorio.
+        flowX: {
+          '0%': { left: '0%', opacity: '0' },
+          '12%, 88%': { opacity: '1' },
+          '100%': { left: '100%', opacity: '0' },
+        },
+        flowY: {
+          '0%': { top: '0%', opacity: '0' },
+          '12%, 88%': { opacity: '1' },
+          '100%': { top: '100%', opacity: '0' },
+        },
       },
       animation: {
         'pulse-dot': 'pulseDot 1.6s ease-in-out infinite',
         'fade-up': 'fadeUp .7s ease-out both',
         scanline: 'scanline 6s linear infinite',
         blink: 'blink 1.1s step-end infinite',
+        'flow-x': 'flowX 2.4s linear infinite',
+        'flow-y': 'flowY 2.4s linear infinite',
       },
       boxShadow: {
         glow: '0 0 0 1px rgba(6,182,212,.25), 0 12px 40px -12px rgba(6,182,212,.35)',

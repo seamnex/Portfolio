@@ -565,6 +565,15 @@ export const ui = {
     corridasVerdes: (n) => `${n} green runs on main`,
     fallidasDe: (f, t) => `${f} failed of ${t} completed runs`,
     mttdDetalle: (ventana, umbral) => `rule: ${umbral}% of 5xx over a ${ventana}s window`,
+    anotaciones: {
+      recuperado: (n) => `Recovery: CFR 0% over the last ${n} runs, with red ones before`,
+      limpio: (n) => `CFR 0% over the last ${n} runs`,
+      conFallas: (f, n) => `${f} failed over the last ${n} runs`,
+      optimizado: (antes, ahora, dias) =>
+        `Optimized: ${antes} → ${ahora} (median by halves of the ${dias}d window)`,
+      arranque: (primera, estable) => `Cold start ${primera} ms → ${estable} ms once warm`,
+      referenciaP50: (p50) => `Dashed line: measured p50, ${p50} ms`,
+    },
     tiles: {
       despliegues: 'Deployment frequency',
       leadTime: 'Lead time for changes',
@@ -586,6 +595,64 @@ export const ui = {
       red: 'The API could not be reached from this browser.',
       timeout: 'The API call took too long.',
       api: 'The API returned something unexpected.',
+    },
+  },
+
+  // ── Live topology (inside the telemetry section) ────────────
+  topologia: {
+    tablero: 'topology · live',
+    pista: 'hover or tab onto a node',
+    bajada:
+      'The three pieces that serve this page, with the health and latency being measured right now. Both arrows start at the browser because this site is static: there is no backend in between calling GitHub for you.',
+    leyenda:
+      'Same checks as the status panel at the top of the page. If you inject a fault in the chaos engineering sandbox, the affected node degrades here too and is labelled as a drill.',
+    simulado: 'This node is degraded by a drill: the value is deliberately fabricated and the real check keeps running underneath.',
+    desdeCache: 'not measured · response from cache',
+    sinDato: '—',
+    nodos: {
+      cliente: {
+        titulo: 'Browser Client',
+        sub: 'your browser',
+        descripcion:
+          'The browser reading this. It is the one timing both requests in the diagram, so the latency you see is yours and not that of a synthetic monitor on another continent.',
+      },
+      edge: {
+        titulo: 'Vercel Edge Network',
+        sub: 'site origin',
+        descripcion:
+          'The edge that serves the HTML, the JS and the assets. Measured with a real, uncached request for a small file: it gives the round trip to the nearest PoP, not the download time.',
+      },
+      actions: {
+        titulo: 'GitHub Actions API',
+        sub: 'api.github.com',
+        descripcion:
+          'The public API behind the pipeline status and the DORA board numbers. It is the only external dependency of this site, which is why it gets its own node: when its rate limit kicks in, what goes without data is measurable and stated.',
+      },
+    },
+    enlaces: {
+      origen: 'GET /favicon.svg',
+      actions: 'GET /actions/runs',
+    },
+    estados: {
+      ok: 'operational',
+      fallo: 'failing',
+      corriendo: 'run in progress',
+      consultando: 'checking…',
+      desconocido: 'no data',
+    },
+    campos: {
+      latencia: 'Latency',
+      p50: 'p50',
+      muestras: 'Samples',
+      codigo: 'Response',
+      entorno: 'Environment',
+      corrida: 'Run',
+      rama: 'Branch',
+      fuente: 'Source',
+    },
+    unidades: {
+      ms: 'ms',
+      p95: 'ms p95',
     },
   },
 
