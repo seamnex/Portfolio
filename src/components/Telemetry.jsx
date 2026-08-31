@@ -1,15 +1,32 @@
 import { useEffect, useRef } from 'react'
-import { Activity, GitCommitHorizontal, Radio, Rocket, ShieldAlert, Timer } from 'lucide-react'
+import {
+  Activity,
+  Gauge,
+  GitCommitHorizontal,
+  Radio,
+  Rocket,
+  RotateCcw,
+  ShieldAlert,
+  ShieldCheck,
+  Timer,
+  TrendingDown,
+} from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useTelemetria } from '../telemetria/TelemetriaProvider'
 import { useCaos } from '../caos/CaosProvider'
 import { MEDIDAS, num } from '../data/medidas.js'
 import { OBJETIVOS } from '../data/dora.js'
 import { cadencia, cumple, formatearDuracion } from '../lib/dora.js'
+import { arranqueLatencia, rachaCfr, tendenciaLeadTime, VENTANA_CORTA } from '../lib/anotaciones.js'
 import Section from './ui/Section'
 import Sparkline from './ui/Sparkline'
+import Topology from './Topology'
 
 const iconos = { Rocket, GitCommitHorizontal, ShieldAlert, Timer, Activity }
+
+// Íconos de las anotaciones. Van aparte de los del tile porque cuentan
+// otra cosa: no qué métrica es, sino qué dice la lectura de su serie.
+const iconosAnotacion = { RotateCcw, ShieldCheck, TrendingDown, Gauge }
 
 // Clases completas, por el purge de Tailwind: `text-${tone}` no sobrevive.
 const tonos = {
@@ -28,9 +45,25 @@ const tonos = {
  * fila y rotulado. Al revés —objetivo grande, medición al pie— es como se
  * arma un tablero DORA que miente sin escribir un solo número falso.
  */
-function Tile({ icono, titulo, valor, unidad, tone = 'accent', detalle, objetivo, veredicto, serie, tipoSerie, t }) {
+function Tile({
+  icono,
+  titulo,
+  valor,
+  unidad,
+  tone = 'accent',
+  detalle,
+  objetivo,
+  veredicto,
+  serie,
+  tipoSerie,
+  referencias,
+  ventana,
+  anotacion,
+  t,
+}) {
   const Icono = iconos[icono]
   const tono = tonos[valor == null ? 'muted' : tone] ?? tonos.accent
+  const IconoAnotacion = anotacion ? iconosAnotacion[anotacion.icono] : null
 
   return (
     <article className={`card flex h-full flex-col p-5 transition-colors ${tono.borde}`}>
@@ -62,8 +95,25 @@ function Tile({ icono, titulo, valor, unidad, tone = 'accent', detalle, objetivo
       </p>
 
       <div className="mt-3">
-        <Sparkline datos={serie} tone={valor == null ? 'muted' : tone} tipo={tipoSerie} etiqueta={titulo} />
+        <Sparkline
+          datos={serie}
+          tone={valor == null ? 'muted' : tone}
+          tipo={tipoSerie}
+          etiqueta={titulo}
+          referencias={referencias}
+          ventana={ventana}
+        />
       </div>
+
+      {/* La anotación va pegada al gráfico y no al número: es una lectura
+          de la serie que está justo arriba, y separarla la dejaría flotando
+          como una afirmación suelta sin el dibujo que la respalda. */}
+      {anotacion && (
+        <p className={`mt-2 flex items-start gap-1.5 font-mono text-[10px] leading-relaxed ${tonos[anotacion.tone]?.valor ?? tonos.muted.valor}`}>
+          {IconoAnotacion && <IconoAnotacion size={11} className="mt-px shrink-0" aria-hidden="true" />}
+          {anotacion.texto}
+        </p>
+      )}
 
       <p className="mt-2 font-mono text-[10px] leading-relaxed text-slate-600">{detalle}</p>
 
@@ -100,6 +150,51 @@ export default function Telemetry() {
   const cad = dora ? cadencia(dora.despliegues.porDia) : null
   const sinFuente = !cargando && !dora
   const sinDato = t.motivo[motivo] ?? t.midiendo
+
+  // ── Anotaciones ────────────────────────────────────────────
+  // Las tres salen de las mismas series que dibujan los sparklines. Si la
+  // serie no alcanza para sostener la lectura, la función devuelve null y
+  // el tile queda sin anotación: no hay texto de relleno.
+  const duracion = (segundos) => {
+    const d = formatearDuracion(segundos, lang)
+    return d ? `${d.valor} ${d.unidad}` : t.sinDatos
+  }
+
+  const racha = dora?.cfr ? rachaCfr(dora.cfr.serie) : null
+  const anotacionCfr = racha
+    ? {
+        icono: racha.recuperado ? 'RotateCcw' : 'ShieldCheck',
+        tone: racha.limpia ? 'ok' : 'warn',
+        texto: racha.limpia
+          ? racha.recuperado
+            ? t.anotaciones.recuperado(racha.ventana)
+            : t.anotaciones.limpio(racha.ventana)
+          : t.anotaciones.conFallas(racha.fallidas, racha.ventana),
+      }
+    : null
+
+  const tendencia = dora?.leadTime ? tendenciaLeadTime(dora.leadTime.serie) : null
+  const anotacionLead = tendencia
+    ? {
+        icono: 'TrendingDown',
+        tone: 'ok',
+        texto: t.anotaciones.optimizado(duracion(tendencia.antes), duracion(tendencia.ahora), ventanaDias),
+      }
+    : null
+
+  const arranque = arranqueLatencia(latencia.muestras)
+  const anotacionLatencia = arranque
+    ? {
+        icono: 'Gauge',
+        tone: 'accent',
+        texto: t.anotaciones.arranque(
+          num(arranque.primera.toFixed(1), lang),
+          num(arranque.estable.toFixed(1), lang),
+        ),
+      }
+    : latencia.p50 != null
+      ? { icono: 'Gauge', tone: 'muted', texto: t.anotaciones.referenciaP50(num(latencia.p50.toFixed(1), lang)) }
+      : null
 
   return (
     <Section id="telemetria" label={t.label} titulo={t.titulo} bajada={t.bajada}>
@@ -161,6 +256,11 @@ export default function Telemetry() {
               detalle={dora?.leadTime ? t.medianaDe(dora.leadTime.muestras) : sinDato}
               objetivo={OBJETIVOS.leadTime.etiqueta}
               serie={dora?.leadTime?.serie}
+              // La referencia punteada es la mediana de la primera mitad de
+              // la ventana: el "antes" del que habla la anotación, dibujado
+              // sobre la misma serie para que se pueda verificar a ojo.
+              referencias={tendencia ? [{ valor: tendencia.antes, tone: 'muted' }] : []}
+              anotacion={anotacionLead}
             />
           </div>
 
@@ -177,6 +277,8 @@ export default function Telemetry() {
               objetivo={OBJETIVOS.cfr.etiqueta}
               serie={dora?.cfr?.serie}
               tipoSerie="barras"
+              ventana={VENTANA_CORTA}
+              anotacion={anotacionCfr}
             />
           </div>
 
@@ -209,6 +311,10 @@ export default function Telemetry() {
               detalle={latencia.n ? t.muestras(latencia.n) : t.midiendo}
               objetivo={latencia.p50 != null ? `p50 ${num(latencia.p50.toFixed(1), lang)} ms` : t.sinDatos}
               serie={latencia.muestras}
+              // Línea de comparación al p50 medido: el p95 solo dice algo
+              // puesto al lado de la mitad de las peticiones que sí van bien.
+              referencias={[{ valor: latencia.p50, tone: 'ok' }]}
+              anotacion={anotacionLatencia}
             />
           </div>
 
@@ -225,6 +331,11 @@ export default function Telemetry() {
           </div>
         </div>
       </div>
+
+      {/* La topología cierra la sección: el tablero dice cómo se comporta el
+          sistema y el diagrama, sobre qué piezas. Va después porque sin los
+          números de arriba es un dibujo de arquitectura como cualquier otro. */}
+      <Topology />
     </Section>
   )
 }

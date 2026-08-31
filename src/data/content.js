@@ -652,6 +652,18 @@ export const ui = {
     corridasVerdes: (n) => `${n} corridas verdes en main`,
     fallidasDe: (f, t) => `${f} fallidas de ${t} corridas completadas`,
     mttdDetalle: (ventana, umbral) => `regla: ${umbral} % de 5xx en ventana de ${ventana} s`,
+    // Anotaciones de los sparklines. Todas reciben números ya calculados
+    // sobre la serie real: ninguna afirma nada que el gráfico de arriba no
+    // esté mostrando, y cuando la serie no alcanza no se renderiza ninguna.
+    anotaciones: {
+      recuperado: (n) => `Recuperación: CFR 0 % en las últimas ${n} corridas, con rojos antes`,
+      limpio: (n) => `CFR 0 % en las últimas ${n} corridas`,
+      conFallas: (f, n) => `${f} fallidas en las últimas ${n} corridas`,
+      optimizado: (antes, ahora, dias) =>
+        `Optimizado: ${antes} → ${ahora} (mediana por mitades de la ventana de ${dias} d)`,
+      arranque: (primera, estable) => `Arranque en frío ${primera} ms → ${estable} ms ya estabilizado`,
+      referenciaP50: (p50) => `Línea punteada: p50 medido, ${p50} ms`,
+    },
     tiles: {
       despliegues: 'Deployment frequency',
       leadTime: 'Lead time for changes',
@@ -673,6 +685,64 @@ export const ui = {
       red: 'No se pudo alcanzar la API desde este navegador.',
       timeout: 'La consulta a la API tardó demasiado.',
       api: 'La API respondió algo inesperado.',
+    },
+  },
+
+  // ── Topología en vivo (dentro de la sección de telemetría) ──
+  topologia: {
+    tablero: 'topology · live',
+    pista: 'pasá el cursor o tabulá sobre un nodo',
+    bajada:
+      'Las tres piezas que sirven esta página, con el estado y la latencia que se están midiendo ahora mismo. Las dos flechas salen del navegador porque este sitio es estático: no hay backend en el medio que llame a GitHub por vos.',
+    leyenda:
+      'Mismos chequeos que el panel de estado de arriba de la página. Si inyectás un fallo en el sandbox de chaos engineering, el nodo afectado se degrada acá también y queda rotulado como simulacro.',
+    simulado: 'Este nodo está degradado por un simulacro: el valor es inventado a propósito y el chequeo real sigue corriendo por debajo.',
+    desdeCache: 'sin medir · respuesta desde cache',
+    sinDato: '—',
+    nodos: {
+      cliente: {
+        titulo: 'Browser Client',
+        sub: 'tu navegador',
+        descripcion:
+          'El navegador que está leyendo esto. Es el que cronometra las dos peticiones del diagrama, así que la latencia que ves es la tuya y no la de un monitor sintético en otro continente.',
+      },
+      edge: {
+        titulo: 'Vercel Edge Network',
+        sub: 'origen del sitio',
+        descripcion:
+          'El edge que sirve el HTML, el JS y los assets. Se mide con una petición real y sin cache a un archivo chico: da la ida y vuelta hasta el PoP más cercano, no el tiempo de descarga.',
+      },
+      actions: {
+        titulo: 'GitHub Actions API',
+        sub: 'api.github.com',
+        descripcion:
+          'La API pública de la que salen el estado del pipeline y los números del tablero DORA. Es la única dependencia externa del sitio, y por eso se muestra como nodo propio: cuando su límite de consultas corta, lo que queda sin datos es medible y está dicho.',
+      },
+    },
+    enlaces: {
+      origen: 'GET /favicon.svg',
+      actions: 'GET /actions/runs',
+    },
+    estados: {
+      ok: 'operativo',
+      fallo: 'con fallo',
+      corriendo: 'corrida en curso',
+      consultando: 'consultando…',
+      desconocido: 'sin datos',
+    },
+    campos: {
+      latencia: 'Latencia',
+      p50: 'p50',
+      muestras: 'Muestras',
+      codigo: 'Respuesta',
+      entorno: 'Entorno',
+      corrida: 'Corrida',
+      rama: 'Rama',
+      fuente: 'Fuente',
+    },
+    unidades: {
+      ms: 'ms',
+      p95: 'ms p95',
     },
   },
 

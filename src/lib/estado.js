@@ -98,6 +98,7 @@ export async function chequearActions(repo, { usarCache = true } = {}) {
   }
 
   let res
+  const arranque = performance.now()
   try {
     res = await fetchConTimeout(
       `https://api.github.com/repos/${repo}/actions/runs?branch=main&per_page=1`,
@@ -106,6 +107,11 @@ export async function chequearActions(repo, { usarCache = true } = {}) {
   } catch (error) {
     return { estado: 'desconocido', motivo: error?.name === 'AbortError' ? 'timeout' : 'red', repo }
   }
+  // Ida y vuelta real hasta api.github.com, para el diagrama de topología.
+  // Solo vale para ESTA respuesta: más abajo se saca antes de cachear, para
+  // que una lectura de cache no muestre la latencia de hace cinco minutos
+  // como si acabara de medirse.
+  const latencia = Math.round(performance.now() - arranque)
 
   if (res.status === 403 || res.status === 429) {
     // El límite por IP se agota con un visitante insistente, no con un fallo
@@ -140,11 +146,15 @@ export async function chequearActions(repo, { usarCache = true } = {}) {
     conclusion: corrida.conclusion,
     url: corrida.html_url,
     fecha: corrida.updated_at,
+    latencia,
   }
 
   // Una corrida en curso cambia en minutos: cachearla dejaría el panel
   // mostrando "running" mucho después de que terminó.
-  if (resultado.estado !== 'corriendo') guardarCache(repo, resultado)
+  if (resultado.estado !== 'corriendo') {
+    const { latencia: _medida, ...cacheable } = resultado
+    guardarCache(repo, cacheable)
+  }
   return resultado
 }
 
