@@ -14,9 +14,13 @@
 //     propia salida, no solo en el aviso de la cabecera.
 //   · `chaos` inyecta un simulacro y lo rotula como tal en cada línea que
 //     imprime, incluida la de `status` mientras dura.
+//   · `playbook` corre un runbook paso a paso. Sus salidas son
+//     ILUSTRATIVAS —no hay cluster detrás— y el propio bloque lo dice en
+//     su segunda línea, antes de imprimir el primer comando.
 // ─────────────────────────────────────────────────────────────
 import { MEDIDAS, num } from '../data/medidas.js'
 import { ESCENARIOS, escenarioPorId } from './caos.js'
+import { PLAYBOOKS, playbookPorId } from '../data/playbooks.js'
 
 /** Comandos ofrecidos al autocompletado, en el orden en que se sugieren. */
 export const COMANDOS = [
@@ -35,6 +39,12 @@ export const COMANDOS = [
   'chaos api-caida',
   'chaos error-500',
   'chaos heal',
+  'playbook',
+  'playbook memory-leak',
+  'playbook high-cpu',
+  'playbook db-connections',
+  'playbook next',
+  'playbook stop',
   'whoami',
   'cv',
   'contact',
@@ -330,6 +340,67 @@ function cmdChaos(ctx, argumento) {
   }
 }
 
+/**
+ * Command Center desde la consola.
+ *
+ *   playbook            -> lista los runbooks y el que este abierto
+ *   playbook <id>       -> lo abre, sin correr ningun paso todavia
+ *   playbook next|n     -> ejecuta el paso siguiente
+ *   playbook stop|close -> lo cierra
+ *
+ * No hay `playbook run` que los corra todos de una: un runbook que se
+ * ejecuta solo no ensena nada. Lo que ensena es la decision de que mirar
+ * antes de tocar algo, y esa se toma un paso por vez.
+ */
+function cmdPlaybook(ctx, argumento) {
+  const { ui, playbook } = ctx
+  const t = ui.playbooks
+  const arg = (argumento ?? '').trim().toLowerCase()
+  const abierto = playbook?.activo ?? null
+
+  if (!arg) {
+    const ancho = Math.max(...PLAYBOOKS.map((p) => p.id.length)) + 2
+    return {
+      lineas: [
+        titulo(t.consola.titulo),
+        ...PLAYBOOKS.map((p) =>
+          raw(`  ${columna(p.id, ancho)}[${p.severidad}]  ${t.escenarios[p.id].titulo}`),
+        ),
+        vacio(),
+        abierto
+          ? texto(t.consola.abiertoEn(t.escenarios[abierto.id].titulo, playbook.paso + 1, playbook.total), 'accent')
+          : texto(t.consola.sinPlaybook, 'muted'),
+        texto(t.consola.pista, 'muted'),
+      ],
+    }
+  }
+
+  if (arg === 'next' || arg === 'n' || arg === 'siguiente') {
+    if (!abierto) return { lineas: [texto(t.consola.nadaAbierto, 'muted')] }
+    if (playbook.paso >= playbook.total - 1) {
+      return { lineas: [texto(t.consola.yaTerminado, 'muted')] }
+    }
+    // Las lineas del paso las escribe el proveedor en su registro, igual
+    // que las fases del sandbox de caos: la consola las levanta de ahi.
+    return { lineas: [], accion: { tipo: 'playbook-siguiente' } }
+  }
+
+  if (arg === 'stop' || arg === 'close' || arg === 'cerrar') {
+    if (!abierto) return { lineas: [texto(t.consola.nadaAbierto, 'muted')] }
+    return { lineas: [], accion: { tipo: 'playbook-cerrar' } }
+  }
+
+  if (arg === 'restart' || arg === 'reset' || arg === 'reiniciar') {
+    if (!abierto) return { lineas: [texto(t.consola.nadaAbierto, 'muted')] }
+    return { lineas: [], accion: { tipo: 'playbook-reiniciar' } }
+  }
+
+  const elegido = playbookPorId(arg)
+  if (!elegido) return { lineas: [texto(t.consola.noExiste(arg), 'crit')] }
+
+  return { lineas: [], accion: { tipo: 'playbook-iniciar', id: elegido.id } }
+}
+
 function cmdWhoami(ctx) {
   return ctx.ui.consola.whoami.map((l) => texto(l, l.startsWith('Samuel') ? 'accent' : undefined))
 }
@@ -417,6 +488,7 @@ export function ejecutar(entrada, ctx) {
   }
 
   if (comando.toLowerCase() === 'chaos') return cmdChaos(ctx, argumento)
+  if (comando.toLowerCase() === 'playbook') return cmdPlaybook(ctx, argumento)
   if (comando.toLowerCase() === 'incident') return cmdIncident(ctx, argumento)
   if (comando.toLowerCase() === 'lang') return cmdLang(ctx, argumento)
 

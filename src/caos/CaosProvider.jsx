@@ -27,6 +27,11 @@ export function CaosProvider({ children }) {
   const [fase, setFase] = useState(null)
   const [terminaEn, setTerminaEn] = useState(null)
   const [registro, setRegistro] = useState([])
+  // Contabilidad de simulacros de la sesión: cuándo empezó cada uno,
+  // cuándo se cerró y cómo. Es lo que consume el error budget del
+  // calculador de SLO, y son segundos de reloj de verdad —lo simulado es
+  // el incidente, no la duración—, así que se guardan sin redondear.
+  const [simulacros, setSimulacros] = useState([])
 
   // Los timeouts de las fases se guardan para poder cancelarlos: si alguien
   // restaura a mano en el segundo 3, las fases 4 y 5 no tienen que dispararse
@@ -45,9 +50,27 @@ export function CaosProvider({ children }) {
     setRegistro((prev) => [...prev, linea].slice(-REGISTRO_MAX))
   }, [])
 
+  /**
+   * Cierra el simulacro que esté abierto, si hay alguno.
+   *
+   * Se guarda el motivo del cierre porque los tres no son lo mismo: el
+   * auto-healing cerró el ciclo solo, la restauración manual lo cortó
+   * antes, y la reinyección lo pisó con otro escenario.
+   */
+  const cerrarSimulacro = useCallback((cerradoPor) => {
+    setSimulacros((prev) => {
+      const abierto = prev.findIndex((s) => s.fin == null)
+      if (abierto < 0) return prev
+      const copia = [...prev]
+      copia[abierto] = { ...copia[abierto], fin: Date.now(), cerradoPor }
+      return copia
+    })
+  }, [])
+
   const restaurar = useCallback(
     ({ anunciar = true } = {}) => {
       limpiarTimers()
+      cerrarSimulacro('manual')
       setEscenario((activo) => {
         if (activo && anunciar) {
           anotar({
@@ -64,7 +87,7 @@ export function CaosProvider({ children }) {
       setFase(null)
       setTerminaEn(null)
     },
-    [anotar, limpiarTimers, ui],
+    [anotar, cerrarSimulacro, limpiarTimers, ui],
   )
 
   /**
@@ -80,8 +103,14 @@ export function CaosProvider({ children }) {
       // Reinyectar sobre un simulacro en curso reinicia el ciclo entero:
       // dos escenarios superpuestos darían un panel imposible de leer.
       limpiarTimers()
+      cerrarSimulacro('reinyeccion')
+      const inicio = Date.now()
       setEscenario(elegido)
-      setTerminaEn(Date.now() + AUTOHEALING_MS)
+      setTerminaEn(inicio + AUTOHEALING_MS)
+      setSimulacros((prev) => [
+        ...prev,
+        { id: `${elegido.id}:${inicio}`, escenario: elegido.id, impacto: elegido.impacto, inicio, fin: null },
+      ])
 
       FASES.forEach((f) => {
         const disparar = () => {
@@ -90,6 +119,7 @@ export function CaosProvider({ children }) {
           // La última fase ES el auto-healing: el sistema vuelve solo, sin
           // que nadie toque un botón. Ese es el punto del simulacro.
           if (f.id === 'recuperado') {
+            cerrarSimulacro('auto-healing')
             setEscenario(null)
             setTerminaEn(null)
           }
@@ -100,7 +130,7 @@ export function CaosProvider({ children }) {
 
       return true
     },
-    [anotar, limpiarTimers, ui],
+    [anotar, cerrarSimulacro, limpiarTimers, ui],
   )
 
   const limpiarRegistro = useCallback(() => setRegistro([]), [])
@@ -111,13 +141,14 @@ export function CaosProvider({ children }) {
       fase,
       terminaEn,
       registro,
+      simulacros,
       activo: escenario != null,
       inyectar,
       restaurar,
       limpiarRegistro,
       autohealingMs: AUTOHEALING_MS,
     }),
-    [escenario, fase, terminaEn, registro, inyectar, restaurar, limpiarRegistro],
+    [escenario, fase, terminaEn, registro, simulacros, inyectar, restaurar, limpiarRegistro],
   )
 
   return <CaosContext.Provider value={valor}>{children}</CaosContext.Provider>

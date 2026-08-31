@@ -4,6 +4,7 @@ import { useContenido } from '../i18n/LanguageProvider'
 import { useEstado } from '../estado/EstadoProvider'
 import { useCaos } from '../caos/CaosProvider'
 import { usePostMortem } from '../postmortem/PostMortemProvider'
+import { usePlaybook } from '../playbooks/PlaybookProvider'
 import { COMANDOS, ejecutar } from '../lib/comandos'
 import { reloj } from '../lib/caos.js'
 import Section from './ui/Section'
@@ -59,6 +60,7 @@ export default function Console() {
   const { ui, lang, cambiar } = contenido
   const estado = useEstado()
   const caos = useCaos()
+  const playbook = usePlaybook()
   const { abrir } = usePostMortem()
 
   const [entradas, setEntradas] = useState([])
@@ -82,7 +84,7 @@ export default function Console() {
 
   const correr = useCallback(
     (entrada) => {
-      const { lineas, accion } = ejecutar(entrada, { ui, lang, contenido, estado, caos })
+      const { lineas, accion } = ejecutar(entrada, { ui, lang, contenido, estado, caos, playbook })
 
       if (accion?.tipo === 'limpiar') {
         setEntradas([])
@@ -103,6 +105,18 @@ export default function Console() {
         case 'restaurar-caos':
           caos.restaurar()
           break
+        case 'playbook-iniciar':
+          playbook.iniciar(accion.id)
+          break
+        case 'playbook-siguiente':
+          playbook.siguiente()
+          break
+        case 'playbook-reiniciar':
+          playbook.reiniciar()
+          break
+        case 'playbook-cerrar':
+          playbook.cerrar()
+          break
         case 'descargar-cv': {
           // Mismo camino que el botón del hero: un <a download> temporal. El
           // navegador decide si lo baja o lo abre, y eso está bien.
@@ -118,7 +132,7 @@ export default function Console() {
           break
       }
     },
-    [ui, lang, contenido, estado, caos, abrir, cambiar],
+    [ui, lang, contenido, estado, caos, playbook, abrir, cambiar],
   )
 
   // ── Bitácora del sandbox de caos ───────────────────────────
@@ -155,6 +169,39 @@ export default function Console() {
       },
     ])
   }, [caos.registro])
+
+  // ── Salida del Command Center ──────────────────────────────
+  // Mismo mecanismo que la bitácora del caos, y por el mismo motivo: el
+  // runbook se puede abrir desde la sección de arriba o desde acá, y en
+  // los dos casos la salida tiene que terminar en la misma consola.
+  const ultimoPaso = useRef(null)
+  useEffect(() => {
+    const registro = playbook.registro
+    if (!registro.length) {
+      ultimoPaso.current = null
+      return
+    }
+
+    const desde = ultimoPaso.current ? registro.findIndex((l) => l.id === ultimoPaso.current) + 1 : 0
+    const nuevas = registro.slice(desde)
+    if (!nuevas.length) return
+
+    ultimoPaso.current = registro.at(-1).id
+    setEntradas((prev) => [
+      ...prev,
+      {
+        comando: null,
+        // El comando del paso se pinta como comando —con su `$`— y no como
+        // una línea más: es lo único de todo el bloque que alguien podría
+        // querer copiar y pegar en una terminal de verdad.
+        lineas: nuevas.map((l) =>
+          l.tipo === 'comando'
+            ? { t: 'raw', texto: `$ ${l.texto}`, tone: 'accent' }
+            : { t: 'raw', texto: l.tipo === 'salida' ? `  ${l.texto}` : l.texto, tone: l.nivel },
+        ),
+      },
+    ])
+  }, [playbook.registro])
 
   const onSubmit = (e) => {
     e.preventDefault()
