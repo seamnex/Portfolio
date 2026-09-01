@@ -1,7 +1,7 @@
 import { ArrowRight, ShieldAlert, TriangleAlert } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { usePostMortem } from '../postmortem/PostMortemProvider'
-import Section from './ui/Section'
+import Bloque from './ui/Bloque'
 
 const SEVERIDAD = {
   P1: { chip: 'border-crit/40 bg-crit/10 text-crit', borde: 'hover:border-crit/50', punto: 'bg-crit' },
@@ -75,7 +75,7 @@ export default function Incidents() {
   const { abrir } = usePostMortem()
 
   return (
-    <Section
+    <Bloque
       id="postmortems"
       label={incidentesMeta.label}
       titulo={incidentesMeta.titulo}
@@ -104,6 +104,6 @@ export default function Incidents() {
         <ShieldAlert size={12} aria-hidden="true" />
         {incidentesMeta.pista}
       </p>
-    </Section>
+    </Bloque>
   )
 }

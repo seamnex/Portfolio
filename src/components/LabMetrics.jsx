@@ -1,6 +1,6 @@
 import { ArrowUpRight, FlaskConical, HeartPulse, RefreshCw, Siren } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
-import Section from './ui/Section'
+import Bloque from './ui/Bloque'
 
 const iconos = { HeartPulse, RefreshCw, Siren }
 
@@ -70,7 +70,7 @@ export default function LabMetrics() {
   const { labMetrics } = useContenido()
 
   return (
-    <Section
+    <Bloque
       id="metricas"
       label={labMetrics.label}
       titulo={labMetrics.titulo}
@@ -90,6 +90,6 @@ export default function LabMetrics() {
           {labMetrics.nota.texto}
         </p>
       </div>
-    </Section>
+    </Bloque>
   )
 }

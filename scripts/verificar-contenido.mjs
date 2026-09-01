@@ -55,8 +55,8 @@ function caminos(objeto, prefijo = '') {
   // Mismo listado que usa Navbar.jsx, en sus dos niveles. Duplicarlo acá es a
   // propósito: si el nav suma una sección —o un rótulo de grupo— y nadie
   // traduce su etiqueta, esto lo caza.
-  const RAIZ = ['sobre-mi', 'skills', 'observabilidad', 'labs', 'trayectoria', 'contacto']
-  const AGRUPADAS = ['metricas', 'telemetria', 'caos', 'playbooks', 'consola', 'postmortems']
+  const RAIZ = ['sobre-mi', 'skills', 'trayectoria', 'observabilidad', 'contacto']
+  const AGRUPADAS = ['telemetria', 'caos', 'playbooks', 'labs', 'consola']
   for (const id of [...RAIZ, ...AGRUPADAS]) {
     if (!es.ui.nav[id]) falla(`ui.nav["${id}"] sin etiqueta en español`)
     if (!en.ui.nav[id]) falla(`ui.nav["${id}"] sin etiqueta en inglés`)
