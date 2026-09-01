@@ -10,24 +10,27 @@ import LangToggle from './ui/LangToggle'
 //  desincronizarse sin que salte a la vista.
 //
 //  Un ítem con `hijos` es un grupo. Se agrupa porque diez enlaces sueltos
-//  en la barra no son diez caminos: son un muro que nadie lee. Las siete
-//  secciones que salen del mismo laboratorio —lo que se mide, lo que se
-//  rompe a propósito, lo que eso cuesta en presupuesto, el procedimiento
-//  para arreglarlo y lo que se consulta— entran bajo un solo rótulo.
-//  Siete es mucho para una barra y poco para un desplegable, que es
-//  justamente el motivo por el que están en un desplegable.
+//  en la barra no son diez caminos: son un muro que nadie lee. Todo lo que
+//  sale del mismo laboratorio —lo que se mide, lo que se rompe a propósito,
+//  el procedimiento para arreglarlo y lo que se consulta— entra bajo un
+//  solo rótulo.
+//
+//  Los tres del medio ya no son secciones sino pestañas del Observability
+//  Hub: sus anclas viven dentro de paneles que pueden estar ocultos, así
+//  que el hub escucha el hash y abre la pestaña que corresponde antes de
+//  saltar. Por eso los rótulos repiten el nombre de la pestaña — el enlace
+//  y la pestaña que abre tienen que llamarse igual.
 //
 //  `destino` es adónde apunta el rótulo del grupo cuando alguien lo toca
-//  en vez de abrirlo: la primera de sus secciones, que es la que ordena
-//  al resto.
+//  en vez de abrirlo: el hub, que es lo que el grupo nombra.
 // ─────────────────────────────────────────────────────────────
 const NAV = [
   { id: 'sobre-mi' },
   { id: 'skills' },
   {
     id: 'observabilidad',
-    destino: 'metricas',
-    hijos: ['metricas', 'telemetria', 'postmortems', 'caos', 'slo', 'playbooks', 'consola'],
+    destino: 'observabilidad',
+    hijos: ['metricas', 'telemetria', 'caos', 'playbooks', 'consola', 'postmortems'],
   },
   { id: 'labs' },
   { id: 'trayectoria' },

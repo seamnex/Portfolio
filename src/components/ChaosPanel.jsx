@@ -3,7 +3,7 @@ import { HeartPulse, PlugZap, ServerCrash, ShieldCheck, Timer, TriangleAlert, Za
 import { useContenido } from '../i18n/LanguageProvider'
 import { useCaos } from '../caos/CaosProvider'
 import { ESCENARIOS, FASES, reloj } from '../lib/caos.js'
-import Section from './ui/Section'
+import Bloque from './ui/Bloque'
 
 const iconos = { Timer, PlugZap, ServerCrash }
 
@@ -106,7 +106,7 @@ export default function ChaosPanel() {
   const progreso = restante != null ? Math.min(100, 100 - (restante * 1000 * 100) / autohealingMs) : 0
 
   return (
-    <Section id="caos" label={t.label} titulo={t.titulo} bajada={t.bajada}>
+    <Bloque id="caos" label={t.label} titulo={t.titulo} bajada={t.bajada}>
       {/* Aviso primero, no al pie: el visitante tiene que saber que esto es
           un simulacro ANTES de apretar el botón, no después de ver el panel
           de estado en rojo y asustarse. */}
@@ -200,6 +200,6 @@ export default function ChaosPanel() {
           </span>
         </div>
       </div>
-    </Section>
+    </Bloque>
   )
 }
