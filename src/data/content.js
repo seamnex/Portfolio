@@ -482,16 +482,14 @@ export const ui = {
     inicio: 'Inicio',
     'sobre-mi': 'Perfil',
     skills: 'Skills',
-    // Rótulo del grupo del header y, ahora sí, ancla del Observability Hub.
-    observabilidad: 'Observabilidad',
-    metricas: 'Métricas',
-    // Los tres siguientes son las pestañas del hub: mismo nombre en el
+    // Rótulo del grupo del header y ancla del Observability Hub cerrado.
+    observabilidad: 'SRE Hub',
+    // Los cuatro siguientes son las pestañas del hub: mismo nombre en el
     // enlace y en la pestaña que abre, o el salto se sentiría un desvío.
     telemetria: 'Telemetría & DORA',
     caos: 'Topología & Chaos',
     playbooks: 'Runbooks & SLO',
-    postmortems: 'Post-mortems',
-    labs: 'Labs',
+    labs: 'Labs & Post-mortems',
     consola: 'Consola',
     trayectoria: 'Trayectoria',
     contacto: 'Contacto',
@@ -631,17 +629,27 @@ export const ui = {
   },
 
   // ── Observability Hub ───────────────────────────────────────
-  // La sección que envuelve las tres pestañas. Su bajada dice lo único
-  // que un visitante necesita saber antes de tocar nada: que cambiar de
-  // pestaña no cancela lo que dejó corriendo en la anterior.
+  // La sección que envuelve el sandbox entero. Cerrada muestra solo la
+  // tarjeta; su bajada explica por qué está cerrada y su tarjeta enumera
+  // lo que hay adentro, que es con lo que se decide abrirla.
   hub: {
     label: 'Observabilidad & SRE',
-    titulo: 'El laboratorio entero, en tres pestañas',
+    titulo: 'El laboratorio, detrás de un botón',
     bajada:
-      'Todo lo que este sitio mide de sí mismo, lo que rompe a propósito y el procedimiento con el que lo arregla, agrupado por la pregunta que responde en vez de apilado en cinco pantallas de scroll. Cambiar de pestaña no reinicia nada: un simulacro sigue con su cuenta regresiva y un runbook abierto sigue en el paso donde quedó.',
+      'Acá adentro está todo lo que este sitio mide de sí mismo, lo que rompe a propósito y el procedimiento con el que lo arregla. Arranca cerrado para que leer el perfil no cueste diez pantallas de scroll: se abre cuando alguien quiere verlo, y una vez abierto no se reinicia solo.',
     aria: 'Paneles del Observability Hub',
     enCurso: 'en curso',
     abierto: 'abierto',
+    cerrar: 'Cerrar sandbox',
+    tarjeta: {
+      etiqueta: 'Sandbox interactivo',
+      titulo: 'SRE / Observability Hub',
+      texto:
+        'Nueve paneles con datos reales: las métricas DORA del pipeline que publica esta página, la topología en vivo, un sandbox de chaos engineering con auto-healing, los runbooks paso a paso, el presupuesto de error, los post-mortems con su bitácora y una consola que responde comandos. Corre entero en tu navegador y no hay nada que instalar.',
+      abrir: 'Abrir Sandbox Interactivo',
+      pie: 'se abre acá mismo · no cambia de página',
+      vivo: 'quedó algo corriendo adentro',
+    },
     pestanas: {
       telemetria: {
         titulo: 'Telemetría & DORA',
@@ -655,7 +663,18 @@ export const ui = {
         titulo: 'Runbooks & SLO',
         resumen: 'command center y presupuesto de error',
       },
+      labs: {
+        titulo: 'Labs & Post-mortems',
+        resumen: 'lo medido, lo que falló y lo publicado',
+      },
     },
+  },
+
+  // ── Resumen de trayectoria ──────────────────────────────────
+  trayectoria: {
+    verLogros: 'Ver logros',
+    ocultarLogros: 'Ocultar logros',
+    cuantos: (n) => `(${n})`,
   },
 
   // ── Tablero de telemetría y métricas DORA ───────────────────

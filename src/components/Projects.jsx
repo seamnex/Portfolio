@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { ExternalLink, Github, Sparkles, TriangleAlert, Wrench } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useEstado } from '../estado/EstadoProvider'
-import Section from './ui/Section'
+import Bloque from './ui/Bloque'
 import CopyButton from './ui/CopyButton'
 import CIBadge from './ui/CIBadge'
 
@@ -124,7 +124,7 @@ export default function Projects() {
     filtro === 'todos' ? projects : projects.filter((p) => p.categoria.startsWith(filtro))
 
   return (
-    <Section id="labs" label={projectsMeta.label} titulo={projectsMeta.titulo} bajada={projectsMeta.bajada}>
+    <Bloque id="labs" label={projectsMeta.label} titulo={projectsMeta.titulo} bajada={projectsMeta.bajada}>
       {filtros.length > 0 && (
         <div className="mb-8 flex flex-wrap gap-2">
           {filtros.map((id) => (
@@ -149,6 +149,6 @@ export default function Projects() {
           <ProjectCard key={p.id} p={p} meta={projectsMeta} pipeline={pipelineDe(p.links.repo)} />
         ))}
       </div>
-    </Section>
+    </Bloque>
   )
 }

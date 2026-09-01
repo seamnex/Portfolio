@@ -7,7 +7,7 @@ import { usePostMortem } from '../postmortem/PostMortemProvider'
 import { usePlaybook } from '../playbooks/PlaybookProvider'
 import { COMANDOS, ejecutar } from '../lib/comandos'
 import { reloj } from '../lib/caos.js'
-import Section from './ui/Section'
+import Bloque from './ui/Bloque'
 
 const TONO = {
   ok: 'text-ok',
@@ -256,7 +256,7 @@ export default function Console() {
   }
 
   return (
-    <Section id="consola" label={ui.consola.label} titulo={ui.consola.titulo} bajada={ui.consola.bajada}>
+    <Bloque id="consola" label={ui.consola.label} titulo={ui.consola.titulo} bajada={ui.consola.bajada}>
       <div className="card overflow-hidden shadow-2xl shadow-black/40">
         {/* Barra de la ventana */}
         <div className="flex items-center gap-2 border-b border-base-600 bg-base-800/80 px-4 py-3">
@@ -339,6 +339,6 @@ export default function Console() {
           </button>
         </form>
       </div>
-    </Section>
+    </Bloque>
   )
 }

@@ -9,36 +9,37 @@ import LangToggle from './ui/LangToggle'
 //  Los ids son la clave de traducción: así el nav y `ui.nav` no pueden
 //  desincronizarse sin que salte a la vista.
 //
-//  Un ítem con `hijos` es un grupo. Se agrupa porque diez enlaces sueltos
-//  en la barra no son diez caminos: son un muro que nadie lee. Todo lo que
-//  sale del mismo laboratorio —lo que se mide, lo que se rompe a propósito,
-//  el procedimiento para arreglarlo y lo que se consulta— entra bajo un
-//  solo rótulo.
+//  Un ítem con `hijos` es un grupo. Los cuatro hijos ya no son secciones
+//  de la portada: son las pestañas del Observability Hub, que arranca
+//  cerrado. Sus anclas viven dentro de paneles ocultos, así que el hub
+//  escucha el hash, abre el sandbox y la pestaña que corresponde, y recién
+//  ahí completa el salto. Por eso los rótulos repiten el nombre de la
+//  pestaña: el enlace y lo que abre tienen que llamarse igual.
 //
-//  Los tres del medio ya no son secciones sino pestañas del Observability
-//  Hub: sus anclas viven dentro de paneles que pueden estar ocultos, así
-//  que el hub escucha el hash y abre la pestaña que corresponde antes de
-//  saltar. Por eso los rótulos repiten el nombre de la pestaña — el enlace
-//  y la pestaña que abre tienen que llamarse igual.
+//  Cuatro ítems sueltos y un grupo. La barra quedó así de corta porque la
+//  portada quedó así de corta: todo lo pesado está detrás del grupo.
 //
 //  `destino` es adónde apunta el rótulo del grupo cuando alguien lo toca
-//  en vez de abrirlo: el hub, que es lo que el grupo nombra.
+//  en vez de abrirlo: el hub cerrado, que es lo que el grupo nombra.
 // ─────────────────────────────────────────────────────────────
 const NAV = [
   { id: 'sobre-mi' },
   { id: 'skills' },
+  { id: 'trayectoria' },
   {
     id: 'observabilidad',
     destino: 'observabilidad',
-    hijos: ['metricas', 'telemetria', 'caos', 'playbooks', 'consola', 'postmortems'],
+    hijos: ['telemetria', 'caos', 'playbooks', 'labs', 'consola'],
   },
-  { id: 'labs' },
-  { id: 'trayectoria' },
   { id: 'contacto' },
 ]
 
-/** Todas las secciones con ancla en la página, para el scroll-spy. */
-const SECCIONES = NAV.flatMap((item) => item.hijos ?? [item.id])
+/**
+ * Todas las anclas que el scroll-spy vigila. El id del grupo entra
+ * también: con el sandbox cerrado, la tarjeta es lo único que hay en esa
+ * sección y sin su ancla el nav no marcaría nada al pasar por encima.
+ */
+const SECCIONES = NAV.flatMap((item) => (item.hijos ? [item.id, ...item.hijos] : [item.id]))
 
 export default function Navbar() {
   const { profile, ui } = useContenido()
@@ -93,8 +94,8 @@ export default function Navbar() {
     }
   }, [grupoAbierto])
 
-  /** Un grupo está activo si la sección visible es cualquiera de sus hijas. */
-  const estaActivo = (item) => (item.hijos ? item.hijos.includes(activo) : item.id === activo)
+  /** Un grupo está activo con su propia ancla o con cualquiera de sus hijas. */
+  const estaActivo = (item) => item.id === activo || Boolean(item.hijos?.includes(activo))
 
   return (
     <header

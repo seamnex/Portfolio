@@ -408,13 +408,11 @@ export const ui = {
     inicio: 'Home',
     'sobre-mi': 'Profile',
     skills: 'Skills',
-    observabilidad: 'Observability',
-    metricas: 'Metrics',
+    observabilidad: 'SRE Hub',
     telemetria: 'Telemetry & DORA',
     caos: 'Topology & Chaos',
     playbooks: 'Runbooks & SLO',
-    postmortems: 'Post-mortems',
-    labs: 'Labs',
+    labs: 'Labs & Post-mortems',
     consola: 'Console',
     trayectoria: 'Career',
     contacto: 'Contact',
@@ -545,12 +543,22 @@ export const ui = {
 
   hub: {
     label: 'Observability & SRE',
-    titulo: 'The whole lab, in three tabs',
+    titulo: 'The lab, behind one button',
     bajada:
-      'Everything this site measures about itself, everything it breaks on purpose and the procedure it uses to fix it, grouped by the question it answers instead of stacked across five screens of scrolling. Switching tabs resets nothing: a drill keeps its countdown running and an open runbook stays on the step where you left it.',
+      'Everything this site measures about itself, everything it breaks on purpose and the procedure it uses to fix it lives in here. It starts closed so that reading the profile does not cost ten screens of scrolling: it opens when someone wants to see it, and once open it never resets on its own.',
     aria: 'Observability Hub panels',
     enCurso: 'running',
     abierto: 'open',
+    cerrar: 'Close sandbox',
+    tarjeta: {
+      etiqueta: 'Interactive sandbox',
+      titulo: 'SRE / Observability Hub',
+      texto:
+        'Nine panels on real data: DORA metrics from the pipeline that publishes this page, live topology, a chaos engineering sandbox with auto-healing, step-by-step runbooks, the error budget, the post-mortems with their logs and a console that answers commands. It all runs in your browser and there is nothing to install.',
+      abrir: 'Open Interactive Sandbox',
+      pie: 'opens right here · no page change',
+      vivo: 'something is still running inside',
+    },
     pestanas: {
       telemetria: {
         titulo: 'Telemetry & DORA',
@@ -564,7 +572,17 @@ export const ui = {
         titulo: 'Runbooks & SLO',
         resumen: 'command center and error budget',
       },
+      labs: {
+        titulo: 'Labs & Post-mortems',
+        resumen: 'what was measured, what broke, what shipped',
+      },
     },
+  },
+
+  trayectoria: {
+    verLogros: 'View highlights',
+    ocultarLogros: 'Hide highlights',
+    cuantos: (n) => `(${n})`,
   },
 
   telemetria: {
