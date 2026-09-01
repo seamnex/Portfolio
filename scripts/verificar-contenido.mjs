@@ -56,7 +56,7 @@ function caminos(objeto, prefijo = '') {
   // propósito: si el nav suma una sección —o un rótulo de grupo— y nadie
   // traduce su etiqueta, esto lo caza.
   const RAIZ = ['sobre-mi', 'skills', 'observabilidad', 'labs', 'trayectoria', 'contacto']
-  const AGRUPADAS = ['metricas', 'telemetria', 'postmortems', 'caos', 'slo', 'playbooks', 'consola']
+  const AGRUPADAS = ['metricas', 'telemetria', 'caos', 'playbooks', 'consola', 'postmortems']
   for (const id of [...RAIZ, ...AGRUPADAS]) {
     if (!es.ui.nav[id]) falla(`ui.nav["${id}"] sin etiqueta en español`)
     if (!en.ui.nav[id]) falla(`ui.nav["${id}"] sin etiqueta en inglés`)

@@ -410,12 +410,11 @@ export const ui = {
     skills: 'Skills',
     observabilidad: 'Observability',
     metricas: 'Metrics',
-    telemetria: 'Telemetry',
+    telemetria: 'Telemetry & DORA',
+    caos: 'Topology & Chaos',
+    playbooks: 'Runbooks & SLO',
     postmortems: 'Post-mortems',
     labs: 'Labs',
-    caos: 'Chaos',
-    slo: 'SLO & Budget',
-    playbooks: 'Runbooks',
     consola: 'Console',
     trayectoria: 'Career',
     contacto: 'Contact',
@@ -541,6 +540,30 @@ export const ui = {
       nadaQueRestaurar: 'There is no drill running.',
       noExiste: (id) => `chaos: no scenario named "${id}". Try \`chaos\`.`,
       seguiEnPanel: 'The phases are written here and in the Chaos section.',
+    },
+  },
+
+  hub: {
+    label: 'Observability & SRE',
+    titulo: 'The whole lab, in three tabs',
+    bajada:
+      'Everything this site measures about itself, everything it breaks on purpose and the procedure it uses to fix it, grouped by the question it answers instead of stacked across five screens of scrolling. Switching tabs resets nothing: a drill keeps its countdown running and an open runbook stays on the step where you left it.',
+    aria: 'Observability Hub panels',
+    enCurso: 'running',
+    abierto: 'open',
+    pestanas: {
+      telemetria: {
+        titulo: 'Telemetry & DORA',
+        resumen: 'pipeline metrics, annotations and p95',
+      },
+      topologia: {
+        titulo: 'Topology & Chaos',
+        resumen: 'the live diagram and what breaks it',
+      },
+      runbooks: {
+        titulo: 'Runbooks & SLO',
+        resumen: 'command center and error budget',
+      },
     },
   },
 
@@ -791,8 +814,10 @@ export const ui = {
       'These seconds are wall-clock and measured, but the incident that produced them was simulated: this is budget spent on a drill, not on an outage. A drill counts in full, whether outage or degradation — weighting degradation would require knowing what fraction of requests failed, and that was not measured here.',
   },
 
-  // ── Live topology (inside the telemetry section) ────────────
+  // ── Live topology ("Topology & Chaos" tab of the hub) ───────
   topologia: {
+    label: 'Live topology',
+    titulo: 'The pieces that serve this page, with their real health',
     tablero: 'topology · live',
     pista: 'hover or tab onto a node',
     bajada:

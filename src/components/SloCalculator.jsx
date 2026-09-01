@@ -14,7 +14,7 @@ import {
   periodoPorId,
   presupuesto,
 } from '../lib/slo.js'
-import Section from './ui/Section'
+import Bloque from './ui/Bloque'
 
 // Clases completas por el purge de Tailwind.
 const NIVEL = {
@@ -55,7 +55,7 @@ export default function SloCalculator() {
   const caida = (s) => formatearCaida(s, lang) ?? t.sinDatos
 
   return (
-    <Section id="slo" label={t.label} titulo={t.titulo} bajada={t.bajada}>
+    <Bloque id="slo" label={t.label} titulo={t.titulo} bajada={t.bajada}>
       {/* ── Selector de objetivo ─────────────────────────────── */}
       <div className="card overflow-hidden">
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-b border-base-600 bg-base-800/70 px-5 py-3">
@@ -233,6 +233,6 @@ export default function SloCalculator() {
           {consumo.cantidad ? t.avisoConSimulacros : t.avisoSinSimulacros}
         </p>
       </div>
-    </Section>
+    </Bloque>
   )
 }

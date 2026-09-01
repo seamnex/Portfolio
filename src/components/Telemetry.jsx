@@ -18,9 +18,8 @@ import { MEDIDAS, num } from '../data/medidas.js'
 import { OBJETIVOS } from '../data/dora.js'
 import { cadencia, cumple, formatearDuracion } from '../lib/dora.js'
 import { arranqueLatencia, rachaCfr, tendenciaLeadTime, VENTANA_CORTA } from '../lib/anotaciones.js'
-import Section from './ui/Section'
+import Bloque from './ui/Bloque'
 import Sparkline from './ui/Sparkline'
-import Topology from './Topology'
 
 const iconos = { Rocket, GitCommitHorizontal, ShieldAlert, Timer, Activity }
 
@@ -134,6 +133,11 @@ export default function Telemetry() {
   // El muestreo de latencia arranca cuando el panel entra en pantalla y se
   // corta cuando sale. Sin esto el sitio dispara una petición cada cuatro
   // segundos durante toda la visita para dibujar algo que nadie mira.
+  //
+  // Dentro del hub esto además cubre el cambio de pestaña: el panel oculto
+  // no tiene caja, el observador lo reporta como fuera de pantalla y el
+  // muestreo se detiene solo. El componente sigue montado —su estado no se
+  // pierde— pero deja de pedir.
   const ref = useRef(null)
   useEffect(() => {
     const nodo = ref.current
@@ -197,7 +201,7 @@ export default function Telemetry() {
       : null
 
   return (
-    <Section id="telemetria" label={t.label} titulo={t.titulo} bajada={t.bajada}>
+    <Bloque id="telemetria" label={t.label} titulo={t.titulo} bajada={t.bajada}>
       <div ref={ref} className="card overflow-hidden">
         {/* Cabecera de tablero: qué se está mirando y sobre qué ventana */}
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-base-600 bg-base-800/70 px-5 py-3">
@@ -331,11 +335,6 @@ export default function Telemetry() {
           </div>
         </div>
       </div>
-
-      {/* La topología cierra la sección: el tablero dice cómo se comporta el
-          sistema y el diagrama, sobre qué piezas. Va después porque sin los
-          números de arriba es un dibujo de arquitectura como cualquier otro. */}
-      <Topology />
-    </Section>
+    </Bloque>
   )
 }

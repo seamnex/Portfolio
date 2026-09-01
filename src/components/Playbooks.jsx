@@ -1,7 +1,7 @@
 import { Check, ChevronRight, Cpu, Database, MemoryStick, Play, RotateCcw, SquareTerminal, TriangleAlert, X } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { usePlaybook } from '../playbooks/PlaybookProvider'
-import Section from './ui/Section'
+import Bloque from './ui/Bloque'
 
 const iconos = { MemoryStick, Cpu, Database }
 
@@ -84,7 +84,7 @@ export default function Playbooks() {
   }
 
   return (
-    <Section id="playbooks" label={t.label} titulo={t.titulo} bajada={t.bajada}>
+    <Bloque id="playbooks" label={t.label} titulo={t.titulo} bajada={t.bajada}>
       {/* El rótulo va antes de las tarjetas, no al pie: quien mira esto
           tiene que saber qué está viendo ANTES de leer una salida de
           kubectl y darla por una corrida registrada. */}
@@ -213,6 +213,6 @@ export default function Playbooks() {
           <p className="px-5 py-8 text-center text-[12.5px] text-slate-600">{t.elegiUno}</p>
         )}
       </div>
-    </Section>
+    </Bloque>
   )
 }

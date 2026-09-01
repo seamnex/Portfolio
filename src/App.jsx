@@ -10,13 +10,10 @@ import SystemStatus from './components/SystemStatus'
 import About from './components/About'
 import Skills from './components/Skills'
 import LabMetrics from './components/LabMetrics'
-import Telemetry from './components/Telemetry'
+import ObservabilityHub from './components/ObservabilityHub'
+import Console from './components/Console'
 import Incidents from './components/Incidents'
 import Projects from './components/Projects'
-import ChaosPanel from './components/ChaosPanel'
-import SloCalculator from './components/SloCalculator'
-import Playbooks from './components/Playbooks'
-import Console from './components/Console'
 import Timeline from './components/Timeline'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
@@ -43,24 +40,20 @@ export default function App() {
                   <SystemStatus />
                   <About />
                   <Skills />
-                  {/* Los números primero; después los incidentes que los produjeron,
-                      y recién ahí los labs donde corren. */}
+                  {/* Los números medidos en los labs primero: son la entrada al
+                      hub, que es donde esos mismos números se pueden mirar,
+                      romper a propósito y presupuestar. */}
                   <LabMetrics />
-                  <Telemetry />
+                  {/* Tablero DORA, topología, sandbox de caos, Command Center y
+                      presupuesto de error: cinco secciones apiladas que ahora son
+                      tres pestañas de una sola. */}
+                  <ObservabilityHub />
+                  {/* La consola, inmediatamente después: cada simulacro del
+                      sandbox y cada paso de runbook escriben su salida acá, y con
+                      una sección en el medio el botón parecería no hacer nada. */}
+                  <Console />
                   <Incidents />
                   <Projects />
-                  {/* El sandbox de caos, justo antes de la consola: el simulacro
-                      escribe su bitácora ahí abajo y conviene que el visitante la
-                      tenga a un scroll de distancia, no al principio de la página. */}
-                  <ChaosPanel />
-                  {/* El presupuesto va pegado al sandbox: lo que lo consume son
-                      los simulacros de arriba, y con una sección en el medio la
-                      relación de causa dejaría de verse. */}
-                  <SloCalculator />
-                  {/* Y el Command Center, pegado a la consola: cada paso del
-                      runbook escribe su salida ahí abajo. */}
-                  <Playbooks />
-                  <Console />
                   <Timeline />
                   <Contact />
                 </main>

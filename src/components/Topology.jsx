@@ -7,6 +7,7 @@ import { useTelemetria } from '../telemetria/TelemetriaProvider'
 import { ENLACES, NODOS, nodoAfectado } from '../data/topologia.js'
 import { resultadoSimulado } from '../lib/caos.js'
 import { num } from '../data/medidas.js'
+import Bloque from './ui/Bloque'
 
 // ─────────────────────────────────────────────────────────────
 //  Diagrama de topología en vivo.
@@ -275,40 +276,40 @@ export default function Topology() {
   })
 
   return (
-    <div className="card mt-5 overflow-visible">
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-base-600 bg-base-800/70 px-5 py-3">
-        <p className="flex items-center gap-2 font-mono text-[11px] text-slate-300">
-          <Waypoints size={13} className="text-accent" aria-hidden="true" />
-          {t.tablero}
-        </p>
-        <span className="font-mono text-[10.5px] text-slate-600">{t.pista}</span>
-      </div>
-
-      <p className="border-b border-base-600/60 px-5 py-3 text-[12.5px] leading-relaxed text-slate-500">{t.bajada}</p>
-
-      {/* En escritorio el cliente ocupa las dos filas y de él salen las dos
-          aristas; en móvil todo se apila, y cada conector lleva escrita su
-          petición para que se siga leyendo como dos llamadas del navegador
-          y no como una cadena. */}
-      <div className="grid gap-x-4 bg-base-800 p-5 md:grid-cols-[minmax(0,15rem)_minmax(0,1fr)_minmax(0,17rem)] md:items-center md:gap-y-4">
-        <div className="md:row-span-2">
-          <Nodo {...nodoProps(cliente)} />
+    <Bloque id="topologia" label={t.label} titulo={t.titulo} bajada={t.bajada}>
+      <div className="card overflow-visible">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-base-600 bg-base-800/70 px-5 py-3">
+          <p className="flex items-center gap-2 font-mono text-[11px] text-slate-300">
+            <Waypoints size={13} className="text-accent" aria-hidden="true" />
+            {t.tablero}
+          </p>
+          <span className="font-mono text-[10.5px] text-slate-600">{t.pista}</span>
         </div>
 
-        {ENLACES.map((enlace) => {
-          const destino = NODOS.find((n) => n.id === enlace.a)
-          return (
-            <Fragment key={enlace.id}>
-              <Conector enlace={enlace} estadoDestino={porId[destino.id].estado} t={t} />
-              <Nodo {...nodoProps(destino)} />
-            </Fragment>
-          )
-        })}
-      </div>
+        {/* En escritorio el cliente ocupa las dos filas y de él salen las dos
+            aristas; en móvil todo se apila, y cada conector lleva escrita su
+            petición para que se siga leyendo como dos llamadas del navegador
+            y no como una cadena. */}
+        <div className="grid gap-x-4 bg-base-800 p-5 md:grid-cols-[minmax(0,15rem)_minmax(0,1fr)_minmax(0,17rem)] md:items-center md:gap-y-4">
+          <div className="md:row-span-2">
+            <Nodo {...nodoProps(cliente)} />
+          </div>
 
-      <p className="border-t border-base-600/60 px-5 py-3 font-mono text-[10px] leading-relaxed text-slate-600">
-        {t.leyenda}
-      </p>
-    </div>
+          {ENLACES.map((enlace) => {
+            const destino = NODOS.find((n) => n.id === enlace.a)
+            return (
+              <Fragment key={enlace.id}>
+                <Conector enlace={enlace} estadoDestino={porId[destino.id].estado} t={t} />
+                <Nodo {...nodoProps(destino)} />
+              </Fragment>
+            )
+          })}
+        </div>
+
+        <p className="border-t border-base-600/60 px-5 py-3 font-mono text-[10px] leading-relaxed text-slate-600">
+          {t.leyenda}
+        </p>
+      </div>
+    </Bloque>
   )
 }

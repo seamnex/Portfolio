@@ -482,16 +482,16 @@ export const ui = {
     inicio: 'Inicio',
     'sobre-mi': 'Perfil',
     skills: 'Skills',
-    // Rótulo del grupo del header: no es una sección, no tiene ancla propia.
-    // Junta las cinco de abajo, que salen todas del mismo laboratorio.
+    // Rótulo del grupo del header y, ahora sí, ancla del Observability Hub.
     observabilidad: 'Observabilidad',
     metricas: 'Métricas',
-    telemetria: 'Telemetría',
+    // Los tres siguientes son las pestañas del hub: mismo nombre en el
+    // enlace y en la pestaña que abre, o el salto se sentiría un desvío.
+    telemetria: 'Telemetría & DORA',
+    caos: 'Topología & Chaos',
+    playbooks: 'Runbooks & SLO',
     postmortems: 'Post-mortems',
     labs: 'Labs',
-    caos: 'Chaos',
-    slo: 'SLO & Budget',
-    playbooks: 'Runbooks',
     consola: 'Consola',
     trayectoria: 'Trayectoria',
     contacto: 'Contacto',
@@ -627,6 +627,34 @@ export const ui = {
       nadaQueRestaurar: 'No hay ningún simulacro activo.',
       noExiste: (id) => `chaos: no existe el escenario "${id}". Probá \`chaos\`.`,
       seguiEnPanel: 'Las fases se escriben acá y en la sección Chaos.',
+    },
+  },
+
+  // ── Observability Hub ───────────────────────────────────────
+  // La sección que envuelve las tres pestañas. Su bajada dice lo único
+  // que un visitante necesita saber antes de tocar nada: que cambiar de
+  // pestaña no cancela lo que dejó corriendo en la anterior.
+  hub: {
+    label: 'Observabilidad & SRE',
+    titulo: 'El laboratorio entero, en tres pestañas',
+    bajada:
+      'Todo lo que este sitio mide de sí mismo, lo que rompe a propósito y el procedimiento con el que lo arregla, agrupado por la pregunta que responde en vez de apilado en cinco pantallas de scroll. Cambiar de pestaña no reinicia nada: un simulacro sigue con su cuenta regresiva y un runbook abierto sigue en el paso donde quedó.',
+    aria: 'Paneles del Observability Hub',
+    enCurso: 'en curso',
+    abierto: 'abierto',
+    pestanas: {
+      telemetria: {
+        titulo: 'Telemetría & DORA',
+        resumen: 'métricas del pipeline, anotaciones y p95',
+      },
+      topologia: {
+        titulo: 'Topología & Caos',
+        resumen: 'el diagrama en vivo y lo que lo rompe',
+      },
+      runbooks: {
+        titulo: 'Runbooks & SLO',
+        resumen: 'command center y presupuesto de error',
+      },
     },
   },
 
@@ -881,8 +909,10 @@ export const ui = {
       'Estos segundos son de reloj y están medidos, pero el incidente que los produjo fue simulado: es presupuesto gastado en un simulacro, no en una caída. Un simulacro cuenta entero, sea caída o degradación — ponderar la degradación exigiría saber qué fracción de las peticiones falló, y eso acá no se midió.',
   },
 
-  // ── Topología en vivo (dentro de la sección de telemetría) ──
+  // ── Topología en vivo (pestaña "Topología & Caos" del hub) ──
   topologia: {
+    label: 'Topología en vivo',
+    titulo: 'Las piezas que sirven esta página, con su estado real',
     tablero: 'topology · live',
     pista: 'pasá el cursor o tabulá sobre un nodo',
     bajada:
