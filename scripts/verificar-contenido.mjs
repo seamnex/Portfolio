@@ -50,16 +50,27 @@ function caminos(objeto, prefijo = '') {
   for (const c of uiEn) if (!uiEs.includes(c)) falla(`ui: falta o difiere en español → ${c}`)
 }
 
-// ── 3. Las secciones del nav tienen etiqueta en los dos idiomas ──
+// ── 3. Las vistas principales están rotuladas en los dos idiomas ──
 {
-  // Mismo listado que usa Navbar.jsx, en sus dos niveles. Duplicarlo acá es a
-  // propósito: si el nav suma una sección —o un rótulo de grupo— y nadie
-  // traduce su etiqueta, esto lo caza.
-  const RAIZ = ['sobre-mi', 'skills', 'trayectoria', 'observabilidad', 'contacto']
-  const AGRUPADAS = ['telemetria', 'caos', 'playbooks', 'labs', 'consola']
-  for (const id of [...RAIZ, ...AGRUPADAS]) {
-    if (!es.ui.nav[id]) falla(`ui.nav["${id}"] sin etiqueta en español`)
-    if (!en.ui.nav[id]) falla(`ui.nav["${id}"] sin etiqueta en inglés`)
+  // Mismo listado que usa `navegacion/VistaProvider`. Duplicarlo acá es a
+  // propósito: si el sitio suma una vista y nadie traduce sus rótulos,
+  // esto lo caza antes de que salga una pestaña vacía en la barra.
+  //
+  // `nav` y `titulo` los llevan las tres; `label` y `bajada` son la
+  // cabecera de la vista, que el perfil no tiene porque ahí ese lugar lo
+  // ocupa el hero, y `aviso` es el punto de "quedó algo corriendo acá",
+  // que solo tienen las dos vistas donde algo puede quedar corriendo.
+  const VISTAS = {
+    perfil: ['nav', 'titulo', 'resumen'],
+    observabilidad: ['nav', 'titulo', 'resumen', 'aviso', 'label', 'bajada'],
+    laboratorio: ['nav', 'titulo', 'resumen', 'aviso', 'label', 'bajada'],
+  }
+
+  for (const [vista, campos] of Object.entries(VISTAS)) {
+    for (const campo of campos) {
+      if (!es.ui.vistas[vista]?.[campo]) falla(`ui.vistas.${vista}.${campo} sin texto en español`)
+      if (!en.ui.vistas[vista]?.[campo]) falla(`ui.vistas.${vista}.${campo} sin texto en inglés`)
+    }
   }
 }
 

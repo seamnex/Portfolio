@@ -404,21 +404,39 @@ export const ui = {
     a: { es: 'Ver el sitio en español', en: 'View this site in English' },
   },
 
+  // Las tres vistas principales. Ver el comentario largo en content.js:
+  // `nav` es la pestaña de la barra, `titulo` el nombre completo que oye
+  // un lector de pantalla, `resumen` lo que muestra el banner de la
+  // portada y `aviso` el punto de "quedó algo corriendo acá".
+  vistas: {
+    aria: 'Main site views',
+    perfil: {
+      nav: 'Profile',
+      titulo: 'Profile & Career',
+      resumen: 'who he is, how he works and where he has been',
+    },
+    observabilidad: {
+      nav: 'Observability',
+      titulo: 'Observability & Telemetry',
+      resumen: 'DORA, p95, topology and error budget',
+      aviso: 'drill running',
+      label: 'Observability & SRE',
+      bajada:
+        'Everything this site measures about itself, with the source of every number in plain sight: DORA metrics from the pipeline that publishes this page, p95 latency measured from your browser, the live topology of what runs underneath and the error budget that comes out of the SLO. Nothing is preloaded or estimated.',
+    },
+    laboratorio: {
+      nav: 'Chaos Lab',
+      titulo: 'Chaos & Incident Lab',
+      resumen: 'drills, runbooks and console',
+      aviso: 'running',
+      label: 'Chaos engineering & incident response',
+      bajada:
+        'The full incident cycle, in the order it happens: the fault is injected, the alert fires, the runbook walks the response step by step and the console logs every move. Drills are not cancelled when you switch views: whatever you leave running here keeps running.',
+    },
+  },
+
   nav: {
-    inicio: 'Home',
-    'sobre-mi': 'Profile',
-    skills: 'Skills',
-    observabilidad: 'SRE Hub',
-    telemetria: 'Telemetry & DORA',
-    caos: 'Topology & Chaos',
-    playbooks: 'Runbooks & SLO',
-    labs: 'Labs & Post-mortems',
-    consola: 'Console',
-    trayectoria: 'Career',
-    contacto: 'Contact',
     cta: 'Get in touch',
-    abrir: 'Open menu',
-    cerrar: 'Close menu',
     volverArriba: 'Back to top',
   },
 
@@ -541,42 +559,14 @@ export const ui = {
     },
   },
 
-  hub: {
-    label: 'Observability & SRE',
-    titulo: 'The lab, behind one button',
-    bajada:
-      'Everything this site measures about itself, everything it breaks on purpose and the procedure it uses to fix it lives in here. It starts closed so that reading the profile does not cost ten screens of scrolling: it opens when someone wants to see it, and once open it never resets on its own.',
-    aria: 'Observability Hub panels',
-    enCurso: 'running',
-    abierto: 'open',
-    cerrar: 'Close sandbox',
-    tarjeta: {
-      etiqueta: 'Interactive sandbox',
-      titulo: 'SRE / Observability Hub',
-      texto:
-        'Nine panels on real data: DORA metrics from the pipeline that publishes this page, live topology, a chaos engineering sandbox with auto-healing, step-by-step runbooks, the error budget, the post-mortems with their logs and a console that answers commands. It all runs in your browser and there is nothing to install.',
-      abrir: 'Open Interactive Sandbox',
-      pie: 'opens right here · no page change',
-      vivo: 'something is still running inside',
-    },
-    pestanas: {
-      telemetria: {
-        titulo: 'Telemetry & DORA',
-        resumen: 'pipeline metrics, annotations and p95',
-      },
-      topologia: {
-        titulo: 'Topology & Chaos',
-        resumen: 'the live diagram and what breaks it',
-      },
-      runbooks: {
-        titulo: 'Runbooks & SLO',
-        resumen: 'command center and error budget',
-      },
-      labs: {
-        titulo: 'Labs & Post-mortems',
-        resumen: 'what was measured, what broke, what shipped',
-      },
-    },
+  sandbox: {
+    etiqueta: 'Interactive sandbox',
+    titulo: 'Explore the SRE Interactive Sandbox',
+    texto:
+      'Nine panels on real data: DORA metrics from the pipeline that publishes this page, p95 latency measured live, the topology, a chaos engineering sandbox with auto-healing, step-by-step runbooks, the error budget, the post-mortems with their logs and a console that answers commands. It all runs in your browser and there is nothing to install.',
+    abrir: 'Explore the sandbox',
+    pie: 'switches view · no page reload',
+    vivo: 'something is still running inside',
   },
 
   trayectoria: {
