@@ -478,24 +478,49 @@ export const ui = {
     a: { es: 'Ver el sitio en español', en: 'View this site in English' },
   },
 
+  // ── Las tres vistas principales ─────────────────────────────
+  // El sitio es tres vistas y una barra que elige cuál se mira. Cada una
+  // lleva cuatro rótulos, y los cuatro se usan en lugares distintos:
+  //
+  //   · `nav`     — la pestaña de la barra. Corto por obligación: son
+  //                 tres y tienen que entrar al lado del logo.
+  //   · `titulo`  — el nombre completo de la vista. Es el `h1` de su
+  //                 cabecera y el `aria-label` de su pestaña, así que un
+  //                 lector de pantalla siempre oye el nombre entero
+  //                 aunque el rótulo visible esté recortado.
+  //   · `resumen` — qué hay adentro, en una línea. Lo usa el banner de
+  //                 la portada, que es desde donde se decide entrar.
+  //   · `aviso`   — el texto del punto que marca la pestaña cuando algo
+  //                 quedó corriendo en esa vista.
+  vistas: {
+    aria: 'Vistas principales del sitio',
+    perfil: {
+      nav: 'Perfil',
+      titulo: 'Perfil & Trayectoria',
+      resumen: 'quién es, cómo trabaja y dónde estuvo',
+    },
+    observabilidad: {
+      nav: 'Observabilidad',
+      titulo: 'Observabilidad & Telemetría',
+      resumen: 'DORA, p95, topología y presupuesto de error',
+      aviso: 'con simulacro',
+      label: 'Observabilidad & SRE',
+      bajada:
+        'Todo lo que este sitio mide de sí mismo, con la fuente de cada número a la vista: las métricas DORA del pipeline que publica esta página, la latencia p95 medida desde tu navegador, la topología en vivo de lo que hay abajo y el presupuesto de error que sale del SLO. Nada está precargado ni estimado.',
+    },
+    laboratorio: {
+      nav: 'Chaos Lab',
+      titulo: 'Chaos & Incident Lab',
+      resumen: 'simulacros, runbooks y consola',
+      aviso: 'en curso',
+      label: 'Chaos engineering & respuesta a incidentes',
+      bajada:
+        'El ciclo completo de un incidente, en el orden en que ocurre: se inyecta el fallo, salta la alerta, el runbook lleva la respuesta paso a paso y la consola registra cada movimiento. Los simulacros no se cancelan al cambiar de vista: lo que se deja corriendo acá sigue corriendo.',
+    },
+  },
+
   nav: {
-    inicio: 'Inicio',
-    'sobre-mi': 'Perfil',
-    skills: 'Skills',
-    // Rótulo del grupo del header y ancla del Observability Hub cerrado.
-    observabilidad: 'SRE Hub',
-    // Los cuatro siguientes son las pestañas del hub: mismo nombre en el
-    // enlace y en la pestaña que abre, o el salto se sentiría un desvío.
-    telemetria: 'Telemetría & DORA',
-    caos: 'Topología & Chaos',
-    playbooks: 'Runbooks & SLO',
-    labs: 'Labs & Post-mortems',
-    consola: 'Consola',
-    trayectoria: 'Trayectoria',
-    contacto: 'Contacto',
     cta: 'Contactar',
-    abrir: 'Abrir menú',
-    cerrar: 'Cerrar menú',
     volverArriba: 'Volver arriba',
   },
 
@@ -628,46 +653,18 @@ export const ui = {
     },
   },
 
-  // ── Observability Hub ───────────────────────────────────────
-  // La sección que envuelve el sandbox entero. Cerrada muestra solo la
-  // tarjeta; su bajada explica por qué está cerrada y su tarjeta enumera
-  // lo que hay adentro, que es con lo que se decide abrirla.
-  hub: {
-    label: 'Observabilidad & SRE',
-    titulo: 'El laboratorio, detrás de un botón',
-    bajada:
-      'Acá adentro está todo lo que este sitio mide de sí mismo, lo que rompe a propósito y el procedimiento con el que lo arregla. Arranca cerrado para que leer el perfil no cueste diez pantallas de scroll: se abre cuando alguien quiere verlo, y una vez abierto no se reinicia solo.',
-    aria: 'Paneles del Observability Hub',
-    enCurso: 'en curso',
-    abierto: 'abierto',
-    cerrar: 'Cerrar sandbox',
-    tarjeta: {
-      etiqueta: 'Sandbox interactivo',
-      titulo: 'SRE / Observability Hub',
-      texto:
-        'Nueve paneles con datos reales: las métricas DORA del pipeline que publica esta página, la topología en vivo, un sandbox de chaos engineering con auto-healing, los runbooks paso a paso, el presupuesto de error, los post-mortems con su bitácora y una consola que responde comandos. Corre entero en tu navegador y no hay nada que instalar.',
-      abrir: 'Abrir Sandbox Interactivo',
-      pie: 'se abre acá mismo · no cambia de página',
-      vivo: 'quedó algo corriendo adentro',
-    },
-    pestanas: {
-      telemetria: {
-        titulo: 'Telemetría & DORA',
-        resumen: 'métricas del pipeline, anotaciones y p95',
-      },
-      topologia: {
-        titulo: 'Topología & Caos',
-        resumen: 'el diagrama en vivo y lo que lo rompe',
-      },
-      runbooks: {
-        titulo: 'Runbooks & SLO',
-        resumen: 'command center y presupuesto de error',
-      },
-      labs: {
-        titulo: 'Labs & Post-mortems',
-        resumen: 'lo medido, lo que falló y lo publicado',
-      },
-    },
+  // ── Banner del sandbox ──────────────────────────────────────
+  // Lo único que la portada dice sobre las otras dos vistas. Enumera lo
+  // que hay del otro lado en vez de resumirlo en un adjetivo, porque es
+  // leyendo qué hay como se decide entrar.
+  sandbox: {
+    etiqueta: 'Sandbox interactivo',
+    titulo: 'Explorar el SRE Interactive Sandbox',
+    texto:
+      'Nueve paneles con datos reales: las métricas DORA del pipeline que publica esta página, la latencia p95 medida en vivo, la topología, un sandbox de chaos engineering con auto-healing, los runbooks paso a paso, el presupuesto de error, los post-mortems con su bitácora y una consola que responde comandos. Corre entero en tu navegador y no hay nada que instalar.',
+    abrir: 'Explorar el sandbox',
+    pie: 'cambia de vista · no recarga la página',
+    vivo: 'quedó algo corriendo adentro',
   },
 
   // ── Resumen de trayectoria ──────────────────────────────────

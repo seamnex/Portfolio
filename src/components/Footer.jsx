@@ -48,13 +48,17 @@ export default function Footer() {
               <Github size={16} />
             </a>
           )}
-          <a
-            href="#inicio"
+          {/* Sube la vista que se está mirando, no la portada: con tres
+              vistas, un ancla a #inicio sacaría al visitante del panel en
+              el que estaba para llevarlo a otra página. */}
+          <button
+            type="button"
+            onClick={() => window.scrollTo({ top: 0 })}
             aria-label={ui.nav.volverArriba}
             className="rounded-md border border-base-600 p-2.5 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent"
           >
             <ArrowUp size={16} />
-          </a>
+          </button>
         </div>
       </div>
     </footer>

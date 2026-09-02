@@ -1,54 +1,44 @@
 import { useEffect, useRef, useState } from 'react'
-import { ChevronDown, Github, Linkedin, Menu, Terminal, X } from 'lucide-react'
+import { Activity, FlaskConical, Github, Linkedin, Terminal, UserRound } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
+import { useVista } from '../navegacion/VistaProvider'
+import { useCaos } from '../caos/CaosProvider'
+import { usePlaybook } from '../playbooks/PlaybookProvider'
 import LangToggle from './ui/LangToggle'
 
 // ─────────────────────────────────────────────────────────────
-//  Estructura del nav.
+//  La barra superior.
 //
-//  Los ids son la clave de traducción: así el nav y `ui.nav` no pueden
-//  desincronizarse sin que salte a la vista.
+//  Tres pestañas, el selector de idioma y nada más. Ya no hay scroll-spy
+//  ni menú desplegable ni hamburguesa: con tres destinos, esconderlos
+//  detrás de un botón costaría un toque de más para no ahorrar nada, y
+//  el ancho alcanza incluso en un teléfono angosto porque abajo de `sm`
+//  las pestañas se quedan en su icono.
 //
-//  Un ítem con `hijos` es un grupo. Los cuatro hijos ya no son secciones
-//  de la portada: son las pestañas del Observability Hub, que arranca
-//  cerrado. Sus anclas viven dentro de paneles ocultos, así que el hub
-//  escucha el hash, abre el sandbox y la pestaña que corresponde, y recién
-//  ahí completa el salto. Por eso los rótulos repiten el nombre de la
-//  pestaña: el enlace y lo que abre tienen que llamarse igual.
-//
-//  Cuatro ítems sueltos y un grupo. La barra quedó así de corta porque la
-//  portada quedó así de corta: todo lo pesado está detrás del grupo.
-//
-//  `destino` es adónde apunta el rótulo del grupo cuando alguien lo toca
-//  en vez de abrirlo: el hub cerrado, que es lo que el grupo nombra.
+//  El punto de aviso al lado de una pestaña no es decoración: dice que
+//  lo que pasa en esa vista sigue pasando aunque se esté mirando otra.
+//  Un simulacro corriendo marca el laboratorio —es donde se inyectó— y
+//  también observabilidad, porque ahí es donde se ve el rojo.
 // ─────────────────────────────────────────────────────────────
-const NAV = [
-  { id: 'sobre-mi' },
-  { id: 'skills' },
-  { id: 'trayectoria' },
-  {
-    id: 'observabilidad',
-    destino: 'observabilidad',
-    hijos: ['telemetria', 'caos', 'playbooks', 'labs', 'consola'],
-  },
-  { id: 'contacto' },
+const PESTANAS = [
+  { id: 'perfil', icono: UserRound },
+  { id: 'observabilidad', icono: Activity },
+  { id: 'laboratorio', icono: FlaskConical },
 ]
-
-/**
- * Todas las anclas que el scroll-spy vigila. El id del grupo entra
- * también: con el sandbox cerrado, la tarjeta es lo único que hay en esa
- * sección y sin su ancla el nav no marcaría nada al pasar por encima.
- */
-const SECCIONES = NAV.flatMap((item) => (item.hijos ? [item.id, ...item.hijos] : [item.id]))
 
 export default function Navbar() {
   const { profile, ui } = useContenido()
+  const { vista, irA } = useVista()
   const [scrolled, setScrolled] = useState(false)
-  const [abierto, setAbierto] = useState(false)
-  const [grupoAbierto, setGrupoAbierto] = useState(null)
-  const [activo, setActivo] = useState('')
 
-  const navRef = useRef(null)
+  const { activo: simulacro } = useCaos()
+  const { activo: runbook } = usePlaybook()
+  const aviso = {
+    observabilidad: simulacro ? ui.vistas.observabilidad.aviso : null,
+    laboratorio: simulacro || runbook ? ui.vistas.laboratorio.aviso : null,
+  }
+
+  const botonesRef = useRef({})
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -57,45 +47,24 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Scroll-spy: marca la sección visible en el nav
-  useEffect(() => {
-    const secciones = SECCIONES.map((id) => document.getElementById(id)).filter(Boolean)
+  // Flechas para moverse entre pestañas, como pide el patrón de tabs: con
+  // `tabIndex -1` en las no seleccionadas, el tabulador entra y sale del
+  // grupo de una vez y adentro se navega con el teclado direccional.
+  const alTeclear = (e) => {
+    const orden = PESTANAS.map((p) => p.id)
+    const i = orden.indexOf(vista)
+    const salto = { ArrowRight: 1, ArrowLeft: -1 }[e.key]
 
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActivo(e.target.id)
-        })
-      },
-      { rootMargin: '-45% 0px -50% 0px' },
-    )
-    secciones.forEach((s) => obs.observe(s))
-    return () => obs.disconnect()
-  }, [])
+    let siguiente = null
+    if (salto) siguiente = orden[(i + salto + orden.length) % orden.length]
+    else if (e.key === 'Home') siguiente = orden[0]
+    else if (e.key === 'End') siguiente = orden.at(-1)
+    if (!siguiente) return
 
-  // El desplegable se abre al pasar el mouse, pero tiene que poder cerrarse
-  // sin mouse: Escape y un clic afuera. Sin esto, quien navega con teclado lo
-  // abre con Enter y se queda con el panel encima del contenido.
-  useEffect(() => {
-    if (!grupoAbierto) return undefined
-
-    const alClic = (e) => {
-      if (!navRef.current?.contains(e.target)) setGrupoAbierto(null)
-    }
-    const alTeclear = (e) => {
-      if (e.key === 'Escape') setGrupoAbierto(null)
-    }
-
-    document.addEventListener('mousedown', alClic)
-    document.addEventListener('keydown', alTeclear)
-    return () => {
-      document.removeEventListener('mousedown', alClic)
-      document.removeEventListener('keydown', alTeclear)
-    }
-  }, [grupoAbierto])
-
-  /** Un grupo está activo con su propia ancla o con cualquiera de sus hijas. */
-  const estaActivo = (item) => item.id === activo || Boolean(item.hijos?.includes(activo))
+    e.preventDefault()
+    irA(siguiente)
+    botonesRef.current[siguiente]?.focus({ preventScroll: true })
+  }
 
   return (
     <header
@@ -103,90 +72,72 @@ export default function Navbar() {
         scrolled ? 'border-b border-base-600/80 bg-base-900/85 backdrop-blur-lg' : 'border-b border-transparent'
       }`}
     >
-      <nav ref={navRef} className="container-x flex h-16 items-center justify-between gap-3">
-        <a href="#inicio" className="group flex shrink-0 items-center gap-2.5">
+      <nav className="container-x flex h-16 items-center justify-between gap-2 sm:gap-4">
+        <button
+          type="button"
+          onClick={() => irA('perfil', 'inicio')}
+          className="group flex shrink-0 items-center gap-2.5"
+        >
           <span className="flex h-8 w-8 items-center justify-center rounded-md border border-accent/40 bg-accent/10 text-accent transition-colors group-hover:bg-accent/20">
             <Terminal size={16} />
           </span>
-          <span className="whitespace-nowrap font-mono text-sm font-semibold text-white">
+          <span className="hidden whitespace-nowrap font-mono text-sm font-semibold text-white sm:inline">
             samuel<span className="text-accent">.garcia</span>
             <span className="animate-blink text-accent">_</span>
           </span>
-        </a>
+        </button>
 
-        {/* El nav completo aparece recién en lg: aun con seis ítems, en md se
-            apretaría contra el logo y el bloque de acciones. Hasta ahí manda el
-            menú desplegable, que las muestra todas sin comprimir nada. */}
-        <ul className="hidden items-center gap-0.5 lg:flex">
-          {NAV.map((item) => {
-            const marcado = estaActivo(item)
+        <div
+          role="tablist"
+          aria-label={ui.vistas.aria}
+          onKeyDown={alTeclear}
+          className="flex min-w-0 items-center gap-1"
+        >
+          {PESTANAS.map((p) => {
+            const texto = ui.vistas[p.id]
+            const Icono = p.icono
+            const sel = p.id === vista
+            const marca = aviso[p.id]
 
-            if (!item.hijos) {
-              return (
-                <li key={item.id}>
-                  <a
-                    href={`#${item.id}`}
-                    className={`block whitespace-nowrap rounded-md px-2.5 py-2 text-[13px] transition-colors ${
-                      marcado ? 'text-accent' : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    {ui.nav[item.id]}
-                  </a>
-                </li>
-              )
-            }
-
-            const desplegado = grupoAbierto === item.id
             return (
-              <li
-                key={item.id}
-                className="relative"
-                onMouseEnter={() => setGrupoAbierto(item.id)}
-                onMouseLeave={() => setGrupoAbierto(null)}
+              <button
+                key={p.id}
+                ref={(nodo) => {
+                  botonesRef.current[p.id] = nodo
+                }}
+                type="button"
+                role="tab"
+                aria-selected={sel}
+                aria-controls={`vista-${p.id}`}
+                // El rótulo visible se recorta abajo de `md`, así que el
+                // nombre completo de la vista viaja en el aria-label: es
+                // el que lee un lector de pantalla en cualquier ancho.
+                aria-label={texto.titulo}
+                tabIndex={sel ? 0 : -1}
+                onClick={() => irA(p.id)}
+                className={`relative flex items-center gap-2 whitespace-nowrap rounded-md border px-2.5 py-2 text-[13px] transition-colors sm:px-3 ${
+                  sel
+                    ? 'border-accent/40 bg-accent/10 text-accent'
+                    : 'border-transparent text-slate-400 hover:bg-base-700/60 hover:text-white'
+                }`}
               >
-                <button
-                  type="button"
-                  onClick={() => setGrupoAbierto(desplegado ? null : item.id)}
-                  aria-expanded={desplegado}
-                  aria-haspopup="true"
-                  className={`flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-2 text-[13px] transition-colors ${
-                    marcado || desplegado ? 'text-accent' : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  {ui.nav[item.id]}
-                  <ChevronDown
-                    size={13}
-                    className={`transition-transform ${desplegado ? 'rotate-180' : ''}`}
-                    aria-hidden="true"
-                  />
-                </button>
+                <Icono size={15} aria-hidden="true" />
+                <span className="hidden md:inline">{texto.nav}</span>
 
-                {desplegado && (
-                  // `pt-1` en el contenedor y no `mt-1`: si hubiera un hueco
-                  // real entre el botón y el panel, el mouse lo cruzaría y el
-                  // onMouseLeave cerraría el menú antes de llegar al primer link.
-                  <div className="absolute left-0 top-full pt-1">
-                    <ul className="min-w-[13rem] overflow-hidden rounded-lg border border-base-600 bg-base-900/95 py-1 shadow-2xl shadow-black/50 backdrop-blur-lg">
-                      {item.hijos.map((hijo) => (
-                        <li key={hijo}>
-                          <a
-                            href={`#${hijo}`}
-                            onClick={() => setGrupoAbierto(null)}
-                            className={`block whitespace-nowrap px-4 py-2 text-[13px] transition-colors hover:bg-base-700/60 ${
-                              activo === hijo ? 'text-accent' : 'text-slate-400 hover:text-white'
-                            }`}
-                          >
-                            {ui.nav[hijo]}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                {marca && (
+                  <span
+                    className="absolute right-1 top-1 flex h-2 w-2 md:static md:right-auto md:top-auto"
+                    title={marca}
+                  >
+                    <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-warn" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-warn" />
+                    <span className="sr-only">{marca}</span>
+                  </span>
                 )}
-              </li>
+              </button>
             )
           })}
-        </ul>
+        </div>
 
         <div className="flex shrink-0 items-center gap-2">
           <LangToggle />
@@ -211,77 +162,15 @@ export default function Navbar() {
           >
             <Linkedin size={16} />
           </a>
-          <a href="#contacto" className="btn-primary hidden whitespace-nowrap px-4 py-2 text-xs lg:inline-flex">
-            {ui.nav.cta}
-          </a>
-
           <button
             type="button"
-            onClick={() => setAbierto((v) => !v)}
-            aria-label={abierto ? ui.nav.cerrar : ui.nav.abrir}
-            aria-expanded={abierto}
-            className="rounded-md border border-base-600 p-2 text-slate-300 lg:hidden"
+            onClick={() => irA('perfil', 'contacto')}
+            className="btn-primary hidden whitespace-nowrap px-4 py-2 text-xs lg:inline-flex"
           >
-            {abierto ? <X size={18} /> : <Menu size={18} />}
+            {ui.nav.cta}
           </button>
         </div>
       </nav>
-
-      {abierto && (
-        <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-base-600 bg-base-900/95 backdrop-blur-lg lg:hidden">
-          <ul className="container-x flex flex-col py-3">
-            {NAV.map((item) =>
-              // En el menú móvil el grupo no se despliega: se muestra abierto,
-              // como encabezado y sublista. Un acordeón dentro de un panel que
-              // ya es un acordeón obliga a dos toques para llegar a un ancla.
-              item.hijos ? (
-                <li key={item.id} className="border-b border-base-700/60 py-3">
-                  <a
-                    href={`#${item.destino}`}
-                    onClick={() => setAbierto(false)}
-                    className="block text-sm text-slate-300 hover:text-accent"
-                  >
-                    {ui.nav[item.id]}
-                  </a>
-                  <ul className="mt-1 border-l border-base-700 pl-4">
-                    {item.hijos.map((hijo) => (
-                      <li key={hijo}>
-                        <a
-                          href={`#${hijo}`}
-                          onClick={() => setAbierto(false)}
-                          className="block py-2 text-[13px] text-slate-500 hover:text-accent"
-                        >
-                          {ui.nav[hijo]}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ) : (
-                <li key={item.id}>
-                  <a
-                    href={`#${item.id}`}
-                    onClick={() => setAbierto(false)}
-                    className="block border-b border-base-700/60 py-3 text-sm text-slate-300 hover:text-accent"
-                  >
-                    {ui.nav[item.id]}
-                  </a>
-                </li>
-              ),
-            )}
-            <li className="flex gap-2 pt-4">
-              <a href={profile.linkedin} target="_blank" rel="noreferrer noopener" className="btn-ghost flex-1 py-2 text-xs">
-                <Linkedin size={14} /> LinkedIn
-              </a>
-              {profile.github && (
-                <a href={profile.github} target="_blank" rel="noreferrer noopener" className="btn-ghost flex-1 py-2 text-xs">
-                  <Github size={14} /> GitHub
-                </a>
-              )}
-            </li>
-          </ul>
-        </div>
-      )}
     </header>
   )
 }
