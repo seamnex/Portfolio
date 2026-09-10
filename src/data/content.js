@@ -31,7 +31,7 @@ export const profile = {
   target: 'Junior SRE / DevOps Engineer',
   ubicacion: 'Buenos Aires, Argentina · Remoto / Híbrido',
   disponibilidad: 'Disponible para nuevas oportunidades',
-  email: 'seamsex@gmail.com',
+  email: 'S.egb@hotmail.es',
   linkedin: 'https://www.linkedin.com/in/samuel-garcia-baciliadis/',
   github: GITHUB_PUBLICO ? GITHUB_URL : '',
   // Generado por `npm run cv` desde este mismo archivo. Ver scripts/generar-cv.mjs.
