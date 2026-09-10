@@ -142,7 +142,7 @@ function construirSvg() {
   ${chipsSvg}
 
   <!-- Pie -->
-  <text x="72" y="590" font-family="JetBrains Mono" font-weight="500" font-size="18" fill="${C.tenue}">portfolio-crunchy2.vercel.app</text>
+  <text x="72" y="590" font-family="JetBrains Mono" font-weight="500" font-size="18" fill="${C.tenue}">portfolio-eight-ashen-34.vercel.app</text>
   <text x="1128" y="590" text-anchor="end" font-family="JetBrains Mono" font-weight="500" font-size="18" fill="${C.tenue}">números medidos, con bitácora publicada</text>
 </svg>`
 }

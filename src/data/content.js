@@ -54,6 +54,16 @@ export const hero = {
       { k: 'Estado', v: 'ONLINE — abierto a propuestas', tone: 'ok' },
     ],
   },
+  // La invitación al laboratorio, arriba de los botones. Es lo que
+  // diferencia este sitio de un CV en PDF, así que no espera al banner
+  // del final de la portada: se ofrece antes de que nadie haga scroll.
+  sandbox: {
+    tag: 'Sandbox en vivo',
+    titulo: 'Inyectar fallas en vivo',
+    texto:
+      'Chaos engineering con auto-healing, runbooks y consola: rompé algo y mirá cómo se recupera. Corre en tu navegador, sin instalar nada.',
+    cta: 'Abrir el Chaos Lab',
+  },
 }
 
 export const metrics = [
@@ -339,6 +349,11 @@ export const timeline = [
     rol: 'Especialización SRE / DevOps',
     org: 'Formación y laboratorios propios',
     tipo: 'formacion',
+    // No es una etapa que vino después del puesto actual: corre a la par.
+    // El timeline lo dibuja como una rama que sale del nodo de abajo, y
+    // el rótulo dice con quién. Va en la entrada de arriba y apunta a la
+    // organización de la siguiente, que es la que se lee en pantalla.
+    paralelo: 'Personal Pay',
     resumen:
       'Ruta de especialización activa en cultura y herramientas DevOps: contenedores, orquestación, infraestructura como código y CI/CD, con laboratorios prácticos propios.',
     bullets: [
@@ -480,10 +495,14 @@ export const ui = {
 
   // ── Las tres vistas principales ─────────────────────────────
   // El sitio es tres vistas y una barra que elige cuál se mira. Cada una
-  // lleva cuatro rótulos, y los cuatro se usan en lugares distintos:
+  // lleva cinco rótulos, y los cinco se usan en lugares distintos:
   //
-  //   · `nav`     — la pestaña de la barra. Corto por obligación: son
-  //                 tres y tienen que entrar al lado del logo.
+  //   · `nav`      — la pestaña de la barra desde `md`. Corto por
+  //                  obligación: son tres y tienen que entrar al lado
+  //                  del logo.
+  //   · `navCorto` — la misma pestaña en móvil, apilada bajo el icono.
+  //                  Una palabra o una abreviatura: a 10px de alto no
+  //                  entra más, y el icono solo no dice qué hay detrás.
   //   · `titulo`  — el nombre completo de la vista. Es el `h1` de su
   //                 cabecera y el `aria-label` de su pestaña, así que un
   //                 lector de pantalla siempre oye el nombre entero
@@ -496,11 +515,13 @@ export const ui = {
     aria: 'Vistas principales del sitio',
     perfil: {
       nav: 'Perfil',
+      navCorto: 'Perfil',
       titulo: 'Perfil & Trayectoria',
       resumen: 'quién es, cómo trabaja y dónde estuvo',
     },
     observabilidad: {
       nav: 'Observabilidad',
+      navCorto: 'Observ.',
       titulo: 'Observabilidad & Telemetría',
       resumen: 'DORA, p95, topología y presupuesto de error',
       aviso: 'con simulacro',
@@ -510,6 +531,7 @@ export const ui = {
     },
     laboratorio: {
       nav: 'Chaos Lab',
+      navCorto: 'Chaos',
       titulo: 'Chaos & Incident Lab',
       resumen: 'simulacros, runbooks y consola',
       aviso: 'en curso',
@@ -672,6 +694,9 @@ export const ui = {
     verLogros: 'Ver logros',
     ocultarLogros: 'Ocultar logros',
     cuantos: (n) => `(${n})`,
+    // Rótulo de una entrada que corre a la par de la siguiente
+    // (`timeline[].paralelo`): dice con quién y que sigue en curso.
+    paralelo: (org) => `En paralelo con ${org} · en curso`,
   },
 
   // ── Tablero de telemetría y métricas DORA ───────────────────

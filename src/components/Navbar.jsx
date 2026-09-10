@@ -12,8 +12,10 @@ import LangToggle from './ui/LangToggle'
 //  Tres pestañas, el selector de idioma y nada más. Ya no hay scroll-spy
 //  ni menú desplegable ni hamburguesa: con tres destinos, esconderlos
 //  detrás de un botón costaría un toque de más para no ahorrar nada, y
-//  el ancho alcanza incluso en un teléfono angosto porque abajo de `sm`
-//  las pestañas se quedan en su icono.
+//  el ancho alcanza incluso en un teléfono angosto porque abajo de `md`
+//  las pestañas apilan el icono sobre un rótulo corto (`navCorto`). Un
+//  icono solo no dice qué hay detrás —un matraz no significa nada para
+//  quien nunca abrió un chaos lab—, y el rótulo de una palabra cabe.
 //
 //  El punto de aviso al lado de una pestaña no es decoración: dice que
 //  lo que pasa en esa vista sigue pasando aunque se esté mirando otra.
@@ -109,20 +111,29 @@ export default function Navbar() {
                 role="tab"
                 aria-selected={sel}
                 aria-controls={`vista-${p.id}`}
-                // El rótulo visible se recorta abajo de `md`, así que el
+                // El rótulo visible se abrevia abajo de `md`, así que el
                 // nombre completo de la vista viaja en el aria-label: es
                 // el que lee un lector de pantalla en cualquier ancho.
                 aria-label={texto.titulo}
                 tabIndex={sel ? 0 : -1}
                 onClick={() => irA(p.id)}
-                className={`relative flex items-center gap-2 whitespace-nowrap rounded-md border px-2.5 py-2 text-[13px] transition-colors sm:px-3 ${
+                className={`relative flex flex-col items-center gap-0.5 whitespace-nowrap rounded-md border px-2 py-1.5 text-[13px] transition-colors md:flex-row md:gap-2 md:px-3 md:py-2 ${
                   sel
                     ? 'border-accent/40 bg-accent/10 text-accent'
                     : 'border-transparent text-slate-400 hover:bg-base-700/60 hover:text-white'
                 }`}
               >
                 <Icono size={15} aria-hidden="true" />
-                <span className="hidden md:inline">{texto.nav}</span>
+                {/* Dos rótulos y uno solo visible por ancho: el corto va
+                    apilado bajo el icono en móvil, el completo al lado
+                    desde `md`. Ambos `aria-hidden`: el nombre ya lo da el
+                    aria-label del botón y no hay que leerlo dos veces. */}
+                <span aria-hidden="true" className="font-mono text-[9.5px] uppercase tracking-wider md:hidden">
+                  {texto.navCorto}
+                </span>
+                <span aria-hidden="true" className="hidden md:inline">
+                  {texto.nav}
+                </span>
 
                 {marca && (
                   <span
