@@ -32,7 +32,7 @@ export default function SandboxBanner() {
   const vivo = Boolean(simulacro || runbook)
 
   return (
-    <section id="sandbox" className="relative z-10 scroll-mt-24 py-20 sm:py-24">
+    <section id="sandbox" className="relative z-10 scroll-mt-24 py-10 sm:py-12">
       <div className="container-x">
         <div className="card overflow-hidden border-accent/30 bg-accent/[0.03]">
           <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-base-600/70 bg-base-800/50 px-6 py-3.5">

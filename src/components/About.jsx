@@ -16,7 +16,7 @@ export default function About() {
           ))}
 
           {/* Puente conceptual ITIL → SRE */}
-          <div className="card mt-8 p-6">
+          <div className="card mt-6 p-6">
             <p className="section-label">{about.puente.label}</p>
             <div className="mt-5 grid items-center gap-5 sm:grid-cols-[1fr_auto_1fr]">
               <div className="rounded-lg border border-crit/25 bg-crit/[0.06] p-4">

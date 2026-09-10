@@ -1,5 +1,6 @@
-import { ArrowRight, Download, FolderGit2, Linkedin, MapPin, Github } from 'lucide-react'
+import { ArrowRight, Download, FlaskConical, FolderGit2, Linkedin, MapPin, Github } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
+import { useVista } from '../navegacion/VistaProvider'
 import StatusBadge from './ui/StatusBadge'
 import CopyButton from './ui/CopyButton'
 
@@ -12,9 +13,10 @@ const toneMap = {
 
 export default function Hero() {
   const { hero, metrics, profile, ui } = useContenido()
+  const { irA } = useVista()
 
   return (
-    <section id="inicio" className="relative z-10 overflow-hidden pb-20 pt-32 sm:pt-40">
+    <section id="inicio" className="relative z-10 overflow-hidden pb-10 pt-28 sm:pb-14 sm:pt-36">
       <div className="container-x">
         <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_.95fr]">
           {/* Columna izquierda — mensaje */}
@@ -36,7 +38,39 @@ export default function Hero() {
 
             <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-400">{hero.subtitle}</p>
 
-            <div className="mt-9 flex flex-wrap gap-3">
+            {/* La puerta al laboratorio, antes que los botones: un botón
+                con forma de tarjeta, con el brillo que el resto reserva
+                para el hover, porque es la única cosa de esta portada que
+                un PDF no puede ofrecer. Cambia de vista sin recargar. */}
+            <button
+              type="button"
+              onClick={() => irA('laboratorio')}
+              className="group relative mt-7 flex w-full max-w-xl items-center gap-4 overflow-hidden rounded-xl border border-accent/50 bg-gradient-to-r from-accent/[0.14] via-base-700/60 to-ok/[0.10] p-4 text-left shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:from-accent/[0.22] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-base-800 sm:p-5"
+            >
+              <span className="pointer-events-none absolute inset-x-0 top-0 h-10 animate-scanline bg-gradient-to-b from-accent/[0.08] to-transparent" />
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-accent/40 bg-base-900 text-accent transition-colors group-hover:bg-accent/15">
+                <FlaskConical size={22} aria-hidden="true" />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.18em] text-ok">
+                  <span className="relative flex h-2 w-2" aria-hidden="true">
+                    <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-ok" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-ok" />
+                  </span>
+                  {hero.sandbox.tag}
+                </span>
+                <span className="mt-1 block text-[15px] font-bold tracking-tight text-white sm:text-base">
+                  {hero.sandbox.titulo}
+                </span>
+                <span className="mt-1 block text-[12.5px] leading-snug text-slate-400">{hero.sandbox.texto}</span>
+                <span className="mt-2 inline-flex items-center gap-1.5 font-mono text-[11.5px] font-semibold text-accent">
+                  {hero.sandbox.cta}
+                  <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                </span>
+              </span>
+            </button>
+
+            <div className="mt-6 flex flex-wrap gap-3">
               {/* `download` con nombre explícito: el archivo servido se llama
                   cv-…-sre.pdf, pero en la carpeta de descargas de un reclutador
                   conviene que se llame por la persona y el rol. */}

@@ -53,6 +53,13 @@ export const hero = {
       { k: 'Status', v: 'ONLINE — open to offers', tone: 'ok' },
     ],
   },
+  sandbox: {
+    tag: 'Live sandbox',
+    titulo: 'Inject failures live',
+    texto:
+      'Chaos engineering with auto-healing, runbooks and a console: break something and watch it recover. Runs in your browser, nothing to install.',
+    cta: 'Open the Chaos Lab',
+  },
 }
 
 export const metrics = [
@@ -412,11 +419,13 @@ export const ui = {
     aria: 'Main site views',
     perfil: {
       nav: 'Profile',
+      navCorto: 'Profile',
       titulo: 'Profile & Career',
       resumen: 'who he is, how he works and where he has been',
     },
     observabilidad: {
       nav: 'Observability',
+      navCorto: 'Observ.',
       titulo: 'Observability & Telemetry',
       resumen: 'DORA, p95, topology and error budget',
       aviso: 'drill running',
@@ -426,6 +435,7 @@ export const ui = {
     },
     laboratorio: {
       nav: 'Chaos Lab',
+      navCorto: 'Chaos',
       titulo: 'Chaos & Incident Lab',
       resumen: 'drills, runbooks and console',
       aviso: 'running',
@@ -573,6 +583,7 @@ export const ui = {
     verLogros: 'View highlights',
     ocultarLogros: 'Hide highlights',
     cuantos: (n) => `(${n})`,
+    paralelo: (org) => `Alongside ${org} · ongoing`,
   },
 
   telemetria: {

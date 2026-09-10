@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Briefcase, ChevronDown, GraduationCap } from 'lucide-react'
+import { Briefcase, ChevronDown, GitBranch, GraduationCap } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { periodoCon } from '../lib/periodo.js'
 import Section from './ui/Section'
@@ -16,6 +16,13 @@ import Section from './ui/Section'
 //  El primero arranca abierto porque es el puesto actual: es el que casi
 //  todo el mundo viene a leer, y esconderlo detrás de un clic para
 //  ahorrar cuatro renglones sería ahorrar en el lugar equivocado.
+//
+//  Una entrada con `paralelo` no vino después de la siguiente: corre a
+//  la par. Una lista vertical se lee como secuencia, así que hay que
+//  decirlo dos veces —con un tramo punteado sobre la línea, que une los
+//  dos nodos como una rama y no como un "después", y con un rótulo en la
+//  tarjeta que dice con quién— para que nadie lea "especialización" como
+//  "dejó el puesto para estudiar".
 // ─────────────────────────────────────────────────────────────
 export default function Timeline() {
   const { timeline, timelineMeta, ui } = useContenido()
@@ -44,7 +51,22 @@ export default function Timeline() {
                 )}
               </span>
 
-              <article className={`card overflow-hidden ${desplegado ? 'border-accent/40' : 'card-hover'}`}>
+              {/* Rama: un tramo punteado en el tono de formación que baja
+                  desde este nodo hasta el siguiente. Va centrado sobre el
+                  nodo (su `left` + 12px, menos 1px de la línea de 2px) y
+                  `-bottom-5` cruza el `space-y-5` hasta el nodo de abajo. */}
+              {item.paralelo && (
+                <span
+                  aria-hidden="true"
+                  className="absolute -bottom-5 -left-[30px] top-6 w-0 border-l-2 border-dashed border-ok/60 sm:-left-[38px]"
+                />
+              )}
+
+              <article
+                className={`card overflow-hidden ${desplegado ? 'border-accent/40' : 'card-hover'} ${
+                  item.paralelo ? 'border-ok/30' : ''
+                }`}
+              >
                 <div className="p-6">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
@@ -59,6 +81,13 @@ export default function Timeline() {
                       {periodoCon(item, ui.duracion)}
                     </span>
                   </div>
+
+                  {item.paralelo && (
+                    <p className="mt-3 inline-flex items-center gap-2 rounded-md border border-ok/25 bg-ok/[0.06] px-2.5 py-1 font-mono text-[11px] text-ok">
+                      <GitBranch size={12} aria-hidden="true" />
+                      {ui.trayectoria.paralelo(item.paralelo)}
+                    </p>
+                  )}
 
                   <p className="mt-4 text-[13.5px] leading-relaxed text-slate-400">{item.resumen}</p>
 
