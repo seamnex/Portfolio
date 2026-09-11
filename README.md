@@ -32,9 +32,12 @@ src/
   i18n/LanguageProvider  contexto de idioma: elige el diccionario y sincroniza <html lang>
   estado/EstadoProvider  chequeos en vivo, compartidos por panel, badges y consola
   postmortem/…Provider   estado del modal, abierto desde las tarjetas o la consola
+  avisos/AvisosProvider  alertas flotantes estilo PagerDuty (TRIGGERED / ACKNOWLEDGED / RESOLVED)
   lib/
     estado.js            chequeos reales (origen + GitHub Actions), con cache y timeout
     comandos.js          intérprete de la consola — función pura, testeable sin React
+    pdf.js               maquetado sobre pdf-lib, compartido por el CV y el post-mortem
+    postmortemPdf.js     arma el PDF de un post-mortem en el navegador (carga perezosa)
   components/
     Navbar.jsx           nav fijo, scroll-spy, menú mobile y selector de idioma
     Hero.jsx             headline, CTAs, terminal animada y métricas
@@ -43,7 +46,8 @@ src/
     Skills.jsx           4 cards expandibles de especialización
     LabMetrics.jsx       las tres métricas medidas, con método y bitácora
     Incidents.jsx        bitácora de incidentes → abre PostMortem.jsx
-    PostMortem.jsx       reporte SRE completo en modal, navegable con ← →
+    PostMortem.jsx       reporte SRE completo en modal, navegable con ← →, exportable a PDF
+    Avisos.jsx           la pila de alertas flotantes que alimenta AvisosProvider
     Projects.jsx         labs con filtros, comandos y badge de CI
     Console.jsx          consola interactiva (help, status, metrics, kubectl, curl…)
     Timeline.jsx         mapa de carrera vertical
@@ -121,6 +125,25 @@ repreguntar. Lo que se evalúa acá es el método, no el evento.
 
 La línea de tiempo lista **solo instantes medidos**. No hay pasos intermedios inventados
 para que el relato quede más prolijo.
+
+**Exportar a PDF.** El botón del pie del modal arma el informe en el navegador con
+`src/lib/postmortemPdf.js` —cabecera, métricas, resumen, cronología, causa raíz,
+impacto, acciones y lección— en el idioma activo, y lo descarga como
+`inc-2026-0N-postmortem-<idioma>.pdf`. Usa el mismo motor de maquetado que el CV
+(`src/lib/pdf.js`) y pdf-lib se carga recién al pedirlo, así que la portada no paga su
+peso. El pie de cada página repite que la falla fue inyectada en un laboratorio: un
+informe que circula suelto no puede perder esa aclaración.
+
+## Alertas flotantes
+
+`src/avisos/AvisosProvider.jsx` es el motor de notificaciones y `components/Avisos.jsx`
+la pila que se ve en la esquina (arriba a la derecha en escritorio, abajo en móvil).
+El sandbox de caos lo usa con el vocabulario de una herramienta de on-call: la alerta
+salta en la fase de detección (**TRIGGERED**), el diagnóstico toma el incidente
+(**ACKNOWLEDGED**, y la remediación actualiza esa misma tarjeta) y el auto-healing o la
+restauración manual lo cierran (**RESOLVED**). Un aviso con la misma `clave` reemplaza
+al anterior en vez de apilarse, que es lo que hace que una tarjeta "cambie de estado".
+El formulario de contacto y la exportación del post-mortem avisan por el mismo canal.
 
 ## Consola interactiva
 

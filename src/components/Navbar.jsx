@@ -137,7 +137,7 @@ export default function Navbar() {
 
                 {marca && (
                   <span
-                    className="absolute right-1 top-1 flex h-2 w-2 md:static md:right-auto md:top-auto"
+                    className="absolute right-1 top-1 flex h-2 w-2 md:relative md:right-auto md:top-auto"
                     title={marca}
                   >
                     <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-warn" />

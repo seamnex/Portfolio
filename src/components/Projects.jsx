@@ -15,7 +15,7 @@ function ProjectCard({ p, meta, pipeline }) {
   const activo = p.estado === 'Activo' || p.estado === 'Active'
 
   return (
-    <article className="card card-hover group flex flex-col p-6">
+    <article className="card card-hover group flex min-w-0 flex-col p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="font-mono text-[11px] uppercase tracking-wider text-accent">{p.categoria}</p>
@@ -62,7 +62,7 @@ function ProjectCard({ p, meta, pipeline }) {
 
       {p.comando && (
         <div className="mt-5 flex items-center justify-between gap-3 rounded-lg border border-base-600 bg-base-900/60 px-3 py-2.5">
-          <code className="truncate font-mono text-[12px] text-accent">
+          <code className="min-w-0 truncate font-mono text-[12px] text-accent">
             <span className="text-ok">$</span> {p.comando}
           </code>
           <CopyButton value={p.comando} className="shrink-0 border-0 px-1.5" />

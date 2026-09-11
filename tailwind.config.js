@@ -40,6 +40,12 @@ export default {
           '0%, 49%': { opacity: '1' },
           '50%, 100%': { opacity: '0' },
         },
+        // Entrada de un aviso flotante: desde la derecha en escritorio y
+        // desde abajo en móvil, que es de donde cuelga la pila en cada caso.
+        slideIn: {
+          '0%': { opacity: '0', transform: 'translateY(12px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
         // El paquete del diagrama de topología. Dos keyframes y no uno con
         // transform porque el conector cambia de eje según el breakpoint:
         // vertical apilado en móvil, horizontal en escritorio.
@@ -59,6 +65,7 @@ export default {
         'fade-up': 'fadeUp .7s ease-out both',
         scanline: 'scanline 6s linear infinite',
         blink: 'blink 1.1s step-end infinite',
+        'slide-in': 'slideIn .35s cubic-bezier(.2,.8,.2,1) both',
         'flow-x': 'flowX 2.4s linear infinite',
         'flow-y': 'flowY 2.4s linear infinite',
       },
