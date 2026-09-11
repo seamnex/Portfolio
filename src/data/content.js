@@ -689,6 +689,45 @@ export const ui = {
     vivo: 'quedó algo corriendo adentro',
   },
 
+  // ── Avisos flotantes (estilo PagerDuty) ─────────────────────
+  // Los estados no se traducen: TRIGGERED / ACKNOWLEDGED / RESOLVED son
+  // los rótulos que usa cualquier herramienta de on-call y así los lee
+  // quien evalúa el sitio. Lo que sí se traduce es el título y el detalle.
+  avisos: {
+    region: 'Alertas y notificaciones',
+    cerrar: 'Cerrar aviso',
+    estados: {
+      triggered: 'Triggered',
+      acknowledged: 'Acknowledged',
+      resolved: 'Resolved',
+      info: 'Info',
+      error: 'Error',
+    },
+    // Las alertas del simulacro. Reciben el escenario técnico; la señal y
+    // el remedio van tal cual porque así los escribiría la regla.
+    caos: {
+      meta: (e) => `simulacro · chaos lab · ${e.id}`,
+      triggered: (e) => ({ titulo: `Alerta en ${e.servicio}`, detalle: e.senal }),
+      acknowledged: (e) => ({
+        titulo: `Runbook tomó el incidente`,
+        detalle: `diagnóstico confirmado en ${e.servicio} · remediación automática en curso`,
+      }),
+      remediando: (e) => ({ titulo: `Remediando ${e.servicio}`, detalle: e.remedio }),
+      resolved: (e) => ({
+        titulo: `${e.servicio} operativo`,
+        detalle: 'auto-healing cerró el ciclo sin intervención manual',
+      }),
+      restaurado: (e) => ({
+        titulo: `Restaurado a mano`,
+        detalle: `"${e.id}" cancelado antes del auto-healing`,
+      }),
+      reinyectado: (e) => ({
+        titulo: `"${e.id}" reemplazado`,
+        detalle: 'se inyectó otro escenario encima · ciclo reiniciado',
+      }),
+    },
+  },
+
   // ── Resumen de trayectoria ──────────────────────────────────
   trayectoria: {
     verLogros: 'Ver logros',
@@ -1109,6 +1148,20 @@ export const ui = {
     anterior: 'Anterior',
     siguiente: 'Siguiente',
     resumenEjecutivo: 'Resumen',
+    metricas: 'Métricas del evento',
+    // Exportación a PDF. El documento se arma en el navegador con el
+    // mismo incidente que se está leyendo (ver lib/postmortemPdf.js).
+    exportar: 'Exportar PDF',
+    exportando: 'Generando PDF…',
+    exportado: (archivo) => `Post-mortem exportado como ${archivo}`,
+    exportarError: 'No se pudo generar el PDF. Probá de nuevo.',
+    pdf: {
+      titulo: 'Post-mortem',
+      asunto: 'Informe de post-mortem (RCA) de laboratorio',
+      avisoLab: 'Falla inyectada a propósito en un laboratorio propio, no un incidente de producción',
+      pagina: (n) => `Página ${n}`,
+      generado: (fecha) => `Exportado desde el portfolio el ${fecha}. Cada número enlaza a la bitácora del repo donde se midió.`,
+    },
   },
 
   // ── Formulario de contacto ──────────────────────────────────
@@ -1131,6 +1184,9 @@ export const ui = {
     error: 'No se pudo enviar el mensaje.',
     errorCta: 'Escribime por correo',
     errorCola: (email) => `o copiá ${email}.`,
+    // Lo que dice el aviso flotante, además del mensaje dentro del formulario.
+    errorDetalle: (email) => `El formulario no respondió. Escribime directo a ${email}.`,
+    avisoMeta: 'contacto · formspree',
     pieFormspree: (email) => `Respondo a la casilla que dejes acá. También podés escribirme directo a ${email}`,
     pieMailto: (email) => `El formulario abre tu cliente de correo. También podés escribirme directo a ${email}`,
     asunto: (nombre) => `Contacto desde el portfolio — ${nombre}`,

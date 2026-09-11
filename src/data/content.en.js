@@ -579,6 +579,39 @@ export const ui = {
     vivo: 'something is still running inside',
   },
 
+  avisos: {
+    region: 'Alerts and notifications',
+    cerrar: 'Dismiss',
+    estados: {
+      triggered: 'Triggered',
+      acknowledged: 'Acknowledged',
+      resolved: 'Resolved',
+      info: 'Info',
+      error: 'Error',
+    },
+    caos: {
+      meta: (e) => `drill · chaos lab · ${e.id}`,
+      triggered: (e) => ({ titulo: `Alert on ${e.servicio}`, detalle: e.senal }),
+      acknowledged: (e) => ({
+        titulo: `Runbook took the incident`,
+        detalle: `diagnosis confirmed on ${e.servicio} · automated remediation in progress`,
+      }),
+      remediando: (e) => ({ titulo: `Remediating ${e.servicio}`, detalle: e.remedio }),
+      resolved: (e) => ({
+        titulo: `${e.servicio} operational`,
+        detalle: 'auto-healing closed the loop with no manual intervention',
+      }),
+      restaurado: (e) => ({
+        titulo: `Restored by hand`,
+        detalle: `"${e.id}" cancelled before auto-healing`,
+      }),
+      reinyectado: (e) => ({
+        titulo: `"${e.id}" replaced`,
+        detalle: 'another scenario was injected on top · cycle restarted',
+      }),
+    },
+  },
+
   trayectoria: {
     verLogros: 'View highlights',
     ocultarLogros: 'Hide highlights',
@@ -992,6 +1025,18 @@ export const ui = {
     anterior: 'Previous',
     siguiente: 'Next',
     resumenEjecutivo: 'Summary',
+    metricas: 'Event metrics',
+    exportar: 'Export PDF',
+    exportando: 'Generating PDF…',
+    exportado: (archivo) => `Post-mortem exported as ${archivo}`,
+    exportarError: 'The PDF could not be generated. Please try again.',
+    pdf: {
+      titulo: 'Post-mortem',
+      asunto: 'Lab post-mortem (RCA) report',
+      avisoLab: 'Failure injected on purpose in a personal lab, not a production incident',
+      pagina: (n) => `Page ${n}`,
+      generado: (fecha) => `Exported from the portfolio on ${fecha}. Every number links to the lab log where it was measured.`,
+    },
   },
 
   form: {
@@ -1013,6 +1058,8 @@ export const ui = {
     error: 'The message could not be sent.',
     errorCta: 'Email me directly',
     errorCola: (email) => `or copy ${email}.`,
+    errorDetalle: (email) => `The form did not respond. Email me directly at ${email}.`,
+    avisoMeta: 'contact · formspree',
     pieFormspree: (email) => `I reply to the address you leave here. You can also write directly to ${email}`,
     pieMailto: (email) => `The form opens your mail client. You can also write directly to ${email}`,
     asunto: (nombre) => `Portfolio enquiry — ${nombre}`,

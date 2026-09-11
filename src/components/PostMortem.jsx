@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   ArrowUpRight,
   ChevronLeft,
@@ -6,13 +6,16 @@ import {
   ClipboardCheck,
   Clock,
   Crosshair,
+  FileDown,
   FlaskConical,
   Lightbulb,
+  Loader2,
   Search,
   Users,
   X,
 } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
+import { useAvisos } from '../avisos/AvisosProvider'
 
 const SEVERIDAD = {
   P1: 'border-crit/40 bg-crit/10 text-crit',
@@ -69,7 +72,9 @@ function Bloque({ icono: Icono, titulo, children }) {
  * correctivas y cierre. Se navega entre incidentes sin cerrar.
  */
 export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, onSiguiente }) {
-  const { ui } = useContenido()
+  const { ui, lang, profile } = useContenido()
+  const { avisar } = useAvisos()
+  const [exportando, setExportando] = useState(false)
   const dialogo = useRef(null)
   const overlay = useRef(null)
   // Para devolver el foco a donde estaba: si el modal se abrió desde la
@@ -106,6 +111,26 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
   }, [onCerrar, onAnterior, onSiguiente])
 
   const p = ui.postmortem
+
+  // El PDF se arma en el navegador con el incidente que se está leyendo.
+  // El módulo se carga recién acá: pdf-lib es más pesado que el sitio
+  // entero y no tiene sentido que lo bajen los que nunca van a exportar.
+  const exportar = async () => {
+    if (exportando) return
+    setExportando(true)
+    try {
+      const { construirPostMortem, descargar, nombreArchivo } = await import('../lib/postmortemPdf.js')
+      const bytes = await construirPostMortem({ incidente, textos: p, autor: profile.nombre, lang })
+      const archivo = nombreArchivo(incidente, lang)
+      descargar(bytes, archivo)
+      avisar({ estado: 'info', titulo: p.exportado(archivo), meta: incidente.codigo })
+    } catch (err) {
+      console.error('post-mortem → PDF', err)
+      avisar({ estado: 'error', titulo: p.exportarError, meta: incidente.codigo })
+    } finally {
+      setExportando(false)
+    }
+  }
 
   return (
     <div
@@ -244,15 +269,34 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
 
         {/* Pie: navegación entre incidentes y salida a la bitácora real */}
         <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-base-600 bg-base-900/40 px-6 py-4 sm:px-8">
-          <a
-            href={incidente.repo}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="inline-flex items-center gap-1.5 font-mono text-[11.5px] text-slate-400 transition-colors hover:text-accent"
-          >
-            {p.verBitacora}
-            <ArrowUpRight size={13} />
-          </a>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <button
+              type="button"
+              onClick={exportar}
+              disabled={exportando}
+              aria-busy={exportando}
+              className="btn-ghost px-3.5 py-2 text-xs disabled:cursor-wait disabled:opacity-70"
+            >
+              {exportando ? (
+                <>
+                  <Loader2 size={14} className="animate-spin" aria-hidden="true" /> {p.exportando}
+                </>
+              ) : (
+                <>
+                  <FileDown size={14} aria-hidden="true" /> {p.exportar}
+                </>
+              )}
+            </button>
+            <a
+              href={incidente.repo}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-flex items-center gap-1.5 font-mono text-[11.5px] text-slate-400 transition-colors hover:text-accent"
+            >
+              {p.verBitacora}
+              <ArrowUpRight size={13} />
+            </a>
+          </div>
 
           <div className="flex items-center gap-2">
             <span className="font-mono text-[10.5px] text-slate-600">

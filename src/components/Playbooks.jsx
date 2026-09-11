@@ -27,7 +27,7 @@ function TarjetaPlaybook({ playbook, texto, activo, onElegir, t }) {
       type="button"
       onClick={() => onElegir(playbook.id)}
       aria-pressed={activo}
-      className={`card group flex h-full flex-col p-5 text-left transition-all duration-200 ${
+      className={`card group flex h-full min-w-0 flex-col p-5 text-left transition-all duration-200 ${
         activo ? 'border-accent/60 bg-accent/[0.05]' : 'text-slate-400 hover:-translate-y-0.5 hover:border-accent/50'
       }`}
     >

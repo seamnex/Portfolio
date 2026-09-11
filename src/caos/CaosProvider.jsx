@@ -1,6 +1,19 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { AUTOHEALING_MS, FASES, escenarioPorId, lineaDeFase } from '../lib/caos.js'
 import { useContenido } from '../i18n/LanguageProvider'
+import { useAvisos } from '../avisos/AvisosProvider'
+
+// Qué aviso flotante dispara cada fase, en el vocabulario de una
+// herramienta de on-call. La inyección no avisa: la alerta salta en la
+// detección, y ese segundo y medio de silencio es el MTTD que el simulacro
+// quiere mostrar. El diagnóstico "toma" el incidente (ACKNOWLEDGED), la
+// remediación actualiza esa misma tarjeta, y la recuperación la resuelve.
+const AVISO_POR_FASE = {
+  deteccion: { estado: 'triggered', texto: 'triggered' },
+  diagnostico: { estado: 'acknowledged', texto: 'acknowledged' },
+  remediacion: { estado: 'acknowledged', texto: 'remediando' },
+  recuperado: { estado: 'resolved', texto: 'resolved' },
+}
 
 // ─────────────────────────────────────────────────────────────
 //  Estado del sandbox de chaos engineering.
@@ -22,6 +35,24 @@ const REGISTRO_MAX = 60
 
 export function CaosProvider({ children }) {
   const { ui } = useContenido()
+  const { avisar } = useAvisos()
+
+  // Un aviso por escenario, con clave fija: la tarjeta pasa de TRIGGERED
+  // a ACKNOWLEDGED a RESOLVED en el mismo lugar, como en PagerDuty.
+  const avisarFase = useCallback(
+    (escenarioActivo, { estado, texto }) => {
+      const { titulo, detalle } = ui.avisos.caos[texto](escenarioActivo)
+      avisar({
+        estado,
+        clave: `caos:${escenarioActivo.id}`,
+        severidad: escenarioActivo.severidad,
+        titulo,
+        detalle,
+        meta: ui.avisos.caos.meta(escenarioActivo),
+      })
+    },
+    [avisar, ui],
+  )
 
   const [escenario, setEscenario] = useState(null)
   const [fase, setFase] = useState(null)
@@ -67,27 +98,38 @@ export function CaosProvider({ children }) {
     })
   }, [])
 
+  // El escenario activo también en un ref: `restaurar` necesita saber cuál
+  // era para anotarlo y avisar, y hacerlo dentro del updater de
+  // `setEscenario` sería disparar el estado de otro proveedor (los
+  // avisos) en mitad de un render. El ref se actualiza en el mismo lugar
+  // que el estado, así que nunca van desfasados.
+  const escenarioRef = useRef(null)
+  const fijarEscenario = useCallback((valor) => {
+    escenarioRef.current = valor
+    setEscenario(valor)
+  }, [])
+
   const restaurar = useCallback(
     ({ anunciar = true } = {}) => {
       limpiarTimers()
       cerrarSimulacro('manual')
-      setEscenario((activo) => {
-        if (activo && anunciar) {
-          anotar({
-            id: `${activo.id}:manual:${Date.now()}`,
-            ts: Date.now(),
-            fase: 'restaurado',
-            nivel: 'ok',
-            escenario: activo.id,
-            texto: ui.caos.fases.restaurado(activo, ui),
-          })
-        }
-        return null
-      })
+      const activo = escenarioRef.current
+      fijarEscenario(null)
       setFase(null)
       setTerminaEn(null)
+      if (activo && anunciar) {
+        anotar({
+          id: `${activo.id}:manual:${Date.now()}`,
+          ts: Date.now(),
+          fase: 'restaurado',
+          nivel: 'ok',
+          escenario: activo.id,
+          texto: ui.caos.fases.restaurado(activo, ui),
+        })
+        avisarFase(activo, { estado: 'resolved', texto: 'restaurado' })
+      }
     },
-    [anotar, cerrarSimulacro, limpiarTimers, ui],
+    [anotar, avisarFase, cerrarSimulacro, fijarEscenario, limpiarTimers, ui],
   )
 
   /**
@@ -104,8 +146,10 @@ export function CaosProvider({ children }) {
       // dos escenarios superpuestos darían un panel imposible de leer.
       limpiarTimers()
       cerrarSimulacro('reinyeccion')
+      const previo = escenarioRef.current
+      if (previo && previo.id !== elegido.id) avisarFase(previo, { estado: 'resolved', texto: 'reinyectado' })
       const inicio = Date.now()
-      setEscenario(elegido)
+      fijarEscenario(elegido)
       setTerminaEn(inicio + AUTOHEALING_MS)
       setSimulacros((prev) => [
         ...prev,
@@ -116,11 +160,12 @@ export function CaosProvider({ children }) {
         const disparar = () => {
           setFase(f.id)
           anotar(lineaDeFase(f, elegido, ui))
+          if (AVISO_POR_FASE[f.id]) avisarFase(elegido, AVISO_POR_FASE[f.id])
           // La última fase ES el auto-healing: el sistema vuelve solo, sin
           // que nadie toque un botón. Ese es el punto del simulacro.
           if (f.id === 'recuperado') {
             cerrarSimulacro('auto-healing')
-            setEscenario(null)
+            fijarEscenario(null)
             setTerminaEn(null)
           }
         }
@@ -130,7 +175,7 @@ export function CaosProvider({ children }) {
 
       return true
     },
-    [anotar, cerrarSimulacro, limpiarTimers, ui],
+    [anotar, avisarFase, cerrarSimulacro, fijarEscenario, limpiarTimers, ui],
   )
 
   const limpiarRegistro = useCallback(() => setRegistro([]), [])

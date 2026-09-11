@@ -65,7 +65,7 @@ function BotonEscenario({ escenario, texto, activo, onInyectar, ui }) {
       type="button"
       onClick={() => onInyectar(escenario.id)}
       aria-pressed={activo}
-      className={`card group flex h-full flex-col items-start p-5 text-left transition-all duration-200 ${
+      className={`card group flex h-full min-w-0 flex-col items-start p-5 text-left transition-all duration-200 ${
         activo ? tono.activo : `text-slate-400 ${tono.boton} hover:-translate-y-0.5`
       }`}
     >

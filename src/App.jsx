@@ -1,5 +1,6 @@
 import { LanguageProvider } from './i18n/LanguageProvider'
 import { VistaProvider, useVista } from './navegacion/VistaProvider'
+import { AvisosProvider } from './avisos/AvisosProvider'
 import { EstadoProvider } from './estado/EstadoProvider'
 import { CaosProvider } from './caos/CaosProvider'
 import { TelemetriaProvider } from './telemetria/TelemetriaProvider'
@@ -37,7 +38,9 @@ export default function App() {
   return (
     // Idioma afuera: todos los demás leen textos traducidos. Después las
     // vistas, porque la barra superior y el banner del sandbox necesitan
-    // saber cuál está activa. Y por último, en orden de dependencia: caos
+    // saber cuál está activa. Después los avisos flotantes, porque caos
+    // y el formulario de contacto los disparan. Y por último, en orden de
+    // dependencia: caos
     // arma sus líneas de bitácora con `ui`, y la consola consulta estado,
     // caos y el runbook abierto. Telemetría va después de caos porque el
     // tablero avisa cuando hay un simulacro en curso, aunque sus números
@@ -49,6 +52,7 @@ export default function App() {
     // visitante cambió de pestaña.
     <LanguageProvider>
       <VistaProvider>
+        <AvisosProvider>
         <EstadoProvider>
           <CaosProvider>
             <TelemetriaProvider>
@@ -62,6 +66,7 @@ export default function App() {
             </TelemetriaProvider>
           </CaosProvider>
         </EstadoProvider>
+        </AvisosProvider>
       </VistaProvider>
     </LanguageProvider>
   )
