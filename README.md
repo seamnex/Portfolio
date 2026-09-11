@@ -56,6 +56,7 @@ src/
 scripts/
   generar-og.mjs         genera public/og-card.png desde content.js
   generar-cv.mjs         genera los dos CV en PDF desde content.js
+  seo.mjs                arma el JSON-LD (schema.org Person + WebSite) que Vite inyecta en el <head>
   verificar-contenido.mjs  paridad de idiomas, enlaces y post-mortems
   verificar-consola.mjs    ejercita el intérprete de comandos
 .github/workflows/
@@ -205,6 +206,26 @@ contra bots.
    volver a buildear no cambia nada en el sitio publicado.
 
 Para probar en local: copiar `.env.example` a `.env` y completar el ID.
+
+## SEO sin JavaScript (JSON-LD y meta)
+
+El sitio es una SPA sin SSR: un crawler, un parser de ATS o el scraper de LinkedIn ven
+solo el `index.html`. Por eso el `<head>` lleva dos cosas que no dependen de React:
+
+- **Meta estáticas** (`<title>`, `description`, Open Graph, Twitter Cards, `author`,
+  `keywords`, `geo.*`) con la síntesis del perfil, en `index.html`. Si cambia el rol en
+  `profile.rol`, hay que cambiarlo también ahí (y en `ui.meta`, que es lo que React
+  escribe al cambiar de idioma).
+- **JSON-LD** (`schema.org/Person` + `WebSite`) que `scripts/seo.mjs` arma desde
+  `src/data/content.js` —nombre, rol, bio, dominios y herramientas, formación, empleador
+  actual, enlaces— y que el plugin `portfolio:json-ld` de `vite.config.js` inyecta en
+  cada build. No se escribe a mano: un JSON-LD estático es uno que en tres meses anuncia
+  un rol que ya no figura en el sitio. Para verlo: `npm run build` y buscar
+  `application/ld+json` en `dist/index.html`.
+
+La trayectoria lleva `desde` (y `hasta` en los tramos cerrados) en `YYYY-MM`:
+`src/lib/periodo.js` calcula la duración de cada puesto para el sitio y para el CV, y el
+tramo agrupado de 2018 – 2022 lleva `soloAnio` para mostrarse sin cuenta de meses.
 
 ## Vista previa al compartir (Open Graph)
 

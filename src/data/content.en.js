@@ -30,8 +30,8 @@ const traducirPorId = (base, traducciones) =>
 
 export const profile = {
   ...profileEs,
-  rol: 'IT Incident Manager · Incident Analyst',
-  target: 'Junior SRE / DevOps Engineer',
+  rol: 'IT Incident Manager / SRE Analyst',
+  target: 'SRE / DevOps Engineer',
   ubicacion: 'Buenos Aires, Argentina · Remote / Hybrid',
   disponibilidad: 'Open to new opportunities',
   cv: '/cv-samuel-garcia-baciliadis-sre-en.pdf',
@@ -155,8 +155,9 @@ export const skillsMeta = {
 
 export const skills = traducirPorId(skillsEs, {
   incident: {
+    titulo: 'Incident Management & On-call',
     tagline: 'The critical event, end to end',
-    nivel: 'Expert',
+    dominio: 'Operations · ITSM',
     descripcion:
       'P1/P2 incident coordination, War Room leadership, impact-based prioritisation, stakeholder communication and closure with root cause.',
     items: [
@@ -171,9 +172,9 @@ export const skills = traducirPorId(skillsEs, {
     ],
   },
   observability: {
-    titulo: 'Observability & Monitoring',
+    titulo: 'Observability & ITSM',
     tagline: 'Detect before the user does',
-    nivel: 'Advanced',
+    dominio: 'APM · Logs · Alerting',
     descripcion:
       'Instrumentation, alert tuning and analysis of metrics, logs and traces to shorten time to detection and diagnosis.',
     items: [
@@ -188,10 +189,11 @@ export const skills = traducirPorId(skillsEs, {
     ],
   },
   devops: {
-    tagline: 'The active specialisation track',
-    nivel: 'Actively training',
+    titulo: 'Automation & Cloud',
+    tagline: 'Containers, IaC and pipelines with measured results',
+    dominio: 'Containers · IaC · CI/CD',
     descripcion:
-      'Personal labs covering containers, orchestration, infrastructure as code and continuous integration pipelines.',
+      'Containers, orchestration, infrastructure as code and continuous integration pipelines, validated in personal labs with a published log.',
     items: [
       'Linux (administration and troubleshooting)',
       'Docker · images and compose',
@@ -204,9 +206,9 @@ export const skills = traducirPorId(skillsEs, {
     ],
   },
   dev: {
-    titulo: 'Development & Automation',
+    titulo: 'Scripting & Development',
     tagline: 'Scripts that remove toil',
-    nivel: 'Intermediate',
+    dominio: 'Python · Bash · JavaScript',
     descripcion:
       'Automation of operational tasks, internal tooling and web development for dashboards and personal projects.',
     items: [
@@ -306,33 +308,45 @@ export const timeline = timelineEs.map((item, i) => ({
     },
     {
       periodo: 'May 2024 – Present',
-      rol: 'IT Incident Manager · Incident Analyst',
-      org: 'Personal Pay',
+      rol: 'IT Incident Manager / SRE Analyst',
+      org: 'Personal Pay · Telecom Argentina (via Asap Consulting)',
       resumen:
-        'Critical incident management on a high-volume financial platform, where every minute of downtime hits users and the business directly.',
+        'Critical incident management on the Telecom group\'s high-volume financial platform, where every minute of downtime hits users and the business directly. 24×7 operation over large-scale telecommunications infrastructure.',
       bullets: [
         'Leading P1/P2 War Rooms through to service restoration',
-        'Root cause analysis (RCA) and follow-up on preventive actions',
-        'Monitoring and diagnosis with Dynatrace, Datadog and Elastic/Kibana',
+        'Root cause analysis (RCA), post-mortems in Confluence and follow-up on preventive actions',
+        'Monitoring and diagnosis with Dynatrace, Datadog, Elastic/Kibana and Zabbix; batch processes with Control-M',
         'Communicating status and impact to technical and business stakeholders',
-        'Working against SLAs with sustained focus on reducing MTTR',
+        'Coordination across infrastructure, network and development teams on a 24×7 rotation',
+        'Working against SLAs with sustained focus on reducing MTTR; documenting procedures and runbooks',
       ],
     },
     {
-      periodo: 'Telco',
-      rol: 'Incident Analyst · IT Operations',
-      org: 'Telecom Argentina',
+      periodo: 'August 2023 – June 2024',
+      rol: 'Sr Helpdesk Leader · N2-N3 Technical Support',
+      org: 'DX Electrónica',
       resumen:
-        'Operating critical services on large-scale telecommunications infrastructure, on 24×7 rotations with demanding availability targets.',
+        'Supervising and managing the technical support area, on site and remotely, focused on meeting service standards and keeping operations running.',
       bullets: [
-        'End-to-end incident lifecycle management',
-        'Infrastructure and batch process monitoring (Zabbix, Control-M)',
-        'Coordination across infrastructure, network and development teams',
-        'Documentation of operational procedures and runbooks',
+        'Assigning and coordinating the support team\'s work, ensuring service standards were met',
+        'Installing and configuring hardware, software and networks; resolving incidents on corporate PCs',
+        'Support reports and metrics to spot improvement opportunities and guarantee service continuity',
       ],
     },
     {
-      periodo: 'Earlier career',
+      periodo: 'February 2022 – July 2023',
+      rol: 'Technical Support',
+      org: 'SmartClick',
+      resumen:
+        'Installation, configuration and maintenance of equipment, hardware and software, with ticket management and case documentation in Jira.',
+      bullets: [
+        'Resolving connectivity, user account and Windows permission issues; support on network configuration',
+        'Documenting cases in Jira, incident reports and ticket management',
+        'Training users in the correct use of IT tools',
+      ],
+    },
+    {
+      periodo: '2018 – 2022',
       rol: 'Help Desk Lead · N2-N3 Technical Support',
       org: 'Operations and Service Desk',
       resumen:
@@ -351,7 +365,7 @@ export const contacto = {
   label: 'Contact',
   titulo: "Let's talk about reliability",
   bajada:
-    'I am open to Incident Management, SRE or Junior DevOps roles, and to projects where service availability is a requirement rather than a wish. I reply within 24 business hours.',
+    'I am open to Incident Management, SRE or DevOps roles in Argentina and LATAM, and to projects where service availability is a requirement rather than a wish. I reply within 24 business hours.',
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -359,7 +373,7 @@ export const contacto = {
 //  derived from the other exports rather than written twice.
 // ─────────────────────────────────────────────────────────────
 export const cv = {
-  titular: 'IT Incident Manager · Incident Analyst → Junior SRE / DevOps Engineer',
+  titular: 'IT Incident Manager / SRE Analyst → SRE / DevOps Engineer',
   resumen:
     'Over 8 years in IT operations, focused on critical P1/P2 incident management in Fintech and Telecommunications: leading War Rooms, restoring service under pressure and closing out with RCAs and preventive actions. Today I am directing that discipline towards SRE and DevOps — observability, automation and reliability — through personal labs where I inject faults, measure detection and recovery, and publish the log of every run.',
   secciones: {
@@ -993,7 +1007,7 @@ export const ui = {
     status: { titulo: 'Live check from this browser', consultando: 'Checking services…' },
     whoami: [
       'Samuel Eduardo García Baciliadis',
-      'IT Incident Manager · Incident Analyst → Junior SRE / DevOps',
+      'IT Incident Manager / SRE Analyst → SRE / DevOps',
       'Buenos Aires, Argentina · Remote / Hybrid',
       '',
       'I run P1/P2 incidents in Fintech and Telco. What you see on this site',
@@ -1074,8 +1088,8 @@ export const ui = {
   },
 
   meta: {
-    title: 'Samuel García Baciliadis — IT Incident Manager & SRE / DevOps',
+    title: 'Samuel García Baciliadis — IT Incident Manager / SRE Analyst',
     description:
-      'Incident Manager with experience in Fintech and Telecommunications. Critical P1/P2 incident management, observability, RCA and MTTR reduction. Moving into SRE / DevOps.',
+      'IT Incident Manager / SRE Analyst in Buenos Aires, Argentina. 8+ years in IT operations: critical P1/P2 incident management in Fintech (Personal Pay) and Telecommunications, observability with Dynatrace, Datadog and Elastic, RCA and MTTR reduction. Personal Kubernetes, observability and chaos engineering labs with published metrics.',
   },
 }

@@ -32,7 +32,7 @@ function SkillCard({ skill, abierto, onToggle }) {
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
             <h3 className="text-base font-semibold text-white">{skill.titulo}</h3>
             <span className={`rounded-md border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider ${t.chip}`}>
-              {skill.nivel}
+              {skill.dominio}
             </span>
           </div>
           <p className="mt-1 font-mono text-[11.5px] text-slate-500">{skill.tagline}</p>

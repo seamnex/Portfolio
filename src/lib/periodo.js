@@ -39,12 +39,21 @@ export function duracion(desde, textos, hasta) {
   return partes.join(` ${textos.union} `)
 }
 
+/** Primer día del mes de un 'YYYY-MM', en UTC. */
+function mesComoFecha(ym) {
+  const [anio, mes] = String(ym).split('-').map(Number)
+  return new Date(Date.UTC(anio, mes - 1, 1))
+}
+
 /**
- * Período de una entrada de trayectoria, con la antigüedad pegada si la
- * entrada declara desde cuándo. Las que no la declaran —los tramos
- * viejos, donde el mes exacto no aporta— se muestran tal cual.
+ * Período de una entrada de trayectoria, con la duración pegada si la
+ * entrada declara desde cuándo. Un tramo cerrado lleva además `hasta`
+ * ('YYYY-MM') y la duración se calcula entre los dos; uno abierto se
+ * calcula hasta hoy. Los tramos con `soloAnio` —agrupados, donde el mes
+ * exacto no aporta— se muestran tal cual, sin la cuenta de meses.
  */
 export function periodoCon(item, textos, hasta) {
-  if (!item?.desde) return item?.periodo ?? ''
-  return `${item.periodo} · ${duracion(item.desde, textos, hasta)}`
+  if (!item?.desde || item.soloAnio) return item?.periodo ?? ''
+  const fin = item.hasta ? mesComoFecha(item.hasta) : hasta
+  return `${item.periodo} · ${duracion(item.desde, textos, fin)}`
 }
