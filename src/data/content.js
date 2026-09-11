@@ -27,8 +27,8 @@ const GITHUB_PUBLICO = true
 export const profile = {
   nombre: 'Samuel Eduardo García Baciliadis',
   alias: 'Samuel García',
-  rol: 'IT Incident Manager · Incident Analyst',
-  target: 'Junior SRE / DevOps Engineer',
+  rol: 'IT Incident Manager / SRE Analyst',
+  target: 'SRE / DevOps Engineer',
   ubicacion: 'Buenos Aires, Argentina · Remoto / Híbrido',
   disponibilidad: 'Disponible para nuevas oportunidades',
   email: 'S.egb@hotmail.es',
@@ -184,14 +184,18 @@ export const skillsMeta = {
   hint: 'Hacé click en cada tarjeta para desplegar el detalle de herramientas',
 }
 
+// Cada tarjeta lleva `dominio`, el rótulo del área técnica que agrupa las
+// herramientas, y no un nivel ("experto", "en formación"): un nivel
+// autoasignado no le dice nada a quien contrata, y el dominio sí le dice
+// dónde encaja el perfil. Lo que se sabe hacer se prueba con los labs.
 export const skills = [
   {
     id: 'incident',
-    titulo: 'Incident & Operations Management',
+    titulo: 'Incident Management & Guardias',
     tagline: 'Gestión del evento crítico de punta a punta',
     icono: 'ShieldAlert',
     tone: 'crit',
-    nivel: 'Experto',
+    dominio: 'Operaciones · ITSM',
     descripcion:
       'Coordinación de incidentes P1/P2, liderazgo de War Rooms, priorización por impacto, comunicación a stakeholders y cierre con causa raíz.',
     items: [
@@ -207,11 +211,11 @@ export const skills = [
   },
   {
     id: 'observability',
-    titulo: 'Observabilidad & Monitoreo',
+    titulo: 'Observabilidad e ITSM',
     tagline: 'Detectar antes que el usuario',
     icono: 'Activity',
     tone: 'accent',
-    nivel: 'Avanzado',
+    dominio: 'APM · Logs · Alertas',
     descripcion:
       'Instrumentación, tuning de alertas y análisis de métricas, logs y trazas para acortar el tiempo de detección y diagnóstico.',
     items: [
@@ -227,13 +231,13 @@ export const skills = [
   },
   {
     id: 'devops',
-    titulo: 'DevOps & Cloud — in progress',
-    tagline: 'La ruta de especialización activa',
+    titulo: 'Automatización & Cloud',
+    tagline: 'Contenedores, IaC y pipelines con resultados medidos',
     icono: 'Container',
     tone: 'ok',
-    nivel: 'En formación activa',
+    dominio: 'Contenedores · IaC · CI/CD',
     descripcion:
-      'Laboratorios propios de contenedores, orquestación, infraestructura como código y pipelines de integración continua.',
+      'Contenedores, orquestación, infraestructura como código y pipelines de integración continua, validados en laboratorios propios con bitácora publicada.',
     items: [
       'Linux (administración y troubleshooting)',
       'Docker · imágenes y compose',
@@ -247,11 +251,11 @@ export const skills = [
   },
   {
     id: 'dev',
-    titulo: 'Desarrollo & Automatización',
+    titulo: 'Scripting & Desarrollo',
     tagline: 'Scripts que eliminan toil',
     icono: 'Terminal',
     tone: 'soft',
-    nivel: 'Intermedio',
+    dominio: 'Python · Bash · JavaScript',
     descripcion:
       'Automatización de tareas operativas, herramientas internas y desarrollo web para dashboards y proyectos propios.',
     items: [
@@ -364,43 +368,71 @@ export const timeline = [
     ],
     tags: ['Docker', 'Kubernetes', 'Linux', 'Python', 'CI/CD'],
   },
+  // Todos los puestos llevan `desde` (y `hasta` los cerrados) en 'YYYY-MM':
+  // es lo que le da trazabilidad a los "+8 años" del hero, y lo que un ATS
+  // lee para armar la línea de tiempo. `periodo` es el texto que se
+  // muestra; la antigüedad NO se escribe: la calcula `lib/periodo.js`
+  // para el sitio y para el CV, porque un "2 años y 4 meses" a mano
+  // envejece en treinta días y nadie vuelve a mirarlo.
   {
     periodo: 'Mayo 2024 – Presente',
-    // La antigüedad NO se escribe acá: la calcula `lib/periodo.js` a partir
-    // de este mes, para el sitio y para el CV. Un "2 años y 4 meses" a mano
-    // envejece en treinta días y nadie vuelve a mirarlo.
     desde: '2024-05',
-    rol: 'IT Incident Manager · Incident Analyst',
-    org: 'Personal Pay',
+    rol: 'IT Incident Manager / SRE Analyst',
+    // Personal Pay es la fintech del grupo Telecom Argentina; la
+    // contratación es a través de Asap Consulting. Un solo puesto, no dos.
+    org: 'Personal Pay · Telecom Argentina (vía Asap Consulting)',
     tipo: 'trabajo',
     resumen:
-      'Gestión de incidentes críticos en una plataforma financiera de alto volumen transaccional, donde cada minuto de indisponibilidad tiene impacto directo en el usuario y en el negocio.',
+      'Gestión de incidentes críticos en la plataforma financiera del grupo Telecom, de alto volumen transaccional, donde cada minuto de indisponibilidad tiene impacto directo en el usuario y en el negocio. Operación 24×7 sobre infraestructura de telecomunicaciones a gran escala.',
     bullets: [
       'Liderazgo de War Rooms P1/P2 hasta la restauración del servicio',
-      'Análisis de causa raíz (RCA) y seguimiento de acciones preventivas',
-      'Monitoreo y diagnóstico con Dynatrace, Datadog y Elastic/Kibana',
+      'Análisis de causa raíz (RCA), post-mortems en Confluence y seguimiento de acciones preventivas',
+      'Monitoreo y diagnóstico con Dynatrace, Datadog, Elastic/Kibana y Zabbix; procesos batch con Control-M',
       'Comunicación de estado e impacto a stakeholders técnicos y de negocio',
-      'Trabajo sobre SLAs con foco sostenido en la reducción del MTTR',
+      'Coordinación entre equipos de infraestructura, redes y desarrollo, en esquema 24×7',
+      'Trabajo sobre SLAs con foco sostenido en la reducción del MTTR; documentación de procedimientos y runbooks',
     ],
-    tags: ['ITIL', 'RCA', 'Dynatrace', 'Datadog', 'SLA/SLO'],
+    tags: ['ITIL', 'RCA', 'Dynatrace', 'Datadog', 'Zabbix', 'Control-M', '24×7', 'SLA/SLO'],
   },
   {
-    periodo: 'Telecomunicaciones',
-    rol: 'Incident Analyst · Operaciones IT',
-    org: 'Telecom Argentina',
+    periodo: 'Agosto 2023 – Junio 2024',
+    desde: '2023-08',
+    hasta: '2024-06',
+    rol: 'Helpdesk Leader Sr · Soporte Técnico N2-N3',
+    org: 'DX Electrónica',
     tipo: 'trabajo',
     resumen:
-      'Operación de servicios críticos en infraestructura de telecomunicaciones a gran escala, con esquemas 24×7 y alta exigencia de disponibilidad.',
+      'Supervisión y gestión del área de soporte técnico, en sitio y remoto, con foco en el cumplimiento de estándares de servicio y la continuidad operativa.',
     bullets: [
-      'Gestión del ciclo de vida del incidente end-to-end',
-      'Monitoreo de infraestructura y procesos batch (Zabbix, Control-M)',
-      'Coordinación entre equipos de infraestructura, redes y desarrollo',
-      'Documentación de procedimientos operativos y runbooks',
+      'Asignación y coordinación de tareas del equipo de soporte, asegurando el cumplimiento de los estándares de servicio',
+      'Instalación y configuración de hardware, software y redes; resolución de incidentes en PCs corporativas',
+      'Informes y métricas de soporte para detectar oportunidades de mejora y garantizar la continuidad del servicio',
     ],
-    tags: ['Zabbix', 'Control-M', '24×7', 'ServiceNow'],
+    tags: ['Service Desk', 'SLA', 'Liderazgo', 'Redes'],
   },
   {
-    periodo: 'Trayectoria previa',
+    periodo: 'Febrero 2022 – Julio 2023',
+    desde: '2022-02',
+    hasta: '2023-07',
+    rol: 'Soporte Técnico',
+    org: 'SmartClick',
+    tipo: 'trabajo',
+    resumen:
+      'Instalación, configuración y mantenimiento de equipos, hardware y software, con gestión de tickets y documentación de casos en Jira.',
+    bullets: [
+      'Resolución de problemas de conectividad, cuentas de usuario y permisos en Windows; soporte en configuración de redes',
+      'Documentación de casos en Jira, reportes de incidentes y gestión de tickets',
+      'Capacitación de usuarios en el uso correcto de las herramientas informáticas',
+    ],
+    tags: ['Jira', 'Windows', 'Redes', 'Tickets'],
+  },
+  {
+    periodo: '2018 – 2022',
+    desde: '2018-01',
+    hasta: '2022-01',
+    // Solo año, a propósito: es un tramo agrupado de varias etapas de
+    // soporte y mesa de ayuda, y el mes exacto de cada una no aporta.
+    soloAnio: true,
     rol: 'Líder de Mesa de Ayuda · Soporte Técnico N2-N3',
     org: 'Operaciones y Service Desk',
     tipo: 'trabajo',
@@ -420,7 +452,7 @@ export const contacto = {
   label: 'Contacto',
   titulo: 'Hablemos de confiabilidad',
   bajada:
-    'Estoy abierto a posiciones de Incident Management, SRE o DevOps Junior, y a proyectos donde la disponibilidad del servicio sea un requisito, no un deseo. Respondo dentro de las 24 horas hábiles.',
+    'Estoy abierto a posiciones de Incident Management, SRE o DevOps en Argentina y LATAM, y a proyectos donde la disponibilidad del servicio sea un requisito, no un deseo. Respondo dentro de las 24 horas hábiles.',
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -437,7 +469,7 @@ export const contacto = {
 //  sección de trayectoria del sitio.
 // ─────────────────────────────────────────────────────────────
 export const cv = {
-  titular: 'IT Incident Manager · Incident Analyst → Junior SRE / DevOps Engineer',
+  titular: 'IT Incident Manager / SRE Analyst → SRE / DevOps Engineer',
   resumen:
     'Más de 8 años en operaciones IT, con foco en la gestión de incidentes críticos P1/P2 en Fintech y Telecomunicaciones: liderazgo de War Rooms, restauración del servicio bajo presión y cierre con RCA y acciones preventivas. Hoy oriento esa disciplina hacia SRE y DevOps —observabilidad, automatización y confiabilidad— con laboratorios propios donde inyecto fallas, mido detección y recuperación, y publico la bitácora de cada corrida.',
   secciones: {
@@ -1118,7 +1150,7 @@ export const ui = {
     status: { titulo: 'Chequeo en vivo desde este navegador', consultando: 'Consultando servicios…' },
     whoami: [
       'Samuel Eduardo García Baciliadis',
-      'IT Incident Manager · Incident Analyst → Junior SRE / DevOps',
+      'IT Incident Manager / SRE Analyst → SRE / DevOps',
       'Buenos Aires, Argentina · Remoto / Híbrido',
       '',
       'Gestiono incidentes P1/P2 en Fintech y Telco. Lo que ves en este sitio',
@@ -1201,8 +1233,8 @@ export const ui = {
   },
 
   meta: {
-    title: 'Samuel García Baciliadis — IT Incident Manager & SRE / DevOps',
+    title: 'Samuel García Baciliadis — IT Incident Manager / SRE Analyst',
     description:
-      'Incident Manager con experiencia en Fintech y Telecomunicaciones. Gestión de incidentes críticos P1/P2, observabilidad, RCA y reducción de MTTR. En transición hacia SRE / DevOps.',
+      'IT Incident Manager / SRE Analyst en Buenos Aires, Argentina. Más de 8 años en operaciones IT: gestión de incidentes críticos P1/P2 en Fintech (Personal Pay) y Telecomunicaciones, observabilidad con Dynatrace, Datadog y Elastic, RCA y reducción de MTTR. Laboratorios propios de Kubernetes, observabilidad y chaos engineering con métricas publicadas.',
   },
 }
