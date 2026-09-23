@@ -844,6 +844,7 @@ export const ui = {
     elegirObjetivo: 'Choose an availability target',
     elegirPeriodo: 'Choose the budget period',
     tablaAria: 'Maximum allowed downtime by period and availability target',
+    deslizarTabla: 'Swipe the table to see the other targets',
     periodo: 'Period',
     sinDatos: 'no data',
     periodos: {

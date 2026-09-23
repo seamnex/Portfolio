@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { FlaskConical, Gauge, Info, Target, Timer } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { FlaskConical, Gauge, Info, MoveHorizontal, Target, Timer } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useCaos } from '../caos/CaosProvider'
 import { num } from '../data/medidas.js'
@@ -41,6 +41,28 @@ export default function SloCalculator() {
     const t = setInterval(() => tick((v) => v + 1), 500)
     return () => clearInterval(t)
   }, [simulacroEnCurso])
+
+  // `hay`: la tabla no entra en su contenedor. `falta`: todavía queda una
+  // parte oculta a la derecha. Se mide del DOM y no por breakpoint porque
+  // lo que decide el desborde es el ancho real, que también cambia con el
+  // idioma y el tamaño de la fuente.
+  const contenedorTabla = useRef(null)
+  const [desborde, setDesborde] = useState({ hay: false, falta: false })
+  const medirDesborde = useCallback(() => {
+    const el = contenedorTabla.current
+    if (!el) return
+    const hay = el.scrollWidth > el.clientWidth + 1
+    const falta = hay && el.scrollLeft + el.clientWidth < el.scrollWidth - 1
+    setDesborde((d) => (d.hay === hay && d.falta === falta ? d : { hay, falta }))
+  }, [])
+  useEffect(() => {
+    const el = contenedorTabla.current
+    if (!el) return undefined
+    medirDesborde()
+    const obs = new ResizeObserver(medirDesborde)
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [medirDesborde])
 
   const periodo = periodoPorId(periodoId) ?? PERIODOS[2]
   // Sin memo a propósito: el simulacro abierto se cuenta hasta `Date.now()`,
@@ -86,50 +108,74 @@ export default function SloCalculator() {
             Las cuatro columnas juntas y no solo la elegida: la pregunta
             real no es "cuánto permite 99,9" sino "cuánto cuesta el nueve
             que sigue", y eso solo se ve comparando. */}
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[34rem] border-collapse text-left">
-            <caption className="sr-only">{t.tablaAria}</caption>
-            <thead>
-              <tr className="border-b border-base-600/70">
-                <th scope="col" className="px-5 py-3 font-mono text-[9.5px] uppercase tracking-[0.14em] text-slate-600">
-                  {t.periodo}
-                </th>
-                {OBJETIVOS_SLO.map((o) => (
-                  <th
-                    key={o}
-                    scope="col"
-                    className={`px-4 py-3 text-right font-mono text-[10.5px] ${
-                      o === objetivo ? 'bg-accent/[0.06] text-accent' : 'text-slate-500'
-                    }`}
-                  >
-                    {formatearObjetivo(o, lang)}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {PERIODOS.map((p) => (
-                <tr key={p.id} className="border-b border-base-600/40 last:border-b-0">
-                  <th
-                    scope="row"
-                    className="px-5 py-3 font-mono text-[11.5px] font-normal text-slate-400"
-                  >
-                    {t.periodos[p.id]}
+        {desborde.hay && (
+          <p className="flex items-center gap-1.5 px-5 pt-3 font-mono text-[10px] text-slate-600" aria-hidden="true">
+            <MoveHorizontal size={12} className="text-accent/70" />
+            {t.deslizarTabla}
+          </p>
+        )}
+        <div className="relative">
+          {/* En un teléfono la tabla es más ancha que la pantalla y las
+              columnas de 99,95 y 99,99 quedan cortadas sin ninguna señal de
+              que existen. El degradé marca que hay más a la derecha y se
+              apaga al llegar al final. El contenedor es enfocable porque un
+              scroll que solo responde al dedo deja afuera al teclado. */}
+          <div
+            ref={contenedorTabla}
+            onScroll={medirDesborde}
+            className="overflow-x-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
+            {...(desborde.hay && { tabIndex: 0, role: 'region', 'aria-label': t.tablaAria })}
+          >
+            <table className="w-full min-w-[34rem] border-collapse text-left">
+              <caption className="sr-only">{t.tablaAria}</caption>
+              <thead>
+                <tr className="border-b border-base-600/70">
+                  <th scope="col" className="px-5 py-3 font-mono text-[9.5px] uppercase tracking-[0.14em] text-slate-600">
+                    {t.periodo}
                   </th>
                   {OBJETIVOS_SLO.map((o) => (
-                    <td
+                    <th
                       key={o}
-                      className={`px-4 py-3 text-right font-mono text-[11.5px] ${
-                        o === objetivo ? 'bg-accent/[0.06] font-semibold text-accent' : 'text-slate-500'
+                      scope="col"
+                      className={`px-4 py-3 text-right font-mono text-[10.5px] ${
+                        o === objetivo ? 'bg-accent/[0.06] text-accent' : 'text-slate-500'
                       }`}
                     >
-                      {caida(presupuesto(o, p.segundos))}
-                    </td>
+                      {formatearObjetivo(o, lang)}
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {PERIODOS.map((p) => (
+                  <tr key={p.id} className="border-b border-base-600/40 last:border-b-0">
+                    <th
+                      scope="row"
+                      className="px-5 py-3 font-mono text-[11.5px] font-normal text-slate-400"
+                    >
+                      {t.periodos[p.id]}
+                    </th>
+                    {OBJETIVOS_SLO.map((o) => (
+                      <td
+                        key={o}
+                        className={`px-4 py-3 text-right font-mono text-[11.5px] ${
+                          o === objetivo ? 'bg-accent/[0.06] font-semibold text-accent' : 'text-slate-500'
+                        }`}
+                      >
+                        {caida(presupuesto(o, p.segundos))}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div
+            className={`pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-base-800 to-transparent transition-opacity duration-200 ${
+              desborde.falta ? 'opacity-100' : 'opacity-0'
+            }`}
+            aria-hidden="true"
+          />
         </div>
 
         <p className="flex items-start gap-2 border-t border-base-600/70 px-5 py-3 text-[11.5px] leading-relaxed text-slate-500">

@@ -985,6 +985,7 @@ export const ui = {
     elegirObjetivo: 'Elegir objetivo de disponibilidad',
     elegirPeriodo: 'Elegir período del presupuesto',
     tablaAria: 'Caída máxima permitida por período y objetivo de disponibilidad',
+    deslizarTabla: 'Deslizá la tabla para ver los demás objetivos',
     periodo: 'Período',
     sinDatos: 'sin datos',
     periodos: {
