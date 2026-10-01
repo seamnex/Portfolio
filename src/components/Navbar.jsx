@@ -78,11 +78,13 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => irA('perfil', 'inicio')}
-          // En el teléfono el nombre se oculta y queda solo el ícono: el
-          // aria-label le da nombre al botón para el lector de pantalla.
-          aria-label={ui.nav.inicioAria}
           className="group flex shrink-0 items-center gap-2.5"
         >
+          {/* En el teléfono el nombre se oculta y queda solo el ícono: este
+              texto le da nombre al botón para el lector de pantalla. Desde
+              `sm` desaparece y el nombre es el texto visible, como pide
+              WCAG 2.5.3 (el nombre accesible contiene lo que se ve). */}
+          <span className="sr-only sm:hidden">{ui.nav.inicioAria}</span>
           <span className="flex h-8 w-8 items-center justify-center rounded-md border border-accent/40 bg-accent/10 text-accent transition-colors group-hover:bg-accent/20">
             <Terminal size={16} />
           </span>
@@ -117,7 +119,10 @@ export default function Navbar() {
                 // El rótulo visible se abrevia abajo de `md`, así que el
                 // nombre completo de la vista viaja en el aria-label: es
                 // el que lee un lector de pantalla en cualquier ancho.
-                aria-label={texto.titulo}
+                // Si el título no contiene el rótulo visible ("Chaos Lab"
+                // vs "Chaos & Incident Lab"), el rótulo va adelante: quien
+                // usa control por voz dice lo que ve (WCAG 2.5.3).
+                aria-label={texto.titulo.includes(texto.nav) ? texto.titulo : `${texto.nav} — ${texto.titulo}`}
                 tabIndex={sel ? 0 : -1}
                 onClick={() => irA(p.id)}
                 className={`relative flex flex-col items-center gap-0.5 whitespace-nowrap rounded-md border px-2 py-1.5 text-[13px] transition-colors md:flex-row md:gap-2 md:px-3 md:py-2 ${
