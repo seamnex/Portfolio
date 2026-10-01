@@ -78,6 +78,9 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => irA('perfil', 'inicio')}
+          // En el teléfono el nombre se oculta y queda solo el ícono: el
+          // aria-label le da nombre al botón para el lector de pantalla.
+          aria-label={ui.nav.inicioAria}
           className="group flex shrink-0 items-center gap-2.5"
         >
           <span className="flex h-8 w-8 items-center justify-center rounded-md border border-accent/40 bg-accent/10 text-accent transition-colors group-hover:bg-accent/20">

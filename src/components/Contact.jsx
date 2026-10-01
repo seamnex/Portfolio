@@ -5,6 +5,7 @@ import { useAvisos } from '../avisos/AvisosProvider'
 import Section from './ui/Section'
 import CopyButton from './ui/CopyButton'
 import StatusBadge from './ui/StatusBadge'
+import { abrirAviso } from './Legal'
 
 const inicial = { nombre: '', email: '', mensaje: '' }
 
@@ -218,6 +219,8 @@ export default function Contact() {
                 id="nombre"
                 name="nombre"
                 type="text"
+                maxLength={80}
+                autoComplete="name"
                 value={form.nombre}
                 onChange={onChange}
                 onBlur={onBlur}
@@ -240,6 +243,8 @@ export default function Contact() {
                 id="email"
                 name="email"
                 type="email"
+                maxLength={120}
+                autoComplete="email"
                 value={form.email}
                 onChange={onChange}
                 onBlur={onBlur}
@@ -262,6 +267,7 @@ export default function Contact() {
                 id="mensaje"
                 name="mensaje"
                 rows={6}
+                maxLength={3000}
                 value={form.mensaje}
                 onChange={onChange}
                 onBlur={onBlur}
@@ -316,6 +322,12 @@ export default function Contact() {
 
             <p className="text-center font-mono text-[10.5px] text-slate-600">
               {ENDPOINT ? ui.form.pieFormspree(profile.email) : ui.form.pieMailto(profile.email)}
+            </p>
+            <p className="text-center font-mono text-[10.5px] text-slate-600">
+              {ui.form.privacidadAntes}{' '}
+              <button type="button" onClick={() => abrirAviso('privacidad')} className="underline underline-offset-2 hover:text-accent">
+                {ui.footer.privacidad}
+              </button>
             </p>
           </div>
         </form>

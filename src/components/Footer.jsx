@@ -1,5 +1,6 @@
 import { ArrowUp, Github, Linkedin, Mail } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
+import { abrirAviso } from './Legal'
 
 export default function Footer() {
   const { profile, ui } = useContenido()
@@ -17,6 +18,14 @@ export default function Footer() {
           </p>
           <p className="mt-3 font-mono text-[11px] text-slate-600">
             © {new Date().getFullYear()} — {ui.footer.construido}
+          </p>
+          <p className="mt-2 flex justify-center gap-4 font-mono text-[11px] sm:justify-start">
+            <button type="button" onClick={() => abrirAviso('privacidad')} className="text-slate-500 underline-offset-2 transition-colors hover:text-accent hover:underline">
+              {ui.footer.privacidad}
+            </button>
+            <button type="button" onClick={() => abrirAviso('aviso')} className="text-slate-500 underline-offset-2 transition-colors hover:text-accent hover:underline">
+              {ui.footer.legal}
+            </button>
           </p>
         </div>
 

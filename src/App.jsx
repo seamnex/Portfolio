@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'
 import { LanguageProvider } from './i18n/LanguageProvider'
 import { VistaProvider, useVista } from './navegacion/VistaProvider'
 import { AvisosProvider } from './avisos/AvisosProvider'
@@ -11,6 +12,7 @@ import VistaPerfil from './components/vistas/VistaPerfil'
 import VistaObservabilidad from './components/vistas/VistaObservabilidad'
 import VistaLaboratorio from './components/vistas/VistaLaboratorio'
 import Footer from './components/Footer'
+import Legal from './components/Legal'
 
 // Un único `<main>` para las tres vistas: las que no están activas se
 // ocultan, no se desmontan, y tener tres `<main>` en el documento —aunque
@@ -61,6 +63,7 @@ export default function App() {
                   <Navbar />
                   <Vistas />
                   <Footer />
+                  <Legal />
                 </PlaybookProvider>
               </PostMortemProvider>
             </TelemetriaProvider>
@@ -68,6 +71,11 @@ export default function App() {
         </EstadoProvider>
         </AvisosProvider>
       </VistaProvider>
+      {/* Vercel Web Analytics: visitas agregadas, sin cookies (ver el aviso
+          de privacidad). En producción pide /_vercel/insights/script.js, que
+          Vercel sirve desde el propio dominio una vez habilitado Analytics
+          en el proyecto; en desarrollo solo loguea en consola. */}
+      <Analytics />
     </LanguageProvider>
   )
 }

@@ -79,7 +79,7 @@ function BotonEscenario({ escenario, texto, activo, onInyectar, ui }) {
       <h3 className="mt-4 text-sm font-semibold text-white">{texto.titulo}</h3>
       <p className="mt-2 text-[13px] leading-relaxed text-slate-400">{texto.descripcion}</p>
 
-      <p className="mt-3 w-full overflow-x-auto whitespace-pre font-mono text-[10px] text-slate-600">
+      <p className="mt-3 w-full whitespace-pre-wrap break-all font-mono text-[10px] text-slate-600">
         {escenario.senal}
       </p>
 

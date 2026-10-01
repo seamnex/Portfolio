@@ -576,6 +576,7 @@ export const ui = {
   nav: {
     cta: 'Contactar',
     volverArriba: 'Volver arriba',
+    inicioAria: 'Samuel García — ir al inicio',
   },
 
   acciones: {
@@ -1220,6 +1221,7 @@ export const ui = {
     // Lo que dice el aviso flotante, además del mensaje dentro del formulario.
     errorDetalle: (email) => `El formulario no respondió. Escribime directo a ${email}.`,
     avisoMeta: 'contacto · formspree',
+    privacidadAntes: 'Cómo uso estos datos:',
     pieFormspree: (email) => `Respondo a la casilla que dejes acá. También podés escribirme directo a ${email}`,
     pieMailto: (email) => `El formulario abre tu cliente de correo. También podés escribirme directo a ${email}`,
     asunto: (nombre) => `Contacto desde el portfolio — ${nombre}`,
@@ -1231,6 +1233,36 @@ export const ui = {
 
   footer: {
     construido: 'Construido con React, Tailwind CSS y Lucide.',
+    privacidad: 'Privacidad',
+    legal: 'Aviso legal',
+  },
+
+  // Avisos del footer y del formulario. Cada sección es [título, texto].
+  legal: {
+    cerrar: 'Cerrar',
+    actualizado: 'Última actualización: 1 de octubre de 2026.',
+    privacidad: {
+      titulo: 'Aviso de privacidad',
+      secciones: [
+        ['Responsable', 'Samuel Eduardo García Baciliadis, Buenos Aires, Argentina. Contacto: el email que figura en la sección Contacto.'],
+        ['Qué datos se usan', 'Este sitio no tiene cuentas. Si usás el formulario de contacto, tu nombre, tu email y tu mensaje se envían a través de Formspree (proveedor con servidores en Estados Unidos) y me llegan por correo. Los uso solo para responderte; no se venden ni se comparten con terceros.'],
+        ['Cookies', 'El sitio no usa cookies ni publicidad. Guarda en tu navegador dos datos técnicos: el idioma elegido (localStorage) y, durante la sesión, el resultado de los chequeos de estado (sessionStorage), para no repetir consultas. No identifican a nadie y podés borrarlos desde tu navegador.'],
+        ['Estadísticas de visitas', 'Cuento visitas con Vercel Web Analytics, que funciona sin cookies y de forma agregada: qué secciones se ven, desde qué tipo de dispositivo y país, sin identificarte ni seguirte entre sitios.'],
+        ['Servicios externos', 'Por funcionamiento técnico reciben la dirección IP de tu conexión: Vercel (alojamiento), la API pública de GitHub (los chequeos en vivo del tablero) y Formspree (solo si enviás el formulario).'],
+        ['Tus derechos', 'Podés pedir acceso, corrección o eliminación de tus datos escribiéndome por email. El titular de los datos personales tiene la facultad de ejercer el derecho de acceso a los mismos en forma gratuita a intervalos no inferiores a seis meses, salvo que se acredite un interés legítimo al efecto conforme lo establecido en el artículo 14, inciso 3 de la Ley N° 25.326. La AGENCIA DE ACCESO A LA INFORMACIÓN PÚBLICA, en su carácter de Órgano de Control de la Ley N° 25.326, tiene la atribución de atender las denuncias y reclamos que interpongan quienes resulten afectados en sus derechos por incumplimiento de las normas vigentes en materia de protección de datos personales.'],
+      ],
+    },
+    aviso: {
+      titulo: 'Aviso legal',
+      secciones: [
+        ['Titular', 'Samuel Eduardo García Baciliadis, Buenos Aires, Argentina. Sitio personal y profesional, sin fines comerciales: no vende productos ni servicios en línea.'],
+        ['Contenido', 'La trayectoria y la formación describen mi experiencia profesional. Las métricas, post-mortems y simulacros provienen de laboratorios propios (Kubernetes, observabilidad, chaos engineering) con fallas inyectadas a propósito: no son datos de producción de ningún empleador.'],
+        ['Marcas', 'Los nombres de empresas, productos y herramientas mencionados (por ejemplo Dynatrace, Datadog, Elastic o Kubernetes) pertenecen a sus respectivos titulares y se citan solo para describir experiencia.'],
+        ['Propiedad intelectual', 'Los textos, el diseño y el código del sitio son de mi autoría salvo indicación en contrario. Los repositorios públicos enlazados se rigen por su propia licencia.'],
+        ['Enlaces externos', 'El sitio enlaza a LinkedIn, GitHub y otras plataformas, que tienen sus propias condiciones y políticas de privacidad.'],
+        ['Ley aplicable', 'Rige la ley de la República Argentina.'],
+      ],
+    },
   },
 
   meta: {

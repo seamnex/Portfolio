@@ -41,7 +41,7 @@ function TarjetaPlaybook({ playbook, texto, activo, onElegir, t }) {
       <h3 className="mt-4 text-sm font-semibold text-white">{texto.titulo}</h3>
       <p className="mt-2 text-[13px] leading-relaxed text-slate-400">{texto.descripcion}</p>
 
-      <p className="mt-3 w-full overflow-x-auto whitespace-pre font-mono text-[10px] text-slate-600">
+      <p className="mt-3 w-full whitespace-pre-wrap break-all font-mono text-[10px] text-slate-600">
         {playbook.senal}
       </p>
 
@@ -189,8 +189,11 @@ export default function Playbooks() {
                     <div className="min-w-0 flex-1">
                       <p className={`text-[13px] font-semibold ${tono.titulo}`}>{tp.titulo}</p>
                       <p className={`mt-1 text-[12.5px] leading-relaxed ${tono.texto}`}>{tp.porQue}</p>
+                      {/* tabIndex: un comando largo scrollea en horizontal, y una zona
+                          con scroll tiene que poder enfocarse para moverla con el teclado. */}
                       <p
-                        className={`mt-2 overflow-x-auto whitespace-pre rounded border px-2.5 py-1.5 font-mono text-[10.5px] ${
+                        tabIndex={0}
+                        className={`mt-2 overflow-x-auto whitespace-pre rounded border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent px-2.5 py-1.5 font-mono text-[10.5px] ${
                           i <= paso
                             ? 'border-base-600 bg-base-900/60 text-slate-400'
                             : 'border-base-600/50 bg-base-900/30 text-slate-600'

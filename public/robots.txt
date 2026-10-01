@@ -1,0 +1,5 @@
+# Portfolio de Samuel García Baciliadis — todo el sitio es público
+User-agent: *
+Allow: /
+
+Sitemap: https://portfolio-eight-ashen-34.vercel.app/sitemap.xml

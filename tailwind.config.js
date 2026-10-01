@@ -11,6 +11,16 @@ export default {
           600: '#1B2333', // bordes / cards
           500: '#28324a',
         },
+        // Grises de texto secundario. Los slate-500/600 de Tailwind
+        // (#64748B, #475569) quedaban en 4,0:1 y 2,5:1 sobre el fondo:
+        // por debajo del 4,5:1 que pide WCAG AA para texto chico. Se
+        // aclaran acá y no clase por clase (son más de cien usos), y se
+        // conserva la jerarquía 400 > 500 > 600. Ambos superan 4,5:1
+        // sobre base-900, base-800 y base-700.
+        slate: {
+          500: '#8494A9',
+          600: '#7A8AA0',
+        },
         accent: {
           DEFAULT: '#06B6D4', // cyan — precisión / tecnología
           soft: '#14B8A6',
@@ -20,8 +30,8 @@ export default {
         crit: '#FB7185',    // incidente P1 / coral
       },
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'sans-serif'],
-        mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Consolas', 'monospace'],
+        sans: ['Inter Variable', 'Inter', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'sans-serif'],
+        mono: ['JetBrains Mono Variable', 'JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Consolas', 'monospace'],
       },
       keyframes: {
         pulseDot: {

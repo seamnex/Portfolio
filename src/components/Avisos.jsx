@@ -136,6 +136,7 @@ export default function Avisos() {
   // aparece junto con su primer contenido no se anuncia.
   return (
     <div
+      role="region"
       aria-live="polite"
       aria-label={ui.avisos.region}
       className="pointer-events-none fixed inset-x-4 bottom-4 z-[70] flex flex-col gap-2.5 sm:inset-x-auto sm:right-5 sm:top-20 sm:w-[380px]"

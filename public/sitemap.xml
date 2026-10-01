@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Una sola URL: las vistas (#observabilidad, #laboratorio) son anclas y los
+     buscadores ignoran todo lo que va después del #. Si cambia el dominio,
+     actualizarlo acá, en robots.txt, en index.html y en SITIO_URL (scripts/seo.mjs).
+     Los CV en PDF se listan porque los buscadores los indexan y un reclutador
+     puede llegar directo a ellos. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://portfolio-eight-ashen-34.vercel.app/</loc><lastmod>2026-10-01</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://portfolio-eight-ashen-34.vercel.app/cv-samuel-garcia-baciliadis-sre.pdf</loc><lastmod>2026-10-01</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://portfolio-eight-ashen-34.vercel.app/cv-samuel-garcia-baciliadis-sre-en.pdf</loc><lastmod>2026-10-01</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+</urlset>

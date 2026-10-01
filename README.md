@@ -290,6 +290,28 @@ Cargar `VITE_FORMSPREE_ID` en *Environment Variables* antes del primer build.
 > Vercel y Netlify instalan devDependencies por defecto; si alguna vez configurás
 > `NODE_ENV=production` en el install, el build va a fallar ahí y con razón.
 
+## Privacidad, seguridad y analítica
+
+- **Avisos legales**: `src/components/Legal.jsx` monta dos `<dialog>` nativos (privacidad
+  según la Ley 25.326 y aviso legal) que se abren desde el footer y desde el formulario. El
+  texto vive en `ui.legal` de `content.js` / `content.en.js`. El sitio **no usa cookies**:
+  solo `localStorage` para el idioma y `sessionStorage` para el caché de los chequeos, y así
+  lo dice el aviso. Si se suma un servicio externo, hay que nombrarlo ahí.
+- **Analítica**: `@vercel/analytics` (`<Analytics />` en `App.jsx`), sin cookies. Hay que
+  habilitarla en Vercel → proyecto `portfolio` → **Analytics → Enable** y redesplegar; hasta
+  entonces `/_vercel/insights/script.js` da 404. Cuenta cargas de página: los cambios de
+  vista por hash no son pageviews nuevas.
+- **Cabeceras**: `vercel.json` define CSP, `X-Frame-Options`, `nosniff`, `Referrer-Policy`,
+  `Permissions-Policy` y caché inmutable para `/assets` (nombres con hash). La CSP solo
+  permite conectarse a `api.github.com` y `formspree.io` además del propio dominio: un
+  `fetch` a otro host nuevo tiene que sumarse ahí. HTTPS y HSTS los pone Vercel.
+- **Tipografías**: Inter y JetBrains Mono servidas desde el sitio con `@fontsource-variable`
+  (importadas en `src/main.jsx`), sin Google Fonts.
+- **SEO**: `public/robots.txt`, `public/sitemap.xml` (una URL: las vistas son anclas),
+  `public/site.webmanifest` con íconos 192/512 y maskable, y `public/404.html` estático.
+- **Contraste**: `slate-500` y `slate-600` están redefinidos en `tailwind.config.js` para
+  pasar 4,5:1 (WCAG AA) sobre los fondos del sitio.
+
 ## Paleta
 
 | Uso | Token | Hex |
@@ -303,3 +325,5 @@ Cargar `VITE_FORMSPREE_ID` en *Environment Variables* antes del primer build.
 | Estado OK / online | `ok` | `#10B981` |
 | Degradado / warning | `warn` | `#F59E0B` |
 | Incidente / crítico | `crit` | `#FB7185` |
+| Texto secundario | `slate-500` | `#8494A9` |
+| Texto terciario | `slate-600` | `#7A8AA0` |

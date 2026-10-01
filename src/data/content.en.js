@@ -462,6 +462,7 @@ export const ui = {
   nav: {
     cta: 'Get in touch',
     volverArriba: 'Back to top',
+    inicioAria: 'Samuel García — go to home',
   },
 
   acciones: {
@@ -1075,6 +1076,7 @@ export const ui = {
     errorCola: (email) => `or copy ${email}.`,
     errorDetalle: (email) => `The form did not respond. Email me directly at ${email}.`,
     avisoMeta: 'contact · formspree',
+    privacidadAntes: 'How I use this data:',
     pieFormspree: (email) => `I reply to the address you leave here. You can also write directly to ${email}`,
     pieMailto: (email) => `The form opens your mail client. You can also write directly to ${email}`,
     asunto: (nombre) => `Portfolio enquiry — ${nombre}`,
@@ -1086,6 +1088,36 @@ export const ui = {
 
   footer: {
     construido: 'Built with React, Tailwind CSS and Lucide.',
+    privacidad: 'Privacy',
+    legal: 'Legal notice',
+  },
+
+  // Notices opened from the footer and the contact form. Each section is [title, text].
+  legal: {
+    cerrar: 'Close',
+    actualizado: 'Last updated: October 1, 2026.',
+    privacidad: {
+      titulo: 'Privacy notice',
+      secciones: [
+        ['Controller', 'Samuel Eduardo García Baciliadis, Buenos Aires, Argentina. Contact: the email listed in the Contact section.'],
+        ['What data is used', 'This site has no accounts. If you use the contact form, your name, email and message are sent through Formspree (a provider with servers in the United States) and reach me by email. I use them only to reply to you; they are not sold or shared with third parties.'],
+        ['Cookies', 'The site uses no cookies and no advertising. It stores two technical values in your browser: the language you chose (localStorage) and, for the session, the result of the status checks (sessionStorage), to avoid repeating requests. They identify no one and you can clear them from your browser.'],
+        ['Visit statistics', 'I count visits with Vercel Web Analytics, which works without cookies and in aggregate: which sections are viewed, from what kind of device and country, without identifying you or tracking you across sites.'],
+        ['Third-party services', 'For technical reasons they receive your connection’s IP address: Vercel (hosting), the public GitHub API (the live checks on the dashboard) and Formspree (only if you submit the form).'],
+        ['Your rights', 'You can request access to, correction or deletion of your data by email. Under Argentine Law 25,326 you may exercise the right of access free of charge at intervals of no less than six months, unless a legitimate interest is shown (art. 14, sec. 3). The Agency for Access to Public Information (AAIP), as the supervisory authority under Law 25,326, handles complaints from anyone whose data protection rights have been affected.'],
+      ],
+    },
+    aviso: {
+      titulo: 'Legal notice',
+      secciones: [
+        ['Owner', 'Samuel Eduardo García Baciliadis, Buenos Aires, Argentina. Personal and professional website, non-commercial: it does not sell products or services online.'],
+        ['Content', 'The career and education sections describe my professional experience. Metrics, post-mortems and drills come from my own labs (Kubernetes, observability, chaos engineering) with deliberately injected failures: they are not production data from any employer.'],
+        ['Trademarks', 'Company, product and tool names mentioned (for example Dynatrace, Datadog, Elastic or Kubernetes) belong to their respective owners and are cited only to describe experience.'],
+        ['Intellectual property', 'The site’s text, design and code are my own unless stated otherwise. Linked public repositories are governed by their own licenses.'],
+        ['External links', 'The site links to LinkedIn, GitHub and other platforms, which have their own terms and privacy policies.'],
+        ['Governing law', 'The laws of the Argentine Republic apply.'],
+      ],
+    },
   },
 
   meta: {
