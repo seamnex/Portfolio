@@ -137,7 +137,7 @@ export const about = {
     'La experiencia en gestión de incidentes no es un paso previo a SRE: es exactamente el insumo que hace valiosa la práctica SRE.',
   parrafos: [
     'Soy un perfil híbrido: vengo de la trinchera de la operación —la llamada a las 3 AM, el servicio caído, el cliente esperando— y hacia allí llevo las prácticas de ingeniería que evitan que esa llamada vuelva a ocurrir.',
-    'Durante años gestioné incidentes críticos en Personal Pay (Fintech) y Telecom Argentina (Telecomunicaciones): coordiné War Rooms con equipos de infraestructura, desarrollo y negocio, prioricé bajo presión con criterio de impacto real, comuniqué estado a stakeholders y cerré cada evento con un RCA accionable. Ese trabajo me dejó una convicción: la mayoría de los incidentes no son sorpresas, son deuda técnica y falta de observabilidad que se cobran factura.',
+    'Durante años gestioné incidentes críticos en Personal Pay, la fintech del grupo Telecom Argentina: coordiné War Rooms con equipos de infraestructura, desarrollo y negocio, prioricé bajo presión con criterio de impacto real, comuniqué estado a stakeholders y cerré cada evento con un RCA accionable. Ese trabajo me dejó una convicción: la mayoría de los incidentes no son sorpresas, son deuda técnica y falta de observabilidad que se cobran factura.',
     'Por eso hoy me especializo en SRE y DevOps. La gestión de incidentes bajo ITIL me da algo que no se aprende en un curso: entender qué falla, por qué falla y qué señales lo anticipaban. Sumado a Docker, Kubernetes, Infrastructure as Code, CI/CD y scripting, esa perspectiva se convierte en prevención: alertas que importan, runbooks que se ejecutan solos y arquitecturas que degradan con elegancia en lugar de caer.',
   ],
   puente: {
@@ -375,8 +375,8 @@ export const timeline = [
   // para el sitio y para el CV, porque un "2 años y 4 meses" a mano
   // envejece en treinta días y nadie vuelve a mirarlo.
   {
-    periodo: 'Mayo 2024 – Presente',
-    desde: '2024-05',
+    periodo: 'Junio 2024 – Presente',
+    desde: '2024-06',
     rol: 'IT Incident Manager / SRE Analyst',
     // Personal Pay es la fintech del grupo Telecom Argentina; la
     // contratación es a través de Asap Consulting. Un solo puesto, no dos.
@@ -385,7 +385,7 @@ export const timeline = [
     resumen:
       'Gestión de incidentes críticos en la plataforma financiera del grupo Telecom, de alto volumen transaccional, donde cada minuto de indisponibilidad tiene impacto directo en el usuario y en el negocio. Operación 24×7 sobre infraestructura de telecomunicaciones a gran escala.',
     bullets: [
-      'Liderazgo de War Rooms P1/P2 hasta la restauración del servicio',
+      'Incident Commander en War Rooms P1/P2: coordinación técnica y de negocio hasta la restauración del servicio',
       'Análisis de causa raíz (RCA), post-mortems en Confluence y seguimiento de acciones preventivas',
       'Monitoreo y diagnóstico con Dynatrace, Datadog, Elastic/Kibana y Zabbix; procesos batch con Control-M',
       'Comunicación de estado e impacto a stakeholders técnicos y de negocio',
