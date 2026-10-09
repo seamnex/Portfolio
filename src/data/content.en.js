@@ -112,7 +112,7 @@ export const about = {
     'Incident management experience is not a stepping stone towards SRE: it is precisely the input that makes SRE practice worth anything.',
   parrafos: [
     'I am a hybrid profile: I come from the operational trenches — the 3 AM call, the service down, the customer waiting — and I bring back to them the engineering practices that keep that call from happening again.',
-    'For years I ran critical incidents at Personal Pay (Fintech) and Telecom Argentina (Telco): coordinating War Rooms with infrastructure, development and business teams, prioritising under pressure by real impact, communicating status to stakeholders and closing every event with an actionable RCA. That work left me with one conviction: most incidents are not surprises — they are technical debt and missing observability collecting their bill.',
+    'For years I ran critical incidents at Personal Pay, the fintech arm of the Telecom Argentina group: coordinating War Rooms with infrastructure, development and business teams, prioritising under pressure by real impact, communicating status to stakeholders and closing every event with an actionable RCA. That work left me with one conviction: most incidents are not surprises — they are technical debt and missing observability collecting their bill.',
     'That is why I specialise in SRE and DevOps today. Managing incidents under ITIL gives me something no course teaches: understanding what fails, why it fails and which signals were pointing at it beforehand. Combined with Docker, Kubernetes, Infrastructure as Code, CI/CD and scripting, that perspective turns into prevention: alerts that matter, runbooks that run themselves and architectures that degrade gracefully instead of falling over.',
   ],
   puente: {
@@ -307,13 +307,13 @@ export const timeline = timelineEs.map((item, i) => ({
       ],
     },
     {
-      periodo: 'May 2024 – Present',
+      periodo: 'June 2024 – Present',
       rol: 'IT Incident Manager / SRE Analyst',
       org: 'Personal Pay · Telecom Argentina (via Asap Consulting)',
       resumen:
         'Critical incident management on the Telecom group\'s high-volume financial platform, where every minute of downtime hits users and the business directly. 24×7 operation over large-scale telecommunications infrastructure.',
       bullets: [
-        'Leading P1/P2 War Rooms through to service restoration',
+        'Incident Commander in P1/P2 War Rooms: technical and business coordination through to service restoration',
         'Root cause analysis (RCA), post-mortems in Confluence and follow-up on preventive actions',
         'Monitoring and diagnosis with Dynatrace, Datadog, Elastic/Kibana and Zabbix; batch processes with Control-M',
         'Communicating status and impact to technical and business stakeholders',

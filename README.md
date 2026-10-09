@@ -1,6 +1,6 @@
 # Portfolio — Samuel Eduardo García Baciliadis
 
-Sitio personal de marca profesional: **IT Incident Manager · Incident Analyst → Junior SRE / DevOps Engineer**.
+Sitio personal de marca profesional: **IT Incident Manager · SRE Analyst → SRE / DevOps Engineer**.
 Dark mode técnico (estilo Vercel / status page), bilingüe ES/EN, React + Tailwind CSS + Lucide React.
 
 🔗 **En vivo:** https://portfolio-eight-ashen-34.vercel.app

@@ -11,13 +11,17 @@
 //  duración se calcula al renderizar, en el sitio y en el PDF.
 // ─────────────────────────────────────────────────────────────
 
-/** Meses completos transcurridos desde un 'YYYY-MM' hasta hoy. */
+/**
+ * Meses transcurridos desde un 'YYYY-MM' hasta hoy, contando el mes de
+ * ingreso y el actual (criterio inclusivo, el mismo que usa LinkedIn), para
+ * que el CV, el sitio y el perfil muestren la misma duración.
+ */
 export function mesesDesde(desde, hasta = new Date()) {
   const [anio, mes] = String(desde).split('-').map(Number)
   if (!anio || !mes) return 0
 
   const fin = hasta instanceof Date ? hasta : new Date(hasta)
-  const total = (fin.getUTCFullYear() - anio) * 12 + (fin.getUTCMonth() + 1 - mes)
+  const total = (fin.getUTCFullYear() - anio) * 12 + (fin.getUTCMonth() + 1 - mes) + 1
   return Math.max(0, total)
 }
 
