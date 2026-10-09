@@ -385,7 +385,7 @@ export const timeline = [
     resumen:
       'Gestión de incidentes críticos en la plataforma financiera del grupo Telecom, de alto volumen transaccional, donde cada minuto de indisponibilidad tiene impacto directo en el usuario y en el negocio. Operación 24×7 sobre infraestructura de telecomunicaciones a gran escala.',
     bullets: [
-      'Incident Commander en War Rooms P1/P2: coordinación técnica y de negocio hasta la restauración del servicio',
+      'Liderazgo de War Rooms P1/P2: coordinación técnica y de negocio hasta la restauración del servicio',
       'Análisis de causa raíz (RCA), post-mortems en Confluence y seguimiento de acciones preventivas',
       'Monitoreo y diagnóstico con Dynatrace, Datadog, Elastic/Kibana y Zabbix; procesos batch con Control-M',
       'Comunicación de estado e impacto a stakeholders técnicos y de negocio',

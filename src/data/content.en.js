@@ -313,7 +313,7 @@ export const timeline = timelineEs.map((item, i) => ({
       resumen:
         'Critical incident management on the Telecom group\'s high-volume financial platform, where every minute of downtime hits users and the business directly. 24×7 operation over large-scale telecommunications infrastructure.',
       bullets: [
-        'Incident Commander in P1/P2 War Rooms: technical and business coordination through to service restoration',
+        'Leading P1/P2 War Rooms: technical and business coordination through to service restoration',
         'Root cause analysis (RCA), post-mortems in Confluence and follow-up on preventive actions',
         'Monitoring and diagnosis with Dynatrace, Datadog, Elastic/Kibana and Zabbix; batch processes with Control-M',
         'Communicating status and impact to technical and business stakeholders',
