@@ -23,7 +23,7 @@ export default function Hero() {
           <div className="animate-fade-up">
             <StatusBadge texto={profile.disponibilidad} tone="ok" />
 
-            <h1 className="mt-7 text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="mt-7 text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[2.9rem]">
               {hero.headline[0]}
               <br />
               <span className="bg-gradient-to-r from-accent via-accent-soft to-ok bg-clip-text text-transparent">

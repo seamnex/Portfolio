@@ -181,7 +181,7 @@ export const skillsMeta = {
   titulo: 'Stack técnico y dominios de trabajo',
   bajada:
     'Cuatro bloques que se refuerzan entre sí: lo que detecto con observabilidad, lo gestiono con procesos de incidentes, lo previengo con prácticas DevOps y lo automatizo con código.',
-  hint: 'Hacé click en cada tarjeta para desplegar el detalle de herramientas',
+  hint: 'Hacé clic en cada tarjeta para desplegar el detalle de herramientas',
 }
 
 // Cada tarjeta lleva `dominio`, el rótulo del área técnica que agrupa las
