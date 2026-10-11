@@ -182,7 +182,7 @@ Casi todo el contenido se deriva de los exports que ya existen —`timeline`, `p
 competencias agrupadas y formación.
 
 **Los períodos salen de `timeline[].periodo`** ("Fintech", "Telecomunicaciones"…). Si
-querés fechas exactas del tipo *Jun 2024 – actualidad*, cambiálas ahí: las toman el CV y
+querés fechas exactas del tipo *May 2024 – actualidad*, cambiálas ahí: las toman el CV y
 también la sección de trayectoria del sitio.
 
 El diseño es de una sola columna y sin cajas de texto a propósito: los parsers de ATS

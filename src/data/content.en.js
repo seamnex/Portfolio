@@ -307,7 +307,7 @@ export const timeline = timelineEs.map((item, i) => ({
       ],
     },
     {
-      periodo: 'June 2024 – Present',
+      periodo: 'May 2024 – Present',
       rol: 'IT Incident Manager / SRE Analyst',
       org: 'Personal Pay · Telecom Argentina (via Asap Consulting)',
       resumen:
