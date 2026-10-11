@@ -375,8 +375,8 @@ export const timeline = [
   // para el sitio y para el CV, porque un "2 años y 4 meses" a mano
   // envejece en treinta días y nadie vuelve a mirarlo.
   {
-    periodo: 'Junio 2024 – Presente',
-    desde: '2024-06',
+    periodo: 'Mayo 2024 – Presente',
+    desde: '2024-05',
     rol: 'IT Incident Manager / SRE Analyst',
     // Personal Pay es la fintech del grupo Telecom Argentina; la
     // contratación es a través de Asap Consulting. Un solo puesto, no dos.
@@ -465,7 +465,7 @@ export const contacto = {
 //  mail. Acá solo vive lo que es propio del formato CV.
 //
 //  Los períodos salen de `timeline[].periodo`. Si querés fechas exactas
-//  ("Jun 2024 – actualidad"), cambiálas ahí: las toma el CV y también la
+//  ("May 2024 – actualidad"), cambiálas ahí: las toma el CV y también la
 //  sección de trayectoria del sitio.
 // ─────────────────────────────────────────────────────────────
 export const cv = {

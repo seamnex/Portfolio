@@ -79,7 +79,11 @@ function experiencia(lienzo, contenido) {
     // El período sale de la misma función que usa el sitio: si el CV
     // dijera una antigüedad y la web otra, el desacople lo descubre quien
     // tiene los dos abiertos, que es exactamente el reclutador.
-    lienzo.puesto(`${item.rol} — ${item.org}`, periodoCon(item, contenido.ui.duracion))
+    // El puesto actual va sin antigüedad: el PDF es un archivo que queda
+    // guardado y adjunto en postulaciones, y un "2 años y 5 meses" impreso
+    // ahí envejece al mes siguiente. "Mayo 2024 – Presente" no envejece.
+    const periodo = item.hasta || item.soloAnio ? periodoCon(item, contenido.ui.duracion) : item.periodo
+    lienzo.puesto(`${item.rol} — ${item.org}`, periodo)
     lienzo.parrafo(item.resumen, { tamano: 8.8, color: C.tenue, interlineado: 1.4 })
     lienzo.avanzar(3)
     for (const bullet of item.bullets) lienzo.vineta(bullet)

@@ -168,15 +168,23 @@ export function crearLienzo(doc, fuentes, { pie } = {}) {
       })
       y -= 9
     },
-    /** Encabezado de puesto: rol a la izquierda, período alineado a la derecha. */
+    /**
+     * Encabezado de puesto: rol a la izquierda, período alineado a la derecha.
+     * Si los dos no entran en el mismo renglón, el período baja a una línea
+     * propia: antes se dibujaba encima del rol y la fecha quedaba ilegible.
+     */
     puesto(rol, periodo) {
-      espacio(16)
-      pagina.drawText(sanear(rol), { x: MARGEN, y: y - 9.8, size: 9.8, font: fuentes.bold, color: C.tinta })
-      if (periodo) {
-        const texto = sanear(periodo)
-        const ancho = fuentes.regular.widthOfTextAtSize(texto, 8.4)
+      const titulo = sanear(rol)
+      const texto = periodo ? sanear(periodo) : ''
+      const anchoTitulo = fuentes.bold.widthOfTextAtSize(titulo, 9.8)
+      const anchoPeriodo = texto ? fuentes.regular.widthOfTextAtSize(texto, 8.4) : 0
+      const entra = anchoTitulo + anchoPeriodo + 12 <= ANCHO_UTIL
+
+      espacio(entra ? 16 : 27)
+      pagina.drawText(titulo, { x: MARGEN, y: y - 9.8, size: 9.8, font: fuentes.bold, color: C.tinta })
+      if (texto && entra) {
         pagina.drawText(texto, {
-          x: A4.ancho - MARGEN - ancho,
+          x: A4.ancho - MARGEN - anchoPeriodo,
           y: y - 9.6,
           size: 8.4,
           font: fuentes.regular,
@@ -184,6 +192,10 @@ export function crearLienzo(doc, fuentes, { pie } = {}) {
         })
       }
       y -= 13.5
+      if (texto && !entra) {
+        pagina.drawText(texto, { x: MARGEN, y: y - 8.4, size: 8.4, font: fuentes.regular, color: C.tenue })
+        y -= 12.5
+      }
     },
     /**
      * Etiqueta en negrita y texto a continuación, en el mismo renglón. La
