@@ -322,7 +322,7 @@ export const timeline = timelineEs.map((item, i) => ({
       ],
     },
     {
-      periodo: 'August 2023 – June 2024',
+      periodo: 'August 2023 – May 2024',
       rol: 'Sr Helpdesk Leader · N2-N3 Technical Support',
       org: 'DX Electrónica',
       resumen:

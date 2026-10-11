@@ -395,9 +395,9 @@ export const timeline = [
     tags: ['ITIL', 'RCA', 'Dynatrace', 'Datadog', 'Zabbix', 'Control-M', '24×7', 'SLA/SLO'],
   },
   {
-    periodo: 'Agosto 2023 – Junio 2024',
+    periodo: 'Agosto 2023 – Mayo 2024',
     desde: '2023-08',
-    hasta: '2024-06',
+    hasta: '2024-05',
     rol: 'Helpdesk Leader Sr · Soporte Técnico N2-N3',
     org: 'DX Electrónica',
     tipo: 'trabajo',
