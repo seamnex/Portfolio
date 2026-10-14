@@ -121,6 +121,11 @@ function formacion(lienzo, contenido) {
   }
 }
 
+function idiomas(lienzo, contenido) {
+  lienzo.seccion(contenido.cv.secciones.idiomas)
+  for (const i of contenido.cv.idiomas) lienzo.vineta(i)
+}
+
 async function generar({ codigo, contenido, archivo }) {
   const doc = await PDFDocument.create()
   const fuentes = {
@@ -143,6 +148,7 @@ async function generar({ codigo, contenido, archivo }) {
   experiencia(lienzo, contenido)
   labs(lienzo, contenido)
   formacion(lienzo, contenido)
+  idiomas(lienzo, contenido)
 
   const bytes = await doc.save()
   const destino = join(raiz, 'public', archivo)

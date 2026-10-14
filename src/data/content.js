@@ -30,6 +30,7 @@ export const profile = {
   rol: 'IT Incident Manager / SRE Analyst',
   target: 'SRE / DevOps Engineer',
   ubicacion: 'Buenos Aires, Argentina · Remoto / Híbrido',
+  idiomas: 'Español (nativo) · Inglés (intermedio)',
   disponibilidad: 'Disponible para nuevas oportunidades',
   email: 'S.egb@hotmail.es',
   linkedin: 'https://www.linkedin.com/in/samuel-garcia-baciliadis/',
@@ -67,7 +68,7 @@ export const hero = {
 }
 
 export const metrics = [
-  { valor: '+8', unidad: 'años', label: 'en operaciones IT y soporte técnico N2-N3' },
+  { valor: '+4', unidad: 'años', label: 'en operaciones IT y soporte técnico N2-N3' },
   { valor: 'P1/P2', unidad: '', label: 'gestión de incidentes críticos end-to-end' },
   { valor: '24×7', unidad: '', label: 'entornos productivos de alta disponibilidad' },
   { valor: '15+', unidad: 'tools', label: 'de monitoreo, observabilidad y automatización' },
@@ -369,7 +370,7 @@ export const timeline = [
     tags: ['Docker', 'Kubernetes', 'Linux', 'Python', 'CI/CD'],
   },
   // Todos los puestos llevan `desde` (y `hasta` los cerrados) en 'YYYY-MM':
-  // es lo que le da trazabilidad a los "+8 años" del hero, y lo que un ATS
+  // es lo que le da trazabilidad a los "+4 años" del hero, y lo que un ATS
   // lee para armar la línea de tiempo. `periodo` es el texto que se
   // muestra; la antigüedad NO se escribe: la calcula `lib/periodo.js`
   // para el sitio y para el CV, porque un "2 años y 4 meses" a mano
@@ -426,26 +427,6 @@ export const timeline = [
     ],
     tags: ['Jira', 'Windows', 'Redes', 'Tickets'],
   },
-  {
-    periodo: '2018 – 2022',
-    desde: '2018-01',
-    hasta: '2022-01',
-    // Solo año, a propósito: es un tramo agrupado de varias etapas de
-    // soporte y mesa de ayuda, y el mes exacto de cada una no aporta.
-    soloAnio: true,
-    rol: 'Líder de Mesa de Ayuda · Soporte Técnico N2-N3',
-    org: 'Operaciones y Service Desk',
-    tipo: 'trabajo',
-    resumen:
-      'Coordinación de equipos operativos de soporte, con foco en cumplimiento de SLAs, calidad de atención y resolución técnica en segundo y tercer nivel.',
-    bullets: [
-      'Liderazgo y capacitación de equipos de soporte',
-      'Gestión de colas de tickets y cumplimiento de SLAs',
-      'Troubleshooting N2-N3 sobre sistemas y plataformas',
-      'Mejora continua de procesos de atención y escalamiento',
-    ],
-    tags: ['Service Desk', 'SLA', 'Jira', 'Liderazgo'],
-  },
 ]
 
 export const contacto = {
@@ -471,13 +452,14 @@ export const contacto = {
 export const cv = {
   titular: 'IT Incident Manager / SRE Analyst → SRE / DevOps Engineer',
   resumen:
-    'Más de 8 años en operaciones IT, con foco en la gestión de incidentes críticos P1/P2 en Fintech y Telecomunicaciones: liderazgo de War Rooms, restauración del servicio bajo presión y cierre con RCA y acciones preventivas. Hoy oriento esa disciplina hacia SRE y DevOps —observabilidad, automatización y confiabilidad— con laboratorios propios donde inyecto fallas, mido detección y recuperación, y publico la bitácora de cada corrida.',
+    'Más de 4 años en operaciones IT, con foco en la gestión de incidentes críticos P1/P2 en Fintech y Telecomunicaciones: liderazgo de War Rooms, restauración del servicio bajo presión y cierre con RCA y acciones preventivas. Hoy oriento esa disciplina hacia SRE y DevOps —observabilidad, automatización y confiabilidad— con laboratorios propios donde inyecto fallas, mido detección y recuperación, y publico la bitácora de cada corrida.',
   secciones: {
     perfil: 'Perfil profesional',
     competencias: 'Competencias técnicas',
     experiencia: 'Experiencia profesional',
     labs: 'Laboratorios propios · resultados medidos',
     formacion: 'Formación',
+    idiomas: 'Idiomas',
   },
   competencias: [
     {
@@ -498,7 +480,7 @@ export const cv = {
     },
   ],
   formacion: [
-    { titulo: 'Técnico Superior en Informática', org: 'Formación terciaria', detalle: '' },
+    { titulo: 'Técnico Superior en Informática', org: 'Instituto Universitario de Tecnología Agroindustrial Región Los Andes', detalle: '2016 – 2018' },
     { titulo: 'Kubernetes', org: 'Udemy', detalle: 'En curso' },
     { titulo: 'Diseño Web', org: 'Udemy', detalle: '' },
     {
@@ -507,6 +489,7 @@ export const cv = {
       detalle: 'Contenedores, orquestación, IaC y CI/CD con laboratorios propios',
     },
   ],
+  idiomas: ['Español — nativo', 'Inglés — intermedio'],
   etiquetas: {
     stack: 'Stack',
     contexto: 'Contexto',
@@ -1268,6 +1251,6 @@ export const ui = {
   meta: {
     title: 'Samuel García Baciliadis — IT Incident Manager / SRE Analyst',
     description:
-      'IT Incident Manager / SRE Analyst en Buenos Aires, Argentina. Más de 8 años en operaciones IT: gestión de incidentes críticos P1/P2 en Fintech (Personal Pay) y Telecomunicaciones, observabilidad con Dynatrace, Datadog y Elastic, RCA y reducción de MTTR. Laboratorios propios de Kubernetes, observabilidad y chaos engineering con métricas publicadas.',
+      'IT Incident Manager / SRE Analyst en Buenos Aires, Argentina. Más de 4 años en operaciones IT: gestión de incidentes críticos P1/P2 en Fintech (Personal Pay) y Telecomunicaciones, observabilidad con Dynatrace, Datadog y Elastic, RCA y reducción de MTTR. Laboratorios propios de Kubernetes, observabilidad y chaos engineering con métricas publicadas.',
   },
 }
