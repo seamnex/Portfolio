@@ -225,7 +225,7 @@ solo el `index.html`. Por eso el `<head>` lleva dos cosas que no dependen de Rea
 
 La trayectoria lleva `desde` (y `hasta` en los tramos cerrados) en `YYYY-MM`:
 `src/lib/periodo.js` calcula la duración de cada puesto para el sitio y para el CV, y el
-tramo agrupado de 2018 – 2022 lleva `soloAnio` para mostrarse sin cuenta de meses.
+un tramo agrupado puede llevar `soloAnio` para mostrarse sin cuenta de meses.
 
 ## Vista previa al compartir (Open Graph)
 

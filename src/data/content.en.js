@@ -33,6 +33,7 @@ export const profile = {
   rol: 'IT Incident Manager / SRE Analyst',
   target: 'SRE / DevOps Engineer',
   ubicacion: 'Buenos Aires, Argentina · Remote / Hybrid',
+  idiomas: 'Spanish (native) · English (intermediate)',
   disponibilidad: 'Open to new opportunities',
   cv: '/cv-samuel-garcia-baciliadis-sre-en.pdf',
   cvArchivo: 'CV-Samuel-Garcia-Baciliadis-SRE-EN.pdf',
@@ -63,7 +64,7 @@ export const hero = {
 }
 
 export const metrics = [
-  { valor: '8+', unidad: 'years', label: 'in IT operations and N2-N3 technical support' },
+  { valor: '4+', unidad: 'years', label: 'in IT operations and N2-N3 technical support' },
   { valor: 'P1/P2', unidad: '', label: 'end-to-end critical incident management' },
   { valor: '24×7', unidad: '', label: 'high-availability production environments' },
   { valor: '15+', unidad: 'tools', label: 'for monitoring, observability and automation' },
@@ -345,19 +346,6 @@ export const timeline = timelineEs.map((item, i) => ({
         'Training users in the correct use of IT tools',
       ],
     },
-    {
-      periodo: '2018 – 2022',
-      rol: 'Help Desk Lead · N2-N3 Technical Support',
-      org: 'Operations and Service Desk',
-      resumen:
-        'Coordinating operational support teams, focused on SLA compliance, service quality and second- and third-line technical resolution.',
-      bullets: [
-        'Leading and training support teams',
-        'Ticket queue management and SLA compliance',
-        'N2-N3 troubleshooting across systems and platforms',
-        'Continuous improvement of support and escalation processes',
-      ],
-    },
   ][i],
 }))
 
@@ -375,13 +363,14 @@ export const contacto = {
 export const cv = {
   titular: 'IT Incident Manager / SRE Analyst → SRE / DevOps Engineer',
   resumen:
-    'Over 8 years in IT operations, focused on critical P1/P2 incident management in Fintech and Telecommunications: leading War Rooms, restoring service under pressure and closing out with RCAs and preventive actions. Today I am directing that discipline towards SRE and DevOps — observability, automation and reliability — through personal labs where I inject faults, measure detection and recovery, and publish the log of every run.',
+    'Over 4 years in IT operations, focused on critical P1/P2 incident management in Fintech and Telecommunications: leading War Rooms, restoring service under pressure and closing out with RCAs and preventive actions. Today I am directing that discipline towards SRE and DevOps — observability, automation and reliability — through personal labs where I inject faults, measure detection and recovery, and publish the log of every run.',
   secciones: {
     perfil: 'Professional profile',
     competencias: 'Technical skills',
     experiencia: 'Professional experience',
     labs: 'Personal labs · measured results',
     formacion: 'Education',
+    idiomas: 'Languages',
   },
   competencias: [
     {
@@ -402,7 +391,7 @@ export const cv = {
     },
   ],
   formacion: [
-    { titulo: 'Higher Technical Degree in Computer Science', org: 'Tertiary education', detalle: '' },
+    { titulo: 'Higher Technical Degree in Computer Science', org: 'Instituto Universitario de Tecnología Agroindustrial Región Los Andes', detalle: '2016 – 2018' },
     { titulo: 'Kubernetes', org: 'Udemy', detalle: 'In progress' },
     { titulo: 'Web Design', org: 'Udemy', detalle: '' },
     {
@@ -411,6 +400,7 @@ export const cv = {
       detalle: 'Containers, orchestration, IaC and CI/CD through personal labs',
     },
   ],
+  idiomas: ['Spanish — native', 'English — intermediate'],
   etiquetas: {
     stack: 'Stack',
     contexto: 'Context',
@@ -1123,6 +1113,6 @@ export const ui = {
   meta: {
     title: 'Samuel García Baciliadis — IT Incident Manager / SRE Analyst',
     description:
-      'IT Incident Manager / SRE Analyst in Buenos Aires, Argentina. 8+ years in IT operations: critical P1/P2 incident management in Fintech (Personal Pay) and Telecommunications, observability with Dynatrace, Datadog and Elastic, RCA and MTTR reduction. Personal Kubernetes, observability and chaos engineering labs with published metrics.',
+      'IT Incident Manager / SRE Analyst in Buenos Aires, Argentina. 4+ years in IT operations: critical P1/P2 incident management in Fintech (Personal Pay) and Telecommunications, observability with Dynatrace, Datadog and Elastic, RCA and MTTR reduction. Personal Kubernetes, observability and chaos engineering labs with published metrics.',
   },
 }

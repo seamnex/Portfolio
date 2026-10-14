@@ -1,4 +1,4 @@
-import { ArrowRight, Download, FlaskConical, FolderGit2, Linkedin, MapPin, Github } from 'lucide-react'
+import { ArrowRight, Download, FlaskConical, FolderGit2, Languages, Linkedin, MapPin, Github } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useVista } from '../navegacion/VistaProvider'
 import StatusBadge from './ui/StatusBadge'
@@ -88,6 +88,9 @@ export default function Hero() {
             <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 text-xs text-slate-500">
               <span className="inline-flex items-center gap-1.5">
                 <MapPin size={13} /> {profile.ubicacion}
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Languages size={13} /> {profile.idiomas}
               </span>
               <a
                 href={profile.linkedin}

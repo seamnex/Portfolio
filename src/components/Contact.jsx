@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Github, Linkedin, Loader2, Mail, MapPin, Send } from 'lucide-react'
+import { Github, Languages, Linkedin, Loader2, Mail, MapPin, Send } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useAvisos } from '../avisos/AvisosProvider'
 import Section from './ui/Section'
@@ -185,6 +185,9 @@ export default function Contact() {
 
               <p className="flex items-center gap-3 text-sm text-slate-400">
                 <MapPin size={16} className="text-accent" /> {profile.ubicacion}
+              </p>
+              <p className="flex items-center gap-3 text-sm text-slate-400">
+                <Languages size={16} className="text-accent" /> {profile.idiomas}
               </p>
             </div>
           </div>
