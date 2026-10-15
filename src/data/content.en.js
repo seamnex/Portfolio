@@ -346,6 +346,14 @@ export const timeline = timelineEs.map((item, i) => ({
         'Training users in the correct use of IT tools',
       ],
     },
+    {
+      periodo: '2016 – 2018',
+      rol: 'Higher Technical Degree in Computer Science',
+      org: 'Instituto Universitario de Tecnología Agroindustrial Región Los Andes',
+      resumen:
+        'Tertiary degree in Computing and Programming: the technical foundation I later built support, operations and incident management on.',
+      bullets: ['Higher Technical Degree in Computer Science, Computing and Programming track'],
+    },
   ][i],
 }))
 
