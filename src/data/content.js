@@ -427,6 +427,16 @@ export const timeline = [
     ],
     tags: ['Jira', 'Windows', 'Redes', 'Tickets'],
   },
+  {
+    periodo: '2016 – 2018',
+    rol: 'Técnico Superior en Informática',
+    org: 'Instituto Universitario de Tecnología Agroindustrial Región Los Andes',
+    tipo: 'formacion',
+    resumen:
+      'Formación terciaria en Informática y Programación: la base técnica sobre la que después construí soporte, operaciones y gestión de incidentes.',
+    bullets: ['Título de Técnico Superior en Informática, orientación Informática y Programación'],
+    tags: ['Informática', 'Programación'],
+  },
 ]
 
 export const contacto = {
