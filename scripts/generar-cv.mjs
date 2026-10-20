@@ -19,8 +19,10 @@
 //
 //  Uso:  npm run cv
 // ─────────────────────────────────────────────────────────────
-import { PDFDocument, StandardFonts } from 'pdf-lib'
-import { writeFile } from 'node:fs/promises'
+import { PDFDocument } from 'pdf-lib'
+import fontkit from '@pdf-lib/fontkit'
+import { readFile, writeFile } from 'node:fs/promises'
+import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -126,20 +128,48 @@ function idiomas(lienzo, contenido) {
   for (const i of contenido.cv.idiomas) lienzo.vineta(i)
 }
 
+// Inter incrustada (la misma tipografía del sitio) en vez de las 14 fuentes
+// estándar del PDF: esas no viajan dentro del archivo y cada visor o parser
+// de ATS las reemplaza por lo que tenga a mano. Incrustada y con subset, el
+// CV se ve igual en todos lados y el texto se extrae con su mapa Unicode.
+const requerir = createRequire(import.meta.url)
+const INTER = {
+  regular: requerir.resolve('@fontsource/inter/files/inter-latin-400-normal.woff'),
+  bold: requerir.resolve('@fontsource/inter/files/inter-latin-700-normal.woff'),
+}
+
 async function generar({ codigo, contenido, archivo }) {
   const doc = await PDFDocument.create()
+  doc.registerFontkit(fontkit)
   const fuentes = {
-    regular: await doc.embedFont(StandardFonts.Helvetica),
-    bold: await doc.embedFont(StandardFonts.HelveticaBold),
+    regular: await doc.embedFont(await readFile(INTER.regular), { subset: true }),
+    bold: await doc.embedFont(await readFile(INTER.bold), { subset: true }),
   }
 
   doc.setTitle(`${contenido.profile.nombre} — ${contenido.cv.titular}`)
   doc.setAuthor(contenido.profile.nombre)
   doc.setSubject(contenido.cv.titular)
-  doc.setKeywords(['SRE', 'DevOps', 'Incident Management', 'Kubernetes', 'Observability'])
+  // Las mismas palabras que el reclutador busca en el ATS; algunos parsers
+  // leen también este campo de los metadatos.
+  doc.setKeywords([
+    'IT Incident Manager',
+    'Major Incident Management',
+    'Incident Management',
+    'Problem Management',
+    'ITIL',
+    'ITSM',
+    'NOC',
+    'SRE',
+    'DevOps',
+    'Observability',
+    'Kubernetes',
+  ])
   doc.setLanguage(codigo === 'es' ? 'es-AR' : 'en')
-  doc.setProducer('scripts/generar-cv.mjs')
-  doc.setCreator('scripts/generar-cv.mjs')
+  // Creador y productor con el nombre del autor: es lo que muestra el panel
+  // de propiedades del archivo, y una ruta de script ahí no le dice nada a
+  // quien lo abre.
+  doc.setProducer(contenido.profile.nombre)
+  doc.setCreator(contenido.profile.nombre)
 
   const lienzo = crearLienzo(doc, fuentes)
   cabecera(lienzo, contenido)
