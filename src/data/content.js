@@ -203,10 +203,10 @@ export const skills = [
       'ITIL v4 (Incident, Problem & Change)',
       'Gestión de SLA / SLO / SLI',
       'RCA y post-mortems blameless',
-      'Liderazgo de War Rooms P1/P2',
+      'Major Incident Management · War Rooms P1/P2',
       'Reducción de MTTR / MTTD',
       'Jira Service Management · ServiceNow',
-      'Escalamiento y guardias 24×7',
+      'Escalamiento · Command Center / NOC 24×7',
       'Reportería ejecutiva de disponibilidad',
     ],
   },
@@ -384,16 +384,16 @@ export const timeline = [
     org: 'Personal Pay · Telecom Argentina (vía Asap Consulting)',
     tipo: 'trabajo',
     resumen:
-      'Gestión de incidentes críticos en la plataforma financiera del grupo Telecom, de alto volumen transaccional, donde cada minuto de indisponibilidad tiene impacto directo en el usuario y en el negocio. Operación 24×7 sobre infraestructura de telecomunicaciones a gran escala.',
+      'Gestión de incidentes críticos (Major Incident Management) en la plataforma financiera del grupo Telecom, de alto volumen transaccional, donde cada minuto de indisponibilidad tiene impacto directo en el usuario y en el negocio. Operación 24×7 desde el Command Center (NOC) sobre infraestructura de telecomunicaciones a gran escala.',
     bullets: [
-      'Liderazgo de War Rooms P1/P2: coordinación técnica y de negocio hasta la restauración del servicio',
-      'Análisis de causa raíz (RCA), post-mortems en Confluence y seguimiento de acciones preventivas',
+      'Major Incident Management: liderazgo de War Rooms P1/P2 y coordinación técnica y de negocio hasta la restauración del servicio',
+      'Análisis de causa raíz (RCA), post-mortems en Confluence y seguimiento de acciones preventivas (Problem Management)',
       'Monitoreo y diagnóstico con Dynatrace, Datadog, Elastic/Kibana y Zabbix; procesos batch con Control-M',
       'Comunicación de estado e impacto a stakeholders técnicos y de negocio',
-      'Coordinación entre equipos de infraestructura, redes y desarrollo, en esquema 24×7',
-      'Trabajo sobre SLAs con foco sostenido en la reducción del MTTR; documentación de procedimientos y runbooks',
+      'Gestión de escalamientos y coordinación entre equipos de infraestructura, redes y desarrollo, en esquema 24×7',
+      'Trabajo sobre SLAs y KPIs de servicio con foco sostenido en la reducción del MTTR; documentación de procedimientos y runbooks',
     ],
-    tags: ['ITIL', 'RCA', 'Dynatrace', 'Datadog', 'Zabbix', 'Control-M', '24×7', 'SLA/SLO'],
+    tags: ['Major Incident', 'ITIL', 'RCA', 'Dynatrace', 'Datadog', 'Zabbix', 'Control-M', '24×7', 'SLA/SLO'],
   },
   {
     periodo: 'Agosto 2023 – Mayo 2024',
@@ -407,9 +407,9 @@ export const timeline = [
     bullets: [
       'Asignación y coordinación de tareas del equipo de soporte, asegurando el cumplimiento de los estándares de servicio',
       'Instalación y configuración de hardware, software y redes; resolución de incidentes en PCs corporativas',
-      'Informes y métricas de soporte para detectar oportunidades de mejora y garantizar la continuidad del servicio',
+      'Reportes, KPIs y métricas de soporte para detectar oportunidades de mejora y garantizar la continuidad del servicio',
     ],
-    tags: ['Service Desk', 'SLA', 'Liderazgo', 'Redes'],
+    tags: ['Service Desk', 'SLA', 'KPIs', 'Liderazgo', 'Redes'],
   },
   {
     periodo: 'Febrero 2022 – Julio 2023',
@@ -462,7 +462,7 @@ export const contacto = {
 export const cv = {
   titular: 'IT Incident Manager / SRE Analyst → SRE / DevOps Engineer',
   resumen:
-    'Más de 4 años en operaciones IT, con foco en la gestión de incidentes críticos P1/P2 en Fintech y Telecomunicaciones: liderazgo de War Rooms, restauración del servicio bajo presión y cierre con RCA y acciones preventivas. Hoy oriento esa disciplina hacia SRE y DevOps —observabilidad, automatización y confiabilidad— con laboratorios propios donde inyecto fallas, mido detección y recuperación, y publico la bitácora de cada corrida.',
+    'Más de 4 años en operaciones IT, con foco en la gestión de incidentes críticos P1/P2 (Major Incident Management) en Fintech y Telecomunicaciones: liderazgo de War Rooms, escalamiento, restauración del servicio bajo presión y cierre con RCA y acciones preventivas. Hoy oriento esa disciplina hacia SRE y DevOps —observabilidad, automatización y confiabilidad— con laboratorios propios donde inyecto fallas, mido detección y recuperación, y publico la bitácora de cada corrida.',
   secciones: {
     perfil: 'Perfil profesional',
     competencias: 'Competencias técnicas',
@@ -474,7 +474,7 @@ export const cv = {
   competencias: [
     {
       grupo: 'Gestión de incidentes y operaciones',
-      items: 'ITIL v4 (Incident, Problem & Change) · War Rooms P1/P2 · RCA y post-mortems blameless · SLA/SLO/SLI · reducción de MTTR y MTTD · guardias 24×7 · Jira Service Management · ServiceNow',
+      items: 'ITIL v4 / ITSM (Incident, Problem & Change Management) · Major Incident Management · War Rooms P1/P2 · gestión de escalamientos · RCA y post-mortems blameless · SLA/SLO/SLI · KPIs y reportes de servicio · reducción de MTTR y MTTD · Command Center / NOC 24×7 · Jira Service Management · ServiceNow',
     },
     {
       grupo: 'Observabilidad y monitoreo',

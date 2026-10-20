@@ -165,10 +165,10 @@ export const skills = traducirPorId(skillsEs, {
       'ITIL v4 (Incident, Problem & Change)',
       'SLA / SLO / SLI management',
       'RCA and blameless post-mortems',
-      'P1/P2 War Room leadership',
+      'Major Incident Management · P1/P2 War Rooms',
       'MTTR / MTTD reduction',
       'Jira Service Management · ServiceNow',
-      'Escalation and 24×7 on-call',
+      'Escalation · 24×7 Command Center / NOC',
       'Executive availability reporting',
     ],
   },
@@ -312,14 +312,14 @@ export const timeline = timelineEs.map((item, i) => ({
       rol: 'IT Incident Manager / SRE Analyst',
       org: 'Personal Pay · Telecom Argentina (via Asap Consulting)',
       resumen:
-        'Critical incident management on the Telecom group\'s high-volume financial platform, where every minute of downtime hits users and the business directly. 24×7 operation over large-scale telecommunications infrastructure.',
+        'Critical incident management (Major Incident Management) on the Telecom group\'s high-volume financial platform, where every minute of downtime hits users and the business directly. 24×7 operation from the Command Center (NOC) over large-scale telecommunications infrastructure.',
       bullets: [
-        'Leading P1/P2 War Rooms: technical and business coordination through to service restoration',
-        'Root cause analysis (RCA), post-mortems in Confluence and follow-up on preventive actions',
+        'Major Incident Management: leading P1/P2 War Rooms with technical and business coordination through to service restoration',
+        'Root cause analysis (RCA), post-mortems in Confluence and follow-up on preventive actions (Problem Management)',
         'Monitoring and diagnosis with Dynatrace, Datadog, Elastic/Kibana and Zabbix; batch processes with Control-M',
         'Communicating status and impact to technical and business stakeholders',
-        'Coordination across infrastructure, network and development teams on a 24×7 rotation',
-        'Working against SLAs with sustained focus on reducing MTTR; documenting procedures and runbooks',
+        'Escalation management and coordination across infrastructure, network and development teams on a 24×7 rotation',
+        'Working against SLAs and service KPIs with sustained focus on reducing MTTR; documenting procedures and runbooks',
       ],
     },
     {
@@ -331,7 +331,7 @@ export const timeline = timelineEs.map((item, i) => ({
       bullets: [
         'Assigning and coordinating the support team\'s work, ensuring service standards were met',
         'Installing and configuring hardware, software and networks; resolving incidents on corporate PCs',
-        'Support reports and metrics to spot improvement opportunities and guarantee service continuity',
+        'Support reports, KPIs and metrics to spot improvement opportunities and guarantee service continuity',
       ],
     },
     {
@@ -371,7 +371,7 @@ export const contacto = {
 export const cv = {
   titular: 'IT Incident Manager / SRE Analyst → SRE / DevOps Engineer',
   resumen:
-    'Over 4 years in IT operations, focused on critical P1/P2 incident management in Fintech and Telecommunications: leading War Rooms, restoring service under pressure and closing out with RCAs and preventive actions. Today I am directing that discipline towards SRE and DevOps — observability, automation and reliability — through personal labs where I inject faults, measure detection and recovery, and publish the log of every run.',
+    'Over 4 years in IT operations, focused on critical P1/P2 incident management (Major Incident Management) in Fintech and Telecommunications: leading War Rooms, escalations, restoring service under pressure and closing out with RCAs and preventive actions. Today I am directing that discipline towards SRE and DevOps — observability, automation and reliability — through personal labs where I inject faults, measure detection and recovery, and publish the log of every run.',
   secciones: {
     perfil: 'Professional profile',
     competencias: 'Technical skills',
@@ -383,7 +383,7 @@ export const cv = {
   competencias: [
     {
       grupo: 'Incident and operations management',
-      items: 'ITIL v4 (Incident, Problem & Change) · P1/P2 War Rooms · RCA and blameless post-mortems · SLA/SLO/SLI · MTTR and MTTD reduction · 24×7 on-call · Jira Service Management · ServiceNow',
+      items: 'ITIL v4 / ITSM (Incident, Problem & Change Management) · Major Incident Management · P1/P2 War Rooms · escalation management · RCA and blameless post-mortems · SLA/SLO/SLI · service KPIs and reporting · MTTR and MTTD reduction · 24×7 Command Center / NOC · Jira Service Management · ServiceNow',
     },
     {
       grupo: 'Observability and monitoring',
