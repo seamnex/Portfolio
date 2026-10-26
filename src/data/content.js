@@ -366,6 +366,7 @@ export const timeline = [
       'IaC local con Vagrant y VirtualBox · builds con Maven',
       'Scripting en Python y Bash aplicado a automatización operativa',
       'Git/GitHub y fundamentos de pipelines CI/CD',
+      'Curso DevOps, integración y agilidad continua (UTN FRBA, aprobado en abril 2026): CI/CD, Jenkins y AWS',
     ],
     tags: ['Docker', 'Kubernetes', 'Linux', 'Python', 'CI/CD'],
   },
@@ -482,7 +483,7 @@ export const cv = {
     },
     {
       grupo: 'DevOps, contenedores y cloud',
-      items: 'Linux · Docker · Kubernetes · Vagrant/VirtualBox (IaC) · Ansible · GitHub Actions · CI/CD · Maven · AWS · Git/GitHub',
+      items: 'Linux · Docker · Kubernetes · Vagrant/VirtualBox (IaC) · Ansible · GitHub Actions · Jenkins · CI/CD · Maven · AWS · Git/GitHub',
     },
     {
       grupo: 'Automatización y desarrollo',
@@ -491,7 +492,9 @@ export const cv = {
   ],
   formacion: [
     { titulo: 'Técnico Superior en Informática', org: 'Instituto Universitario de Tecnología Agroindustrial Región Los Andes', detalle: '2016 – 2018' },
-    { titulo: 'Kubernetes', org: 'Udemy', detalle: 'En curso' },
+    { titulo: 'Curso DevOps, integración y agilidad continua', org: 'UTN FRBA', detalle: 'Aprobado abr 2026 · 48 h · nota Sobresaliente · DevOps, CI/CD, Jenkins y AWS' },
+    { titulo: 'Docker y Kubernetes', org: 'Udemy', detalle: 'En curso' },
+    { titulo: 'AWS', org: 'Udemy', detalle: 'En curso · objetivo: AWS Certified Cloud Practitioner' },
     { titulo: 'Diseño Web', org: 'Udemy', detalle: '' },
     {
       titulo: 'Especialización SRE / DevOps',
