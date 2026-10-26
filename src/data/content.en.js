@@ -305,6 +305,7 @@ export const timeline = timelineEs.map((item, i) => ({
         'Local IaC with Vagrant and VirtualBox · builds with Maven',
         'Python and Bash scripting applied to operational automation',
         'Git/GitHub and CI/CD pipeline fundamentals',
+        'DevOps, Continuous Integration and Agility course (UTN FRBA, passed April 2026): CI/CD, Jenkins and AWS',
       ],
     },
     {
@@ -391,7 +392,7 @@ export const cv = {
     },
     {
       grupo: 'DevOps, containers and cloud',
-      items: 'Linux · Docker · Kubernetes · Vagrant/VirtualBox (IaC) · Ansible · GitHub Actions · CI/CD · Maven · AWS · Git/GitHub',
+      items: 'Linux · Docker · Kubernetes · Vagrant/VirtualBox (IaC) · Ansible · GitHub Actions · Jenkins · CI/CD · Maven · AWS · Git/GitHub',
     },
     {
       grupo: 'Automation and development',
@@ -400,7 +401,9 @@ export const cv = {
   ],
   formacion: [
     { titulo: 'Higher Technical Degree in Computer Science', org: 'Instituto Universitario de Tecnología Agroindustrial Región Los Andes', detalle: '2016 – 2018' },
-    { titulo: 'Kubernetes', org: 'Udemy', detalle: 'In progress' },
+    { titulo: 'DevOps, Continuous Integration and Agility course', org: 'UTN FRBA', detalle: 'Passed Apr 2026 · 48 h · grade: Outstanding · DevOps, CI/CD, Jenkins and AWS' },
+    { titulo: 'Docker and Kubernetes', org: 'Udemy', detalle: 'In progress' },
+    { titulo: 'AWS', org: 'Udemy', detalle: 'In progress · goal: AWS Certified Cloud Practitioner' },
     { titulo: 'Web Design', org: 'Udemy', detalle: '' },
     {
       titulo: 'SRE / DevOps specialisation',
