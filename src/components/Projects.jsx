@@ -16,6 +16,24 @@ function ProjectCard({ p, meta, pipeline }) {
 
   return (
     <article className="card card-hover group flex min-w-0 flex-col p-6">
+      {/* La misma tarjeta 1200×627 que usan el repo y LinkedIn. En la grilla
+          alcanza la de 600 px; la de 1200 queda para pantallas de alta
+          densidad. width/height reservan el espacio y evitan el salto de
+          layout mientras carga. */}
+      {p.imagen && (
+        <img
+          src={`${p.imagen}-600.png`}
+          srcSet={`${p.imagen}-600.png 600w, ${p.imagen}.png 1200w`}
+          sizes="(min-width: 768px) 560px, 100vw"
+          width={1200}
+          height={627}
+          loading="lazy"
+          decoding="async"
+          alt=""
+          className="mb-5 h-auto w-full rounded-lg border border-base-600 transition-colors group-hover:border-accent/30"
+        />
+      )}
+
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="font-mono text-[11px] uppercase tracking-wider text-accent">{p.categoria}</p>

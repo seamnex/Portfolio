@@ -239,6 +239,7 @@ export const projectsMeta = {
 
 export const projects = traducirPorId(projectsEs, {
   'vagrant-lab': {
+    imagen: '/proyectos/vagrant-lab-en',
     titulo: 'Virtualisation environment with Vagrant + VirtualBox',
     categoria: 'DevOps Lab · Infrastructure as Code',
     estado: 'In progress',
@@ -253,6 +254,7 @@ export const projects = traducirPorId(projectsEs, {
     ],
   },
   'observability-lab': {
+    imagen: '/proyectos/observability-lab-en',
     titulo: 'Monitoring dashboard & log analytics',
     categoria: 'DevOps Lab · Observability',
     estado: 'In progress',
@@ -267,6 +269,7 @@ export const projects = traducirPorId(projectsEs, {
     ],
   },
   'k8s-lab': {
+    imagen: '/proyectos/k8s-lab-en',
     titulo: 'Kubernetes laboratory cluster',
     categoria: 'DevOps Lab · Orchestration',
     estado: 'In progress',
@@ -278,6 +281,66 @@ export const projects = traducirPorId(projectsEs, {
       `preStop hook: from ${MEDIDAS.rollingFallosSinHook} failures in ${MEDIDAS.rollingTotalSinHook} requests to ${MEDIDAS.rollingFallosConHook} in ${MEDIDAS.rollingTotalConHook}`,
       'PodDisruptionBudget verified with the Eviction API (429 on the second eviction)',
       'CI validating the manifests: yamllint + kubeconform on every push',
+    ],
+  },
+  'cicd-pipeline': {
+    imagen: '/proyectos/cicd-pipeline-en',
+    titulo: 'CI/CD pipeline with vulnerability scanning',
+    categoria: 'DevOps Lab · CI/CD',
+    estado: 'In progress',
+    problema:
+      'In a War Room, "what changed?" needs an answer in seconds. A hand-built image, with no record of which commit it came from or which vulnerabilities it carries, has none.',
+    solucion:
+      'A GitHub Actions pipeline over a small API: lint, tests with a coverage floor, image build, Trivy scan and publishing to GHCR. The image is built once and exactly the scanned image is published. A tag publishes semver versions and a GitHub Release with the SBOM attached.',
+    highlights: [
+      'The gate blocked a test PR with 6 HIGH vulnerabilities: the same ones as the local scan',
+      'Distroless base chosen with data: Alpine carried 6 fixable HIGHs in its bundled npm',
+      'Actions pinned by SHA and tag-based releases with an SBOM (CycloneDX)',
+    ],
+  },
+  'terraform-gcp-lab': {
+    imagen: '/proyectos/terraform-gcp-lab-en',
+    titulo: 'Google Cloud infrastructure with Terraform',
+    categoria: 'DevOps Lab · Infrastructure as Code',
+    estado: 'In progress',
+    problema:
+      '"Who opened that port?" has no answer if infrastructure changes by hand in the console. And an apply without a reviewed plan is a blind change.',
+    solucion:
+      'Reusable network, IAM and compute modules for GCP, with remote state in GCS and dev and prod environments that differ only in their variables. Every PR runs fmt, tflint, Trivy and plan, and each environment\'s plan is posted as a PR comment. CI reaches GCP keylessly, through Workload Identity Federation, and never applies.',
+    highlights: [
+      'Dev and prod plans commented on every PR, updated on every push',
+      'No VM with a public IP: SSH through IAP and egress through Cloud NAT',
+      'Cost estimates and teardown documented. Validated and planned, not yet applied',
+    ],
+  },
+  'sre-slo-lab': {
+    imagen: '/proyectos/sre-slo-lab-en',
+    titulo: 'SLOs, error budgets and burn-rate alerting',
+    categoria: 'DevOps Lab · SRE',
+    estado: 'In progress',
+    problema:
+      'A fixed-threshold alert wakes someone up for a 30-second spike and stays silent through a sustained 0.8% that eats the month\'s margin. The team ends up ignoring alerts.',
+    solucion:
+      'Two SLOs on an instrumented service, with SLIs precomputed over 8 windows and multi-window burn-rate alerts: page if the error budget runs out in days, ticket if it runs out in weeks. A separate alert covers the blind spot: without metrics, no other alert fires. It runs with docker compose.',
+    highlights: [
+      'From injected failure to pager notification: 120 s in the lab, measured with timestamps',
+      '6 alert unit tests with promtool; one of them corrected my own reasoning',
+      'Grafana dashboard versioned as JSON and a runbook linked from every alert',
+    ],
+  },
+  'incident-postmortems': {
+    imagen: '/proyectos/incident-postmortems-en',
+    titulo: 'Incident postmortems and runbooks',
+    categoria: 'DevOps Lab · Incident Management',
+    estado: 'In progress',
+    problema:
+      'A postmortem written to close the ticket, with "human error" as root cause and ownerless action items, is the surest way for the same incident to come back.',
+    solucion:
+      'Three simulated incidents —fictional, and labelled as such— documented in blameless format: impact with numbers and sources, timeline, 5 whys, what went well, what didn\'t, where we got lucky, and action items with owner and date. Plus three runbooks and a reusable template, in Spanish and English.',
+    highlights: [
+      '3 simulated postmortems in ES and EN, with 23 prevent, detect and mitigate actions',
+      'Runbooks linked from the real alerts in the sre-slo-lab',
+      'CI that checks formatting, internal links and translation parity',
     ],
   },
 })

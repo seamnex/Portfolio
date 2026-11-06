@@ -58,4 +58,20 @@ export const pipelines = {
     repo: `${OWNER}/k8s-lab`,
     workflow: 'lint',
   },
+  [`https://github.com/${OWNER}/cicd-pipeline`]: {
+    repo: `${OWNER}/cicd-pipeline`,
+    workflow: 'ci',
+  },
+  [`https://github.com/${OWNER}/terraform-gcp-lab`]: {
+    repo: `${OWNER}/terraform-gcp-lab`,
+    workflow: 'terraform',
+  },
+  [`https://github.com/${OWNER}/sre-slo-lab`]: {
+    repo: `${OWNER}/sre-slo-lab`,
+    workflow: 'validar',
+  },
+  [`https://github.com/${OWNER}/incident-postmortems`]: {
+    repo: `${OWNER}/incident-postmortems`,
+    workflow: 'docs',
+  },
 }
