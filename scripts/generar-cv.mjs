@@ -108,7 +108,11 @@ function labs(lienzo, contenido) {
     lienzo.puesto(p.titulo, p.links.repo?.replace('https://github.com/', ''))
     lienzo.parrafo(`${cv.etiquetas.stack}: ${p.stack.join(' · ')}`, { tamano: 8.4, color: C.tenue })
     lienzo.avanzar(3)
-    for (const h of p.highlights) lienzo.vineta(h, { tamano: 8.8 })
+    // En el PDF va solo el primer highlight de cada lab: con siete labs, los
+    // tres highlights empujaban el CV a una tercera página casi vacía. El
+    // sitio muestra los tres; por eso el orden de `highlights` importa: el
+    // primero es el que tiene que leer quien escanea un CV.
+    lienzo.vineta(p.highlights[0], { tamano: 8.8 })
     lienzo.avanzar(6)
   }
 

@@ -302,6 +302,7 @@ export const projects = [
     ],
     links: { repo: 'https://github.com/seamnex/vagrant-lab', demo: null },
     comando: 'ANSIBLE=1 vagrant up',
+    imagen: '/proyectos/vagrant-lab',
   },
   {
     id: 'observability-lab',
@@ -320,6 +321,7 @@ export const projects = [
     ],
     links: { repo: 'https://github.com/seamnex/observability-lab', demo: null },
     comando: 'python scripts/alerta_5xx.py --remediar',
+    imagen: '/proyectos/observability-lab',
   },
   {
     id: 'k8s-lab',
@@ -338,6 +340,83 @@ export const projects = [
     ],
     links: { repo: 'https://github.com/seamnex/k8s-lab', demo: null },
     comando: './scripts/medir_rollout.sh nginx:1.28-alpine',
+    imagen: '/proyectos/k8s-lab',
+  },
+  {
+    id: 'cicd-pipeline',
+    titulo: 'Pipeline de CI/CD con escaneo de vulnerabilidades',
+    categoria: 'DevOps Lab · CI/CD',
+    estado: 'En curso',
+    problema:
+      'En un War Room, "¿qué cambió?" tiene que tener respuesta en segundos. Una imagen construida a mano, sin saber de qué commit salió ni qué vulnerabilidades trae, no la tiene.',
+    solucion:
+      'Pipeline de GitHub Actions sobre una API chica: lint, tests con piso de cobertura, build de la imagen, escaneo con Trivy y publicación en GHCR. La imagen se construye una sola vez y se publica exactamente la que se escaneó. Un tag publica versiones semver y un GitHub Release con el SBOM adjunto.',
+    stack: ['GitHub Actions', 'Docker', 'Trivy', 'GHCR', 'Node.js'],
+    highlights: [
+      'La compuerta frenó un PR de prueba con 6 vulnerabilidades HIGH: las mismas del escaneo local',
+      'Base distroless elegida con datos: Alpine traía 6 HIGH con fix en el npm empaquetado',
+      'Actions fijadas por SHA y release por tag con SBOM (CycloneDX)',
+    ],
+    links: { repo: 'https://github.com/seamnex/cicd-pipeline', demo: null },
+    comando: 'docker run -p 8080:8080 ghcr.io/seamnex/cicd-pipeline:latest',
+    imagen: '/proyectos/cicd-pipeline',
+  },
+  {
+    id: 'terraform-gcp-lab',
+    titulo: 'Infraestructura en Google Cloud con Terraform',
+    categoria: 'DevOps Lab · Infrastructure as Code',
+    estado: 'En curso',
+    problema:
+      '"¿Quién abrió ese puerto?" no tiene respuesta si la infraestructura cambia a mano en la consola. Y un apply sin plan revisado es un cambio a ciegas.',
+    solucion:
+      'Módulos reutilizables de red, IAM y cómputo para GCP, con state remoto en GCS y entornos dev y prod que difieren solo en sus variables. Cada PR corre fmt, tflint, Trivy y plan, y el plan de cada entorno queda comentado en el PR. El CI entra a GCP sin claves, por Workload Identity Federation, y nunca aplica.',
+    stack: ['Terraform', 'Google Cloud', 'GitHub Actions', 'tflint', 'Trivy'],
+    highlights: [
+      'Plan de dev y prod comentado en cada PR, actualizado en cada push',
+      'Ninguna VM con IP pública: SSH por IAP y salida por Cloud NAT',
+      'Costos estimados y destrucción documentados. Validado y planeado, todavía sin apply',
+    ],
+    links: { repo: 'https://github.com/seamnex/terraform-gcp-lab', demo: null },
+    comando: 'terraform plan -refresh=false -lock=false',
+    imagen: '/proyectos/terraform-gcp-lab',
+  },
+  {
+    id: 'sre-slo-lab',
+    titulo: 'SLOs, error budget y alertas por burn rate',
+    categoria: 'DevOps Lab · SRE',
+    estado: 'En curso',
+    problema:
+      'Una alerta de umbral fijo despierta a alguien por un pico de 30 segundos y calla ante un 0,8 % sostenido que se come el margen del mes. El equipo termina ignorándolas.',
+    solucion:
+      'Dos SLOs sobre un servicio instrumentado, con SLIs precalculados en 8 ventanas y alertas por burn rate multiventana: page si el error budget se agota en días, ticket si se agota en semanas. Una alerta aparte cubre el punto ciego: sin métricas, ninguna otra dispara. Se levanta con docker compose.',
+    stack: ['Prometheus', 'Grafana', 'Alertmanager', 'Python', 'Docker Compose'],
+    highlights: [
+      'De la falla inyectada al aviso en el pager: 120 s en el lab, medido con timestamps',
+      '6 tests unitarios de alertas con promtool; uno corrigió mi propio razonamiento',
+      'Dashboard de Grafana versionado como JSON y runbook enlazado en cada alerta',
+    ],
+    links: { repo: 'https://github.com/seamnex/sre-slo-lab', demo: null },
+    comando: 'python scripts/medir_deteccion.py disponibilidad',
+    imagen: '/proyectos/sre-slo-lab',
+  },
+  {
+    id: 'incident-postmortems',
+    titulo: 'Postmortems y runbooks de incidentes',
+    categoria: 'DevOps Lab · Incident Management',
+    estado: 'En curso',
+    problema:
+      'Un postmortem escrito para cerrar el ticket, con "error humano" como causa raíz y acciones sin dueño, es la forma más segura de que el mismo incidente vuelva.',
+    solucion:
+      'Tres incidentes simulados —ficticios y rotulados como tales— documentados en formato blameless: impacto con números y fuente, línea de tiempo, 5 porqués, qué salió bien, qué no, dónde hubo suerte y acciones con responsable y fecha. Más tres runbooks y una plantilla reutilizable, en español e inglés.',
+    stack: ['Postmortems', 'Runbooks', 'SRE', 'Markdown', 'GitHub Actions'],
+    highlights: [
+      '3 postmortems simulados en ES y EN, con 23 acciones de prevenir, detectar y mitigar',
+      'Runbooks enlazados desde las alertas reales del sre-slo-lab',
+      'CI que valida formato, links internos y paridad de traducciones',
+    ],
+    links: { repo: 'https://github.com/seamnex/incident-postmortems', demo: null },
+    comando: null,
+    imagen: '/proyectos/incident-postmortems',
   },
 ]
 
