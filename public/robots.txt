@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://portfolio-eight-ashen-34.vercel.app/sitemap.xml
+Sitemap: https://www.samuelsre.com.ar/sitemap.xml

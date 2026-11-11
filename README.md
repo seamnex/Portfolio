@@ -3,7 +3,7 @@
 Sitio personal de marca profesional: **IT Incident Manager · SRE Analyst → SRE / DevOps Engineer**.
 Dark mode técnico (estilo Vercel / status page), bilingüe ES/EN, React + Tailwind CSS + Lucide React.
 
-🔗 **En vivo:** https://portfolio-eight-ashen-34.vercel.app
+🔗 **En vivo:** https://www.samuelsre.com.ar
 
 ## Levantar el proyecto
 

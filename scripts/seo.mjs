@@ -17,7 +17,7 @@
 // ─────────────────────────────────────────────────────────────
 import * as es from '../src/data/content.js'
 
-export const SITIO_URL = 'https://portfolio-eight-ashen-34.vercel.app'
+export const SITIO_URL = es.SITIO_URL
 
 /** Empleador actual: el primer puesto de la trayectoria que sigue abierto. */
 function empleadorActual(timeline) {

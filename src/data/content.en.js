@@ -21,6 +21,7 @@ import {
 } from './content.js'
 
 export { incidentes, incidentesMeta } from './incidentes.en.js'
+export { SITIO_URL } from './content.js'
 
 const n = (v) => num(v, 'en')
 

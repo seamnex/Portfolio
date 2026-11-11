@@ -53,7 +53,7 @@ function cabecera(lienzo, contenido) {
   // encuentra igual que en tres líneas, y ocupa un tercio del espacio.
   // Sin teléfono ni documento: el CV se publica en la web, y esos datos en
   // una URL abierta no suman nada y exponen bastante.
-  const contacto = [profile.email, profile.linkedin.replace('https://www.', ''), profile.github?.replace('https://', ''), profile.ubicacion]
+  const contacto = [profile.email, profile.web?.replace('https://', ''), profile.linkedin.replace('https://www.', ''), profile.github?.replace('https://', ''), profile.ubicacion]
     .filter(Boolean)
     .join('  ·  ')
   lienzo.parrafo(contacto, { tamano: 8.4, color: C.tenue, interlineado: 1.35 })

@@ -24,6 +24,12 @@ const n = (v) => num(v, 'es')
 const GITHUB_URL = 'https://github.com/seamnex'
 const GITHUB_PUBLICO = true
 
+// ── Dominio propio ───────────────────────────────────────────
+// Única fuente de la URL pública del sitio: la usan el CV, la card OG y el
+// JSON-LD (scripts/seo.mjs). index.html, robots.txt y sitemap.xml son
+// estáticos y hay que actualizarlos a mano si cambia.
+export const SITIO_URL = 'https://www.samuelsre.com.ar'
+
 export const profile = {
   nombre: 'Samuel Eduardo García Baciliadis',
   alias: 'Samuel García',
@@ -35,6 +41,7 @@ export const profile = {
   email: 'S.egb@hotmail.es',
   linkedin: 'https://www.linkedin.com/in/samuel-garcia-baciliadis/',
   github: GITHUB_PUBLICO ? GITHUB_URL : '',
+  web: SITIO_URL,
   // Generado por `npm run cv` desde este mismo archivo. Ver scripts/generar-cv.mjs.
   cv: '/cv-samuel-garcia-baciliadis-sre.pdf',
   cvArchivo: 'CV-Samuel-Garcia-Baciliadis-SRE-ES.pdf',
