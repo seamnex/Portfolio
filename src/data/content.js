@@ -67,12 +67,15 @@ export const hero = {
   panel: {
     titulo: 'Este sitio, en vivo',
     // Tira compacta que lo anticipa en el teléfono, donde el panel queda abajo.
-    tira: 'Ver el panel en vivo',
+    tira: `${Math.round(MEDIDAS.ventanaInstrumento[0])} s de mi MTTR eran mi propia medición`,
+    tiraAria: 'Ver el panel en vivo',
     simulacroActivo: 'Simulacro de falla en curso',
-    mttdEtiqueta: `medido en mi lab · objetivo < ${n(MEDIDAS.mttdSensible)} s`,
-    // El número no llega al objetivo y el texto lo dice: lo que se muestra
-    // es el diagnóstico, que es la habilidad, no el número.
-    mttdTexto: `Una caída real (5xx en aumento) tardó ${n(MEDIDAS.mttd)} s en detectarse: más que mi objetivo. Al medirlo encontré por qué: ${Math.round(MEDIDAS.ventanaInstrumento[0])} de los ${Math.round(MEDIDAS.mttr)} s del ciclo eran mi propia ventana de medición, no el incidente.`,
+    // El titular es el hallazgo, no el MTTD: el número no llega al objetivo,
+    // y lo que vale mostrar es el diagnóstico, que es la habilidad.
+    hallazgoEtiqueta: 'Lo que encontré midiendo mi lab',
+    hallazgo: `${Math.round(MEDIDAS.ventanaInstrumento[0])} de los ${Math.round(MEDIDAS.mttr)} s de mi MTTR eran mi propia medición`,
+    mttdTexto: `Medí una caída real (5xx en aumento) y el tramo más largo no era el incidente: era la ventana de evaluación de mi alerta.`,
+    mttdEtiqueta: `medido · objetivo < ${n(MEDIDAS.mttdSensible)} s`,
     diagnostico: 'Ver el diagnóstico',
     bitacora: 'Ver la bitácora',
     simulacro: {
@@ -294,6 +297,16 @@ export const skills = [
     ],
   },
 ]
+
+// Anticipo de los labs en la vista Perfil: quien llega desde LinkedIn ve
+// evidencia sin ir a Chaos Lab. Muestra el primer resultado medido de cada
+// lab tal como figura en `projects`; no hay cifras propias acá.
+export const evidencia = {
+  titulo: 'Tres labs, con lo que midieron',
+  bajada: 'Repos públicos con el resultado medido de cada uno. Los siete, con problema y solución, están en Chaos Lab.',
+  ids: ['k8s-lab', 'sre-slo-lab', 'incident-postmortems'],
+  verTodos: 'Ver los siete labs',
+}
 
 export const projectsMeta = {
   label: 'DevOps Labs',

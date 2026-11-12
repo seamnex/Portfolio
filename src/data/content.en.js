@@ -17,6 +17,7 @@ import {
   labMetrics as labMetricsEs,
   skills as skillsEs,
   projects as projectsEs,
+  evidencia as evidenciaEs,
   timeline as timelineEs,
 } from './content.js'
 
@@ -56,10 +57,13 @@ export const hero = {
     'I run P1/P2 incidents in high-volume environments — Fintech and Telco — leading War Rooms, restoring service and closing the loop with RCAs that stop the same failure from coming back. Today I am taking that operational discipline into SRE and DevOps: observability, automation and systems that fail rarely and recover fast.',
   panel: {
     titulo: 'This site, live',
-    tira: 'See the live panel',
+    tira: `${Math.round(MEDIDAS.ventanaInstrumento[0])} s of my MTTR were my own measurement`,
+    tiraAria: 'See the live panel',
     simulacroActivo: 'Failure drill in progress',
-    mttdEtiqueta: `measured in my lab · target < ${n(MEDIDAS.mttdSensible)} s`,
-    mttdTexto: `A real outage (rising 5xx) took ${n(MEDIDAS.mttd)} s to detect: above my target. Measuring it showed why: ${Math.round(MEDIDAS.ventanaInstrumento[0])} of the ${Math.round(MEDIDAS.mttr)} s were my own measurement window, not the incident.`,
+    hallazgoEtiqueta: 'What I found measuring my lab',
+    hallazgo: `${Math.round(MEDIDAS.ventanaInstrumento[0])} of the ${Math.round(MEDIDAS.mttr)} s of my MTTR were my own measurement`,
+    mttdTexto: 'I measured a real outage (rising 5xx) and the longest stretch was not the incident: it was my alert evaluation window.',
+    mttdEtiqueta: `measured · target < ${n(MEDIDAS.mttdSensible)} s`,
     diagnostico: 'See the diagnosis',
     bitacora: 'See the run log',
     simulacro: {
@@ -236,6 +240,13 @@ export const skills = traducirPorId(skillsEs, {
     ],
   },
 })
+
+export const evidencia = {
+  ...evidenciaEs,
+  titulo: 'Three labs, and what they measured',
+  bajada: 'Public repos, each with its measured result. All seven, with problem and solution, are in Chaos Lab.',
+  verTodos: 'See all seven labs',
+}
 
 export const projectsMeta = {
   label: 'DevOps Labs',

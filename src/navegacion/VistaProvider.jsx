@@ -41,7 +41,7 @@ export const VISTAS = ['perfil', 'observabilidad', 'laboratorio']
  * `hidden` y el navegador no tiene forma de llegar solo.
  */
 const ANCLAS = {
-  perfil: ['inicio', 'sobre-mi', 'skills', 'trayectoria', 'sandbox', 'contacto'],
+  perfil: ['inicio', 'sobre-mi', 'evidencia', 'skills', 'trayectoria', 'sandbox', 'contacto'],
   observabilidad: ['estado', 'telemetria', 'topologia', 'slo', 'metricas', 'hallazgo'],
   laboratorio: ['caos', 'playbooks', 'consola', 'postmortems', 'labs'],
 }

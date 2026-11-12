@@ -33,11 +33,14 @@ function useEstadoPanel() {
 /**
  * Anticipo del panel para el teléfono. Abajo de `lg` el panel queda debajo
  * del pliegue, y es justo el diferencial: esta tira lo trae a la primera
- * pantalla con el estado y el número, y lleva hasta él.
+ * pantalla con el hallazgo, y lleva hasta él. El punto de estado solo
+ * aparece cuando hay un dato verificado: un punto gris en la portada se
+ * lee como "algo anda mal" y no dice nada.
  */
 function TiraVivo() {
-  const { hero, lang } = useContenido()
+  const { hero } = useContenido()
   const { estado } = useEstadoPanel()
+  const conDato = estado === 'ok' || estado === 'degradado' || estado === 'caido'
 
   return (
     <a
@@ -48,11 +51,10 @@ function TiraVivo() {
       }}
       className="mt-5 flex min-h-[44px] items-center gap-3 rounded-lg border border-base-600 bg-base-800/50 px-4 py-2.5 text-[13px] text-slate-400 transition-colors hover:border-accent/50 lg:hidden"
     >
-      <span className={`h-2 w-2 shrink-0 rounded-full ${PUNTO[estado] ?? PUNTO.desconocido}`} aria-hidden="true" />
-      <span className="flex-1">
-        MTTD <span className="font-semibold tabular-nums text-white">{num(MEDIDAS.mttd, lang)} s</span>
-        <span className="mx-1.5 text-slate-500" aria-hidden="true">·</span>
-        <span className="text-accent">{hero.panel.tira}</span>
+      {conDato && <span className={`h-2 w-2 shrink-0 rounded-full ${PUNTO[estado]}`} aria-hidden="true" />}
+      <span className="flex-1 text-slate-200">
+        {hero.panel.tira}
+        <span className="sr-only"> · {hero.panel.tiraAria}</span>
       </span>
       <ArrowDown size={15} className="shrink-0 text-accent" aria-hidden="true" />
     </a>
@@ -86,14 +88,17 @@ function PanelVivo() {
       </div>
 
       <div className="mt-5 border-t border-base-600 pt-5">
-        <p className="text-[13px] text-slate-400">
-          <Sigla id="mttd">MTTD</Sigla> · {p.mttdEtiqueta}
-        </p>
-        <p className="mt-1 text-5xl font-bold tabular-nums tracking-tight text-white">
-          {num(MEDIDAS.mttd, lang)}
-          <span className="ml-1.5 text-xl font-medium text-slate-400">s</span>
+        {/* El hallazgo es el titular; el MTTD queda abajo como dato. */}
+        <p className="text-[13px] text-slate-400">{p.hallazgoEtiqueta}</p>
+        <p className="mt-2 text-balance text-2xl font-bold leading-tight tracking-tight text-white sm:text-[1.7rem]">
+          {p.hallazgo}
         </p>
         <p className="mt-3 text-[14px] leading-relaxed text-slate-400">{p.mttdTexto}</p>
+        <p className="mt-4 flex flex-wrap items-baseline gap-x-2 text-[13px] text-slate-400">
+          <Sigla id="mttd">MTTD</Sigla>
+          <span className="text-xl font-semibold tabular-nums text-white">{num(MEDIDAS.mttd, lang)} s</span>
+          <span>{p.mttdEtiqueta}</span>
+        </p>
         <div className="mt-2 flex flex-wrap items-center gap-x-5">
           <a
             href="#hallazgo"

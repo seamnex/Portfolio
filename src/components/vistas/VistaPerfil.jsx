@@ -2,6 +2,7 @@ import { useContenido } from '../../i18n/LanguageProvider'
 import Vista from '../ui/Vista'
 import Hero from '../Hero'
 import About from '../About'
+import Evidencia from '../Evidencia'
 import Skills from '../Skills'
 import Timeline from '../Timeline'
 import SandboxBanner from '../SandboxBanner'
@@ -26,6 +27,9 @@ export default function VistaPerfil() {
     <Vista id="perfil" titulo={ui.vistas.perfil.titulo}>
       <Hero />
       <About />
+      {/* La evidencia antes del stack: un reclutador que se va después
+          de "Sobre mí" igual se lleva tres repos con resultados. */}
+      <Evidencia />
       <Skills />
       <Timeline />
       {/* Entre la trayectoria y el contacto a propósito: es el punto del
