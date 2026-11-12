@@ -79,6 +79,7 @@
   }
 
   .animate-trazo,
+  .animate-avance,
   .animate-scanline,
   .animate-pulse-dot,
   .animate-blink,
@@ -128,7 +129,7 @@
   }
 
   .pill {
-    @apply inline-flex items-center rounded-md border border-base-600 bg-base-800/80 px-2.5 py-1 font-mono text-xs font-medium tracking-wide text-slate-400 transition-colors;
+    @apply inline-flex items-center rounded-md border border-base-600 bg-base-800/80 px-2.5 py-1 text-xs font-medium text-slate-400 transition-colors;
   }
 
   .pill-accent {
@@ -156,7 +157,7 @@
   /* Rótulo de sección en gris: el cian queda para lo que se toca y lo que
      está en vivo, y así vuelve a señalar algo. */
   .section-label {
-    @apply font-mono text-xs uppercase tracking-[0.12em] text-slate-400;
+    @apply text-xs font-medium uppercase tracking-[0.14em] text-slate-400;
   }
 
   .heading-2 {

@@ -83,6 +83,8 @@ export default {
         blink: 'blink 1.1s step-end infinite',
         'slide-in': 'slideIn .35s cubic-bezier(.2,.8,.2,1) both',
         trazo: 'trazo 1.6s cubic-bezier(.16,1,.3,1) .45s both',
+        // El simulacro avanza a velocidad de reloj: lineal, y la duración la pone el componente.
+        avance: 'trazo 10s linear both',
         'flow-x': 'flowX 2.4s linear infinite',
         'flow-y': 'flowY 2.4s linear infinite',
       },

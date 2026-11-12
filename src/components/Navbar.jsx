@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { Activity, FlaskConical, Github, Linkedin, Mail, Terminal, UserRound } from 'lucide-react'
+import { Activity, FlaskConical, Github, Linkedin, Mail, UserRound } from 'lucide-react'
+import Marca from './ui/Marca'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useVista } from '../navegacion/VistaProvider'
 import { useCaos } from '../caos/CaosProvider'
@@ -97,12 +98,12 @@ export default function Navbar() {
               idioma y el botón de contacto ocupan todo el ancho, y la
               pestaña Perfil ya lleva al inicio. El nombre lo dice el h1
               de la portada. */}
-          <span className="flex h-8 w-8 items-center justify-center rounded-md border border-accent/40 bg-accent/10 text-accent transition-colors group-hover:bg-accent/20">
-            <Terminal size={16} />
+          {/* La marca es la barra del incidente: alerta, corte y medición. */}
+          <span className="flex h-8 w-8 items-center justify-center rounded-md border border-base-500 bg-base-800 transition-colors group-hover:border-accent/50">
+            <Marca className="w-[18px]" />
           </span>
-          <span className="hidden whitespace-nowrap font-mono text-sm font-semibold text-white sm:inline">
-            samuel<span className="text-accent">.garcia</span>
-            <span className="animate-blink text-accent">_</span>
+          <span className="hidden whitespace-nowrap text-[15px] font-semibold tracking-tight text-white sm:inline">
+            Samuel García
           </span>
         </button>
 
@@ -148,7 +149,7 @@ export default function Navbar() {
                     apilado bajo el icono en móvil, el completo al lado
                     desde `md`. Ambos `aria-hidden`: el nombre ya lo da el
                     aria-label del botón y no hay que leerlo dos veces. */}
-                <span aria-hidden="true" className="font-mono text-xs md:hidden">
+                <span aria-hidden="true" className="text-xs md:hidden">
                   {texto.navCorto}
                 </span>
                 <span aria-hidden="true" className="hidden md:inline">

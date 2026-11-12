@@ -1,9 +1,10 @@
-import { useState } from 'react'
-import { Activity, ArrowDown, ArrowRight, ArrowUpRight, Download, FlaskConical, Languages, Linkedin, MapPin, Github } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { Activity, ArrowDown, ArrowRight, ArrowUpRight, Download, FlaskConical, Languages, Linkedin, MapPin, Github, Play } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useVista } from '../navegacion/VistaProvider'
 import { useEstado } from '../estado/EstadoProvider'
 import { useCaos } from '../caos/CaosProvider'
+import { useAvisos } from '../avisos/AvisosProvider'
 import { MEDIDAS, num } from '../data/medidas.js'
 import StatusBadge from './ui/StatusBadge'
 import CopyButton from './ui/CopyButton'
@@ -173,92 +174,195 @@ function Acceso({ Icono, titulo, texto, onClick, disabled = false, vivo = false 
  * consultado desde el navegador de quien mira, el MTTD medido en el lab
  * con su bitácora, y las dos puertas a lo que un PDF no puede mostrar.
  */
+/**
+ * El simulacro contado dentro del panel, con el mismo dibujo que la línea
+ * del lab: ámbar hasta que salta la alerta, verde mientras actúa el
+ * runbook, rayado mientras se verifica. La barra avanza en tiempo real y,
+ * al terminar, queda el resultado escrito. El alto es fijo en los tres
+ * estados (reposo, en curso, terminado) para que la portada no salte.
+ */
+function Simulacro({ onInyectar }) {
+  const { hero } = useContenido()
+  const { irA } = useVista()
+  const { activo, fase, terminaEn, autohealingMs, simulacros } = useCaos()
+  const t = hero.panel.simulacro
+
+  const ultimo = simulacros.at(-1)
+  const terminado = !activo && ultimo?.fin != null
+  const segundos = terminado ? Math.round((ultimo.fin - ultimo.inicio) / 1000) : null
+
+  const mensaje = activo
+    ? (t.fases[fase] ?? t.fases.inyeccion)
+    : terminado
+      ? ultimo.cerradoPor === 'auto-healing'
+        ? t.recuperado(segundos)
+        : t.restaurado
+      : t.reposo
+
+  return (
+    <div className={`rounded-lg border transition-colors duration-300 ${activo ? 'border-warn/40 bg-warn/[0.04]' : 'border-base-600 bg-base-800/50'}`}>
+      <button
+        type="button"
+        onClick={onInyectar}
+        disabled={activo}
+        className="group flex w-full items-center gap-3.5 px-4 pt-3 text-left disabled:cursor-default"
+      >
+        <span
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md border bg-base-900 transition-colors ${
+            activo ? 'border-warn/40 text-warn' : 'border-accent/30 text-accent'
+          }`}
+        >
+          <FlaskConical size={16} aria-hidden="true" />
+        </span>
+        <span className="min-w-0 flex-1 text-sm font-semibold text-white">{t.titulo}</span>
+        {/* Un "play" y no una flecha: esto ejecuta algo acá, no lleva a otra vista. */}
+        <span
+          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors ${
+            activo ? 'border-base-600 text-slate-600' : 'border-accent/40 text-accent group-hover:bg-accent group-hover:text-base-900'
+          }`}
+        >
+          <Play size={13} aria-hidden="true" />
+        </span>
+      </button>
+
+      <div className="px-4 pb-3 pt-3">
+        <div
+          role="img"
+          aria-label={t.tramos}
+          className="h-2 overflow-hidden rounded-[2px] bg-base-600/50"
+        >
+          {(activo || terminado) && (
+            <div
+              // La clave reinicia el avance en cada simulacro nuevo.
+              key={activo ? terminaEn : 'fin'}
+              className={`flex h-full ${activo ? 'animate-avance' : ''} ${terminado && ultimo.cerradoPor !== 'auto-healing' ? 'opacity-40' : ''}`}
+              style={activo ? { animationDuration: `${autohealingMs}ms` } : undefined}
+            >
+              <span className="h-full w-[15%] shrink-0 bg-warn" />
+              <span className="h-full w-[60%] shrink-0 border-l-2 border-base-800 bg-ok" />
+              <span className="rayado h-full flex-1 border-l-2 border-base-800 text-accent" />
+            </div>
+          )}
+        </div>
+        <p className="mt-2 flex min-h-[2.5rem] flex-wrap items-center gap-x-2 text-[13px] leading-snug text-slate-400" aria-live="polite">
+          <span className={terminado ? 'text-slate-200' : ''}>{mensaje}</span>
+          {terminado && (
+            <a
+              href="#caos"
+              onClick={(e) => {
+                e.preventDefault()
+                irA('laboratorio', 'caos')
+              }}
+              className="inline-flex items-center gap-1 font-medium text-accent transition-colors hover:text-white"
+            >
+              {t.verQuePaso} <ArrowRight size={13} aria-hidden="true" />
+            </a>
+          )}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * La columna derecha de la portada, en dos partes que no se mezclan:
+ * arriba, un caso medido en el lab (con su bitácora); abajo, este sitio
+ * ahora mismo: su estado real y un simulacro que corre acá adentro.
+ */
 function PanelVivo() {
   const { hero, lang, labMetrics } = useContenido()
   const { irA } = useVista()
   const { estado, texto: textoEstado } = useEstadoPanel()
-  const { activo: simulacro, inyectar } = useCaos()
+  const { inyectar } = useCaos()
+  const { setCaosEnPanel } = useAvisos()
   const p = hero.panel
 
   const bitacora = labMetrics.items.find((m) => m.id === 'mttd')?.repo
 
+  // Con la parte en vivo a la vista, el simulacro se cuenta acá y el aviso
+  // flotante se calla (ver AvisosProvider). Fuera de vista, vuelve.
+  const enVivo = useRef(null)
+  useEffect(() => {
+    const nodo = enVivo.current
+    if (!nodo || typeof IntersectionObserver === 'undefined') return
+    const obs = new IntersectionObserver(([e]) => setCaosEnPanel(e.isIntersecting), { threshold: 0.6 })
+    obs.observe(nodo)
+    return () => {
+      obs.disconnect()
+      setCaosEnPanel(false)
+    }
+  }, [setCaosEnPanel])
+
   return (
     <div id="panel-vivo" className="card scroll-mt-24 p-6 shadow-2xl shadow-black/40">
-      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-        <p className="whitespace-nowrap text-sm font-semibold text-white">{p.titulo}</p>
-        <p className="flex items-center gap-2 text-[13px] text-slate-400" aria-live="polite">
-          {estado in CON_DATO && <span className={`h-2 w-2 shrink-0 rounded-full ${PUNTO[estado]}`} aria-hidden="true" />}
-          {textoEstado}
-        </p>
-      </div>
-
-      <div className="mt-5 border-t border-base-600 pt-5">
-        {/* El hallazgo es el titular; el MTTD queda abajo como dato. */}
-        <p className="text-[13px] text-slate-400">{p.hallazgoEtiqueta}</p>
-        <p className="mt-2 text-balance text-2xl font-bold leading-[1.15] tracking-tight text-white sm:text-[2rem]">
-          {p.hallazgo}
-        </p>
-        <p className="mt-3 text-sm leading-relaxed text-slate-400">{p.mttdTexto}</p>
-        <LineaIncidente />
-        <p className="mt-4 flex flex-wrap items-baseline gap-x-2 text-[13px] text-slate-400">
-          <Sigla id="mttd">MTTD</Sigla>
-          <span className="text-xl font-semibold tabular-nums text-white">{num(MEDIDAS.mttd, lang)} s</span>
-          <span>{p.mttdEtiqueta}</span>
-        </p>
-        <div className="mt-2 flex flex-wrap items-center gap-x-5">
-          <a
-            href="#hallazgo"
-            onClick={(e) => {
-              e.preventDefault()
-              irA(null, 'hallazgo')
-            }}
-            className="inline-flex items-center gap-1.5 py-1.5 text-[13px] font-medium text-accent transition-colors hover:text-white"
-          >
-            {p.diagnostico} <ArrowRight size={14} aria-hidden="true" />
-          </a>
-          {bitacora && (
-            <a
-              href={bitacora}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="inline-flex items-center gap-1.5 py-1.5 text-[13px] font-medium text-slate-400 transition-colors hover:text-white"
-            >
-              {p.bitacora} <ArrowUpRight size={14} aria-hidden="true" />
-            </a>
-          )}
-        </div>
-      </div>
-
-      <div className="mt-4 grid gap-2.5 border-t border-base-600 pt-5">
-        {/* El simulacro corre acá mismo: el estado de arriba pasa a
-            degradado, salta el aviso y en 10 s vuelve solo. Es el mejor
-            argumento del sitio y no tiene que costar un cambio de vista. */}
-        <Acceso
-          Icono={FlaskConical}
-          titulo={p.simulacro.titulo}
-          texto={simulacro ? p.simulacro.enCurso : p.simulacro.texto}
-          onClick={() => {
-            inyectar('latency')
-            // En el teléfono el estado del panel puede haber quedado arriba,
-            // fuera de vista: se lo trae para que el cambio se vea.
-            if (window.matchMedia('(max-width: 1023px)').matches) {
-              document.getElementById('panel-vivo')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-            }
-          }}
-          disabled={simulacro}
-          vivo={simulacro}
-        />
-        <Acceso Icono={Activity} titulo={p.tablero.titulo} texto={p.tablero.texto} onClick={() => irA('observabilidad')} />
+      {/* ── Un caso del lab ─────────────────────────────────── */}
+      <p className="text-[13px] text-slate-400">{p.hallazgoEtiqueta}</p>
+      <p className="mt-2 text-balance text-2xl font-bold leading-[1.15] tracking-tight text-white sm:text-[2rem]">
+        {p.hallazgo}
+      </p>
+      <p className="mt-3 text-sm leading-relaxed text-slate-400">{p.mttdTexto}</p>
+      <LineaIncidente />
+      <p className="mt-4 flex flex-wrap items-baseline gap-x-2 text-[13px] text-slate-400">
+        <Sigla id="mttd">MTTD</Sigla>
+        <span className="text-xl font-semibold tabular-nums text-white">{num(MEDIDAS.mttd, lang)} s</span>
+        <span>{p.mttdEtiqueta}</span>
+      </p>
+      <div className="mt-2 flex flex-wrap items-center gap-x-5">
         <a
-          href="#caos"
+          href="#hallazgo"
           onClick={(e) => {
             e.preventDefault()
-            irA('laboratorio')
+            irA(null, 'hallazgo')
           }}
-          className="inline-flex min-h-[40px] items-center gap-1.5 self-start text-[13px] font-medium text-slate-400 transition-colors hover:text-white"
+          className="inline-flex items-center gap-1.5 py-1.5 text-[13px] font-medium text-accent transition-colors hover:text-white"
         >
-          {p.simulacro.masSimulacros} <ArrowRight size={14} aria-hidden="true" />
+          {p.diagnostico} <ArrowRight size={14} aria-hidden="true" />
         </a>
+        {bitacora && (
+          <a
+            href={bitacora}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="inline-flex items-center gap-1.5 py-1.5 text-[13px] font-medium text-accent transition-colors hover:text-white"
+          >
+            {p.bitacora} <ArrowUpRight size={14} aria-hidden="true" />
+          </a>
+        )}
+      </div>
+
+      {/* ── Este sitio, ahora ───────────────────────────────── */}
+      <div id="en-vivo" ref={enVivo} className="mt-5 scroll-mt-24 border-t border-base-600 pt-5">
+        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+          <p className="whitespace-nowrap text-sm font-semibold text-white">{p.titulo}</p>
+          <p className="flex items-center gap-2 text-[13px] text-slate-400" aria-live="polite">
+            {estado in CON_DATO && <span className={`h-2 w-2 shrink-0 rounded-full ${PUNTO[estado]}`} aria-hidden="true" />}
+            {textoEstado}
+          </p>
+        </div>
+
+        <div className="mt-4 grid gap-2.5">
+          <Simulacro
+            onInyectar={() => {
+              inyectar('latency')
+              // En el teléfono esta parte puede haber quedado a medias fuera
+              // de vista: se la trae para que el simulacro se vea entero.
+              if (window.matchMedia('(max-width: 1023px)').matches) {
+                document.getElementById('en-vivo')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+              }
+            }}
+          />
+          <Acceso Icono={Activity} titulo={p.tablero.titulo} texto={p.tablero.texto} onClick={() => irA('observabilidad')} />
+          <a
+            href="#caos"
+            onClick={(e) => {
+              e.preventDefault()
+              irA('laboratorio')
+            }}
+            className="inline-flex min-h-[40px] items-center gap-1.5 self-start text-[13px] font-medium text-slate-400 transition-colors hover:text-white"
+          >
+            {p.simulacro.masSimulacros} <ArrowRight size={14} aria-hidden="true" />
+          </a>
+        </div>
       </div>
     </div>
   )
@@ -283,11 +387,11 @@ export default function Hero() {
               {profile.alias}
             </h1>
 
-            <p className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-sm text-slate-400">
+            <p className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-[15px] text-slate-400">
               <span>{profile.rol}</span>
               <ArrowRight size={14} className="text-slate-500" aria-hidden="true" />
               <span className="sr-only">{hero.transicion}</span>
-              <span className="text-slate-200">{profile.target}</span>
+              <span className="font-semibold text-slate-100">{profile.target}</span>
             </p>
 
             {/* Lo que antes era una grilla de cuatro tarjetas: una línea.

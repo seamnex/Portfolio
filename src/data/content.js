@@ -93,8 +93,18 @@ export const hero = {
     bitacora: 'Ver la bitácora',
     simulacro: {
       titulo: 'Romper algo y ver cómo se recupera',
-      texto: 'Inyecta una caída de latencia acá mismo; se cura sola en 10 s',
-      enCurso: 'Simulacro en curso: mirá el estado de arriba y el aviso',
+      reposo: 'Un incidente simulado de 10 s: falla, alerta, runbook y verificación.',
+      // Lo que va pasando, en lenguaje llano (la bitácora técnica está en Chaos Lab).
+      fases: {
+        inyeccion: 'Falla inyectada: la latencia del sitio se dispara…',
+        deteccion: 'La alerta saltó.',
+        diagnostico: 'El runbook tomó el incidente.',
+        remediacion: 'Remediación automática en curso…',
+      },
+      recuperado: (s) => `Se recuperó solo en ${s} s, sin que nadie toque nada.`,
+      restaurado: 'Simulacro cortado a mano antes de terminar.',
+      verQuePaso: 'Ver la bitácora',
+      tramos: 'Tramos del simulacro: alerta, runbook y verificación',
       masSimulacros: 'Más simulacros, runbooks y la consola en Chaos Lab',
     },
     tablero: {

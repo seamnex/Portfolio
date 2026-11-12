@@ -9,10 +9,7 @@ export default function Footer() {
     <footer className="relative z-10 border-t border-base-600 bg-base-900/60">
       <div className="container-x flex flex-col items-center justify-between gap-6 py-10 sm:flex-row">
         <div className="text-center sm:text-left">
-          <p className="font-mono text-sm text-white">
-            {profile.alias}
-            <span className="text-accent" aria-hidden="true">_</span>
-          </p>
+          <p className="text-sm font-semibold text-white">{profile.alias}</p>
           <p className="mt-1.5 text-xs text-slate-500">
             {profile.rol} · {profile.target}
           </p>

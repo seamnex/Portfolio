@@ -75,8 +75,17 @@ export const hero = {
     bitacora: 'See the run log',
     simulacro: {
       titulo: 'Break something and watch it recover',
-      texto: 'Injects a latency failure right here; it self-heals in 10 s',
-      enCurso: 'Drill running: watch the status above and the alert',
+      reposo: 'A simulated 10 s incident: failure, alert, runbook and verification.',
+      fases: {
+        inyeccion: 'Failure injected: the site latency spikes…',
+        deteccion: 'The alert fired.',
+        diagnostico: 'The runbook took the incident.',
+        remediacion: 'Automated remediation in progress…',
+      },
+      recuperado: (s) => `It recovered on its own in ${s} s, with nobody touching anything.`,
+      restaurado: 'Drill stopped by hand before it finished.',
+      verQuePaso: 'See the log',
+      tramos: 'Drill segments: alert, runbook and verification',
       masSimulacros: 'More drills, runbooks and the console in Chaos Lab',
     },
     tablero: {

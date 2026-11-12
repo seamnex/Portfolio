@@ -1,13 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Terminal prompt">
-  <!-- Misma marca que el logo del nav: el prompt de terminal en cyan sobre el
-       fondo profundo del sitio.
-       Diseñado para 16 px, no para verse bien ampliado: sin borde interior
-       (a 16 px se comía 2 de cada lado y solo agregaba ruido), glifo a
-       sangre y trazos de 8/64 = 2 px reales, que es el mínimo que sobrevive
-       al antialiasing. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Samuel García">
+  <!-- La marca del sitio: la barra del incidente. Ámbar hasta la alerta,
+       verde el corte, rayado la medición. Pensada para 16 px: tres bloques
+       gruesos y dos rayas, sin detalle que el antialiasing se coma. -->
+  <defs>
+    <clipPath id="m"><rect x="34" y="22" width="22" height="20" rx="3"/></clipPath>
+  </defs>
   <rect width="64" height="64" rx="12" fill="#0B0F19"/>
-  <g fill="none" stroke="#06B6D4" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="15,19 29,32 15,45"/>
-    <line x1="38" y1="45" x2="50" y2="45"/>
+  <rect x="8" y="22" width="16" height="20" rx="3" fill="#F59E0B"/>
+  <rect x="26" y="22" width="6" height="20" rx="2" fill="#10B981"/>
+  <rect x="34" y="22" width="22" height="20" rx="3" fill="#06B6D4" fill-opacity=".22"/>
+  <g clip-path="url(#m)" stroke="#06B6D4" stroke-width="5">
+    <line x1="30" y1="46" x2="46" y2="18"/>
+    <line x1="42" y1="46" x2="58" y2="18"/>
+    <line x1="54" y1="46" x2="70" y2="18"/>
   </g>
 </svg>

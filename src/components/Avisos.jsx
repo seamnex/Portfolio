@@ -134,7 +134,8 @@ function Aviso({ aviso: crudo, ultimo, onCerrar }) {
 
 export default function Avisos() {
   const { ui } = useContenido()
-  const { avisos, cerrar } = useAvisos()
+  const { avisos: todos, cerrar, caosEnPanel } = useAvisos()
+  const avisos = caosEnPanel ? todos.filter((a) => !a.clave?.startsWith('caos:')) : todos
 
   // La región existe siempre, aunque esté vacía: un `aria-live` que
   // aparece junto con su primer contenido no se anuncia.

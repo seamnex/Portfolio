@@ -64,7 +64,15 @@ export function AvisosProvider({ children }) {
     [cerrar],
   )
 
-  const valor = useMemo(() => ({ avisos, avisar, cerrar }), [avisos, avisar, cerrar])
+  // Mientras el panel en vivo de la portada está a la vista, el simulacro
+  // se cuenta ahí adentro: el aviso flotante encima sería decirlo dos veces
+  // y tapar justo lo que hay que mirar. El panel avisa cuándo está visible.
+  const [caosEnPanel, setCaosEnPanel] = useState(false)
+
+  const valor = useMemo(
+    () => ({ avisos, avisar, cerrar, caosEnPanel, setCaosEnPanel }),
+    [avisos, avisar, cerrar, caosEnPanel],
+  )
 
   return (
     <AvisosContext.Provider value={valor}>
