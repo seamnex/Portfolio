@@ -51,10 +51,12 @@ export const profile = {
 export const hero = {
   headline: ['From the critical incident', 'to resilience by design.'],
   transicion: 'moving into',
+  seguirLeyendo: 'Keep reading',
   subtitle:
     'I run P1/P2 incidents in high-volume environments — Fintech and Telco — leading War Rooms, restoring service and closing the loop with RCAs that stop the same failure from coming back. Today I am taking that operational discipline into SRE and DevOps: observability, automation and systems that fail rarely and recover fast.',
   panel: {
     titulo: 'This site, live',
+    tira: 'See the live panel',
     simulacroActivo: 'Failure drill in progress',
     mttdEtiqueta: `measured in my lab · target < ${n(MEDIDAS.mttdSensible)} s`,
     mttdTexto: `A real outage (rising 5xx) took ${n(MEDIDAS.mttd)} s to detect: above my target. Measuring it showed why: ${Math.round(MEDIDAS.ventanaInstrumento[0])} of the ${Math.round(MEDIDAS.mttr)} s were my own measurement window, not the incident.`,

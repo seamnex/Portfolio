@@ -59,11 +59,15 @@ export const hero = {
   headline: ['Del incidente crítico', 'a la resiliencia por diseño.'],
   // Lo lee el lector de pantalla en lugar de la flecha entre los dos roles.
   transicion: 'en transición a',
+  // En el teléfono el subtítulo arranca en dos líneas: la prueba va primero.
+  seguirLeyendo: 'Seguir leyendo',
   subtitle:
     'Gestiono incidentes P1/P2 en entornos de alto volumen —Fintech y Telecomunicaciones— liderando War Rooms, restaurando el servicio y cerrando el ciclo con RCA que evitan la reincidencia. Hoy llevo esa disciplina operacional hacia SRE y DevOps: observabilidad, automatización y sistemas que fallan poco y se recuperan rápido.',
   // Panel de la columna derecha de la portada (Hero.jsx > PanelVivo).
   panel: {
     titulo: 'Este sitio, en vivo',
+    // Tira compacta que lo anticipa en el teléfono, donde el panel queda abajo.
+    tira: 'Ver el panel en vivo',
     simulacroActivo: 'Simulacro de falla en curso',
     mttdEtiqueta: `medido en mi lab · objetivo < ${n(MEDIDAS.mttdSensible)} s`,
     // El número no llega al objetivo y el texto lo dice: lo que se muestra

@@ -1,4 +1,5 @@
-import { Activity, ArrowRight, ArrowUpRight, Download, FlaskConical, Languages, Linkedin, MapPin, Github } from 'lucide-react'
+import { useState } from 'react'
+import { Activity, ArrowDown, ArrowRight, ArrowUpRight, Download, FlaskConical, Languages, Linkedin, MapPin, Github } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useVista } from '../navegacion/VistaProvider'
 import { useEstado } from '../estado/EstadoProvider'
@@ -18,6 +19,46 @@ const PUNTO = {
   cargando: 'bg-slate-500',
 }
 
+/** El estado agregado del panel, con el simulacro por encima del real. */
+function useEstadoPanel() {
+  const { hero, ui } = useContenido()
+  const { agregado } = useEstado()
+  const { activo: simulacro } = useCaos()
+  return {
+    estado: simulacro ? 'degradado' : agregado,
+    texto: simulacro ? hero.panel.simulacroActivo : ui.estado.banner[agregado],
+  }
+}
+
+/**
+ * Anticipo del panel para el teléfono. Abajo de `lg` el panel queda debajo
+ * del pliegue, y es justo el diferencial: esta tira lo trae a la primera
+ * pantalla con el estado y el número, y lleva hasta él.
+ */
+function TiraVivo() {
+  const { hero, lang } = useContenido()
+  const { estado } = useEstadoPanel()
+
+  return (
+    <a
+      href="#panel-vivo"
+      onClick={(e) => {
+        e.preventDefault()
+        document.getElementById('panel-vivo')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }}
+      className="mt-5 flex min-h-[44px] items-center gap-3 rounded-lg border border-base-600 bg-base-800/50 px-4 py-2.5 text-[13px] text-slate-400 transition-colors hover:border-accent/50 lg:hidden"
+    >
+      <span className={`h-2 w-2 shrink-0 rounded-full ${PUNTO[estado] ?? PUNTO.desconocido}`} aria-hidden="true" />
+      <span className="flex-1">
+        MTTD <span className="font-semibold tabular-nums text-white">{num(MEDIDAS.mttd, lang)} s</span>
+        <span className="mx-1.5 text-slate-500" aria-hidden="true">·</span>
+        <span className="text-accent">{hero.panel.tira}</span>
+      </span>
+      <ArrowDown size={15} className="shrink-0 text-accent" aria-hidden="true" />
+    </a>
+  )
+}
+
 /**
  * La columna derecha de la portada: el sitio mostrándose a sí mismo.
  *
@@ -27,18 +68,15 @@ const PUNTO = {
  * con su bitácora, y las dos puertas a lo que un PDF no puede mostrar.
  */
 function PanelVivo() {
-  const { hero, ui, lang, labMetrics } = useContenido()
+  const { hero, lang, labMetrics } = useContenido()
   const { irA } = useVista()
-  const { agregado } = useEstado()
-  const { activo: simulacro } = useCaos()
+  const { estado, texto: textoEstado } = useEstadoPanel()
   const p = hero.panel
 
-  const estado = simulacro ? 'degradado' : agregado
-  const textoEstado = simulacro ? p.simulacroActivo : ui.estado.banner[agregado]
   const bitacora = labMetrics.items.find((m) => m.id === 'mttd')?.repo
 
   return (
-    <div className="card p-6 shadow-2xl shadow-black/40">
+    <div id="panel-vivo" className="card scroll-mt-24 p-6 shadow-2xl shadow-black/40">
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm font-semibold text-white">{p.titulo}</p>
         <p className="flex items-center gap-2 text-[13px] text-slate-400" aria-live="polite">
@@ -112,6 +150,7 @@ function PanelVivo() {
 
 export default function Hero() {
   const { hero, metrics, profile, ui } = useContenido()
+  const [subtituloEntero, setSubtituloEntero] = useState(false)
 
   return (
     <section id="inicio" className="relative z-10 overflow-hidden pb-10 pt-28 sm:pb-14 sm:pt-36">
@@ -139,11 +178,33 @@ export default function Hero() {
                 Son credenciales, no la prueba; la prueba está a la derecha. */}
             <p className="mt-3 text-[14px] text-slate-400">{metrics.map((m) => m.corto).join(" · ")}</p>
 
+            <TiraVivo />
+
             <p className="mt-6 text-balance text-2xl font-semibold leading-snug tracking-tight text-slate-200 sm:text-[1.7rem]">
               {hero.headline[0]} <span className="text-accent">{hero.headline[1]}</span>
             </p>
 
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-400">{hero.subtitle}</p>
+            {/* En el teléfono arranca en dos líneas para que la tira y los
+                botones entren en la primera pantalla; desde `lg` va entero. */}
+            <p
+              id="hero-subtitulo"
+              className={`mt-4 max-w-xl text-base leading-relaxed text-slate-400 lg:line-clamp-none ${
+                subtituloEntero ? '' : 'line-clamp-2'
+              }`}
+            >
+              {hero.subtitle}
+            </p>
+            {!subtituloEntero && (
+              <button
+                type="button"
+                aria-expanded="false"
+                aria-controls="hero-subtitulo"
+                onClick={() => setSubtituloEntero(true)}
+                className="mt-1 py-1.5 text-[13px] font-medium text-accent transition-colors hover:text-white lg:hidden"
+              >
+                {hero.seguirLeyendo}
+              </button>
+            )}
 
             {/* El par principal es CV y contacto: es lo que viene a hacer
                 un reclutador. Al laboratorio se llega desde el panel. */}
@@ -159,6 +220,7 @@ export default function Hero() {
               </a>
             </div>
 
+            {/* LinkedIn y GitHub solo abajo de `lg`: desde ahí ya están en la barra. */}
             <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-slate-500">
               <span className="inline-flex items-center gap-1.5">
                 <MapPin size={13} /> {profile.ubicacion}
@@ -170,7 +232,7 @@ export default function Hero() {
                 href={profile.linkedin}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="inline-flex items-center gap-1.5 py-1.5 transition-colors hover:text-accent"
+                className="inline-flex items-center gap-1.5 py-1.5 transition-colors hover:text-accent lg:hidden"
               >
                 <Linkedin size={13} /> LinkedIn
               </a>
@@ -179,7 +241,7 @@ export default function Hero() {
                   href={profile.github}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="inline-flex items-center gap-1.5 py-1.5 transition-colors hover:text-accent"
+                  className="inline-flex items-center gap-1.5 py-1.5 transition-colors hover:text-accent lg:hidden"
                 >
                   <Github size={13} /> GitHub
                 </a>
