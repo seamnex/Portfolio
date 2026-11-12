@@ -16,6 +16,14 @@
     background-attachment: fixed;
   }
 
+  /* Anillo de foco único para todo lo que no trae el suyo (selector de
+     idioma, redes, copiar, tarjetas): el outline por defecto del
+     navegador apenas se ve sobre este fondo. */
+  :focus-visible {
+    outline: 2px solid theme('colors.accent.DEFAULT');
+    outline-offset: 2px;
+  }
+
   ::selection {
     @apply bg-accent/30 text-white;
   }
@@ -125,6 +133,12 @@
 
   .btn-ghost {
     @apply btn border border-base-600 text-slate-300 hover:border-accent/50 hover:bg-base-700 hover:text-white;
+  }
+
+  /* La segunda acción principal: mismo peso visual que el primario pero
+     sin competir en relleno. Es Contactar, al lado de Descargar CV. */
+  .btn-outline {
+    @apply btn border-2 border-accent/80 text-accent hover:border-accent hover:bg-accent/10;
   }
 
   .section-label {

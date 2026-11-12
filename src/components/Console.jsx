@@ -47,8 +47,10 @@ function Linea({ linea }) {
     case 'raw':
       // `whitespace-pre` es lo que hace que las tablas de kubectl y el JSON
       // conserven su alineación; sin eso el navegador colapsa los espacios y
-      // la salida deja de parecer una salida.
-      return <p className={`overflow-x-auto whitespace-pre ${color}`}>{linea.texto || ' '}</p>
+      // la salida deja de parecer una salida. El scroll horizontal lo pone
+      // el contenedor de toda la consola: uno por línea dejaba una barrita
+      // gris debajo de cada renglón largo en el teléfono.
+      return <p className={`w-max min-w-full whitespace-pre ${color}`}>{linea.texto || ' '}</p>
 
     default:
       return <p className={`whitespace-pre-wrap ${color}`}>{linea.texto || ' '}</p>
@@ -287,7 +289,7 @@ export default function Console() {
         <div
           ref={scrollRef}
           onClick={() => inputRef.current?.focus()}
-          className="h-[24rem] overflow-y-auto p-4 font-mono text-[12px] leading-relaxed sm:text-[12.5px]"
+          className="h-[24rem] overflow-auto p-4 font-mono text-[12px] leading-relaxed sm:text-[12.5px]"
         >
           <p className="text-slate-600">{ui.consola.ayudaInicial}</p>
 

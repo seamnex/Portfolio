@@ -236,6 +236,10 @@ export const projectsMeta = {
   solucion: 'The solution',
   codigo: 'Code',
   demo: 'Demo',
+  verMas: 'Show solution and details',
+  verMenos: 'Hide details',
+  verTodos: (n) => `Show all ${n} labs`,
+  verMenosLabs: 'Show featured only',
   filtros: { todos: 'All', 'DevOps Lab': 'DevOps Labs', 'Proyecto Web': 'Web projects' },
 }
 
@@ -539,7 +543,6 @@ export const ui = {
 
   acciones: {
     descargarCV: 'Download CV',
-    verLabs: 'See Labs & Projects',
     contactar: 'Get in touch',
     copiar: 'Copy',
     copiado: 'Copied',
@@ -716,9 +719,10 @@ export const ui = {
     fuenteActions: 'source: github actions · main',
     objetivo: 'Target',
     cumple: 'met',
-    noCumple: 'missed',
+    noCumple: 'stretch goal',
+    objetivoDiario: 'daily',
     notaObjetivos:
-      'The targets are goals I set for this site, stricter than a portfolio needs. When a number is “missed”, the dashboard shows it instead of hiding it: the same principle as a blameless postmortem.',
+      'The targets are goals I set for this site, stricter than a portfolio needs. When a number is not there yet, the dashboard marks it as a “stretch goal” instead of hiding it: the same principle as a blameless postmortem.',
     sinDatos: 'no data',
     midiendo: 'measuring…',
     comoSeMide: 'How it is measured',
@@ -951,7 +955,7 @@ export const ui = {
       enCurso: 'drill running · counting',
     },
     avisoSinSimulacros:
-      'The consumption comes from the drills in the chaos engineering sandbox above. Inject one and watch it eat the budget in real time: ten seconds of drill are ten seconds of a 99.99% month.',
+      'The consumption comes from the drills in the chaos engineering sandbox, in the Chaos Lab view. Inject one and watch it eat the budget in real time: ten seconds of drill are ten seconds of a 99.99% month.',
     avisoConSimulacros:
       'These seconds are wall-clock and measured, but the incident that produced them was simulated: this is budget spent on a drill, not on an outage. A drill counts in full, whether outage or degradation — weighting degradation would require knowing what fraction of requests failed, and that was not measured here.',
   },

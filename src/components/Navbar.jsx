@@ -97,7 +97,7 @@ export default function Navbar() {
           role="tablist"
           aria-label={ui.vistas.aria}
           onKeyDown={alTeclear}
-          className="flex min-w-0 items-center gap-1"
+          className="flex min-w-0 items-center gap-0.5 sm:gap-1"
         >
           {PESTANAS.map((p) => {
             const texto = ui.vistas[p.id]

@@ -78,7 +78,7 @@ function Tile({
         {veredicto != null && (
           <span
             className={`shrink-0 rounded border px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wider ${
-              veredicto ? 'border-ok/30 bg-ok/10 text-ok' : 'border-warn/30 bg-warn/10 text-warn'
+              veredicto ? 'border-ok/30 bg-ok/10 text-ok' : 'border-base-500 bg-base-800 text-slate-400'
             }`}
           >
             {veredicto ? t.cumple : t.noCumple}
@@ -227,6 +227,12 @@ export default function Telemetry() {
           </p>
         )}
 
+        {/* Antes de los números y no después: quien no es técnico tiene
+            que leer qué significa "meta exigente" antes de ver el badge. */}
+        <p className="border-b border-base-600 bg-base-800/40 px-5 py-3 text-[13px] leading-relaxed text-slate-400">
+          {t.notaObjetivos}
+        </p>
+
         <div className="grid gap-px bg-base-600/40 sm:grid-cols-2 lg:grid-cols-3">
           <div className="bg-base-700/40 p-1">
             <Tile
@@ -242,7 +248,7 @@ export default function Telemetry() {
                   ? `${t.cadencia[cad] ?? ''} · ${t.corridasVerdes(dora.despliegues.muestras)}`
                   : sinDato
               }
-              objetivo={OBJETIVOS.despliegues.etiqueta}
+              objetivo={t.objetivoDiario}
               serie={dora?.despliegues.serie}
               tipoSerie="barras"
             />
@@ -255,7 +261,7 @@ export default function Telemetry() {
               titulo={t.tiles.leadTime}
               valor={lt?.valor ?? null}
               unidad={lt?.unidad}
-              tone={cumple(dora?.leadTime?.valor, OBJETIVOS.leadTime) ? 'ok' : 'warn'}
+              tone={cumple(dora?.leadTime?.valor, OBJETIVOS.leadTime) ? 'ok' : 'accent'}
               veredicto={cumple(dora?.leadTime?.valor, OBJETIVOS.leadTime)}
               detalle={dora?.leadTime ? t.medianaDe(dora.leadTime.muestras) : sinDato}
               objetivo={OBJETIVOS.leadTime.etiqueta}
@@ -275,7 +281,7 @@ export default function Telemetry() {
               titulo={t.tiles.cfr}
               valor={dora?.cfr ? num(dora.cfr.valor.toFixed(1), lang) : null}
               unidad="%"
-              tone={cumple(dora?.cfr?.valor, OBJETIVOS.cfr) ? 'ok' : 'crit'}
+              tone={cumple(dora?.cfr?.valor, OBJETIVOS.cfr) ? 'ok' : 'accent'}
               veredicto={cumple(dora?.cfr?.valor, OBJETIVOS.cfr)}
               detalle={dora?.cfr ? t.fallidasDe(dora.cfr.fallidas, dora.cfr.muestras) : sinDato}
               objetivo={OBJETIVOS.cfr.etiqueta}
@@ -300,7 +306,7 @@ export default function Telemetry() {
               serie={[MEDIDAS.mttd, MEDIDAS.mttdSensible]}
               tipoSerie="barras"
               detalle={t.mttdDetalle(MEDIDAS.ventanaSegundos, MEDIDAS.umbralPorcentaje)}
-              objetivo={OBJETIVOS.mttd.etiqueta}
+              objetivo={`< ${num(MEDIDAS.mttdSensible, lang)} s`}
             />
           </div>
 
@@ -334,12 +340,6 @@ export default function Telemetry() {
             </div>
           </div>
         </div>
-
-        {/* Lee "fuera" como lo que es: una meta exigente mostrada tal
-            cual, no un error del sitio. */}
-        <p className="border-t border-base-600 bg-base-800/40 px-5 py-3 text-[13px] leading-relaxed text-slate-400">
-          {t.notaObjetivos}
-        </p>
       </div>
     </Bloque>
   )

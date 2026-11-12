@@ -1,4 +1,4 @@
-import { ArrowRight, Download, FlaskConical, FolderGit2, Languages, Linkedin, MapPin, Github } from 'lucide-react'
+import { ArrowRight, Download, FlaskConical, Languages, Linkedin, MapPin, Github } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useVista } from '../navegacion/VistaProvider'
 import StatusBadge from './ui/StatusBadge'
@@ -44,7 +44,7 @@ export default function Hero() {
             <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-400">{hero.subtitle}</p>
 
             {/* El par principal es CV y contacto: es lo que viene a hacer
-                un reclutador. Los labs quedan como tercera opción. */}
+                un reclutador. A los labs se llega por la fila de abajo. */}
             <div className="mt-8 flex flex-wrap gap-3">
               {/* `download` con nombre explícito: el archivo servido se llama
                   cv-…-sre.pdf, pero en la carpeta de descargas de un reclutador
@@ -52,11 +52,8 @@ export default function Hero() {
               <a href={profile.cv} download={profile.cvArchivo} className="btn-primary">
                 <Download size={16} /> {ui.acciones.descargarCV}
               </a>
-              <a href="#contacto" className="btn-ghost">
+              <a href="#contacto" className="btn-outline">
                 {ui.acciones.contactar} <ArrowRight size={16} />
-              </a>
-              <a href="#labs" className="btn-ghost">
-                <FolderGit2 size={16} /> {ui.acciones.verLabs}
               </a>
             </div>
 

@@ -123,7 +123,8 @@ export const labMetrics = {
     {
       id: 'mttd',
       icono: 'Siren',
-      tone: 'crit',
+      // Acento y no coral: es un logro medido, no un incidente.
+      tone: 'accent',
       valor: n(MEDIDAS.mttd),
       unidad: 's',
       titulo: 'MTTD de incidentes',
@@ -290,6 +291,10 @@ export const projectsMeta = {
   solucion: 'La solución',
   codigo: 'Código',
   demo: 'Demo',
+  verMas: 'Ver solución y detalle',
+  verMenos: 'Ocultar detalle',
+  verTodos: (n) => `Ver los ${n} labs`,
+  verMenosLabs: 'Mostrar solo los destacados',
   filtros: { todos: 'Todos', 'DevOps Lab': 'DevOps Labs', 'Proyecto Web': 'Proyectos Web' },
 }
 
@@ -672,7 +677,6 @@ export const ui = {
 
   acciones: {
     descargarCV: 'Descargar CV',
-    verLabs: 'Ver Labs & Proyectos',
     contactar: 'Contactar',
     copiar: 'Copiar',
     copiado: 'Copiado',
@@ -873,12 +877,12 @@ export const ui = {
     fuenteActions: 'fuente: github actions · main',
     objetivo: 'Objetivo',
     cumple: 'cumple',
-    noCumple: 'fuera',
-    // Debajo del tablero: un "fuera" no es una falla escondida, es una
-    // meta exigente que se muestra igual. Sin esto, alguien que no es
-    // técnico lee el ámbar como un error del sitio.
+    noCumple: 'meta exigente',
+    objetivoDiario: 'diario',
+    // Arriba del tablero: un número que no llega al objetivo no es una
+    // falla escondida, es una meta exigente que se muestra igual.
     notaObjetivos:
-      'Los objetivos son metas que me puse para este sitio, más exigentes de lo que necesita un portfolio. Cuando un número queda «fuera», el tablero lo muestra en vez de esconderlo: es el mismo criterio de un postmortem sin culpables.',
+      'Los objetivos son metas que me puse para este sitio, más exigentes de lo que necesita un portfolio. Cuando un número todavía no llega, el tablero lo marca como «meta exigente» en vez de esconderlo: es el mismo criterio de un postmortem sin culpables.',
     sinDatos: 'sin datos',
     midiendo: 'midiendo…',
     comoSeMide: 'Cómo se mide',
@@ -1114,7 +1118,7 @@ export const ui = {
       enCurso: 'simulacro en curso · sumando',
     },
     avisoSinSimulacros:
-      'El consumo lo generan los simulacros del sandbox de chaos engineering de más arriba. Inyectá uno y mirá cómo se come el presupuesto en tiempo real: diez segundos de simulacro son diez segundos de un mes de 99,99 %.',
+      'El consumo lo generan los simulacros del sandbox de chaos engineering, en la vista Chaos Lab. Inyectá uno y mirá cómo se come el presupuesto en tiempo real: diez segundos de simulacro son diez segundos de un mes de 99,99 %.',
     avisoConSimulacros:
       'Estos segundos son de reloj y están medidos, pero el incidente que los produjo fue simulado: es presupuesto gastado en un simulacro, no en una caída. Un simulacro cuenta entero, sea caída o degradación — ponderar la degradación exigiría saber qué fracción de las peticiones falló, y eso acá no se midió.',
   },

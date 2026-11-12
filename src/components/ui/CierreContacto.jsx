@@ -30,12 +30,13 @@ export default function CierreContacto() {
       </div>
 
       <div className="flex shrink-0 flex-wrap gap-3">
-        <button type="button" onClick={() => irA('perfil', 'contacto')} className="btn-primary">
-          {ui.acciones.contactar} <ArrowRight size={16} aria-hidden="true" />
-        </button>
-        <a href={profile.cv} download={profile.cvArchivo} className="btn-ghost">
+        {/* Mismo par y mismo orden que la portada. */}
+        <a href={profile.cv} download={profile.cvArchivo} className="btn-primary">
           <Download size={16} aria-hidden="true" /> {ui.acciones.descargarCV}
         </a>
+        <button type="button" onClick={() => irA('perfil', 'contacto')} className="btn-outline">
+          {ui.acciones.contactar} <ArrowRight size={16} aria-hidden="true" />
+        </button>
       </div>
     </section>
   )

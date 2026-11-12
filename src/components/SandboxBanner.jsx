@@ -87,7 +87,7 @@ export default function SandboxBanner() {
             </ul>
 
             <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3">
-              <button type="button" onClick={() => irA('observabilidad')} className="btn-primary">
+              <button type="button" onClick={() => irA('observabilidad')} className="btn-ghost">
                 {t.abrir}
                 <ArrowRight size={16} aria-hidden="true" />
               </button>

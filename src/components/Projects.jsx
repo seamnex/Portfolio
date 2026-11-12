@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { ExternalLink, Github, Sparkles, TriangleAlert, Wrench } from 'lucide-react'
+import { useId, useMemo, useState } from 'react'
+import { ChevronDown, ExternalLink, Github, Sparkles, TriangleAlert, Wrench } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useEstado } from '../estado/EstadoProvider'
 import Bloque from './ui/Bloque'
@@ -11,8 +11,18 @@ import CIBadge from './ui/CIBadge'
 // `projectsMeta.filtros`.
 const CATEGORIAS = ['DevOps Lab', 'Proyecto Web']
 
+// Cuántos labs se muestran antes de "Ver los N". Siete tarjetas completas
+// hacían de esta vista un muro de ~15.000 px en el teléfono, y el cierre
+// de contacto quedaba donde nadie llega. Los primeros del array son los
+// destacados: el orden de `projects` en content.js es la curaduría.
+const DESTACADOS = 3
+
 function ProjectCard({ p, meta, pipeline }) {
   const activo = p.estado === 'Activo' || p.estado === 'Active'
+  // Cerrada, la tarjeta dice qué problema ataca el lab; la solución, los
+  // logros, el comando y el stack son para quien quiere profundizar.
+  const [abierta, setAbierta] = useState(false)
+  const idDetalle = useId()
 
   return (
     <article className="card card-hover group flex min-w-0 flex-col p-6">
@@ -54,13 +64,26 @@ function ProjectCard({ p, meta, pipeline }) {
           pipeline no lleva badge — ver `pipelines` en data/servicios.js. */}
       <CIBadge pipeline={pipeline} className="mt-4 self-start" />
 
-      <div className="mt-5 space-y-4">
-        <div>
-          <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-crit">
-            <TriangleAlert size={12} /> {meta.problema}
-          </p>
-          <p className="mt-2 text-[13.5px] leading-relaxed text-slate-400">{p.problema}</p>
-        </div>
+      <div className="mt-5">
+        <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-crit">
+          <TriangleAlert size={12} /> {meta.problema}
+        </p>
+        <p className="mt-2 text-[13.5px] leading-relaxed text-slate-400">{p.problema}</p>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setAbierta((v) => !v)}
+        aria-expanded={abierta}
+        aria-controls={idDetalle}
+        className="mt-4 inline-flex items-center gap-1.5 self-start py-1.5 font-mono text-[12px] text-accent transition-colors hover:text-white"
+      >
+        {abierta ? meta.verMenos : meta.verMas}
+        <ChevronDown size={14} className={`transition-transform duration-200 ${abierta ? 'rotate-180' : ''}`} aria-hidden="true" />
+      </button>
+
+      <div id={idDetalle} hidden={!abierta}>
+      <div className="mt-4">
         <div>
           <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-ok">
             <Wrench size={12} /> {meta.solucion}
@@ -93,6 +116,7 @@ function ProjectCard({ p, meta, pipeline }) {
             {s}
           </span>
         ))}
+      </div>
       </div>
 
       {/* Sin repo ni demo publicados, no mostramos la barra vacía */}
@@ -128,6 +152,7 @@ export default function Projects() {
   const { projects, projectsMeta } = useContenido()
   const { pipelineDe } = useEstado()
   const [filtro, setFiltro] = useState('todos')
+  const [todos, setTodos] = useState(false)
 
   // Se ofrecen solo los filtros que tienen al menos un proyecto detrás: una
   // pestaña que no muestra nada es peor que no tener la pestaña. Y si queda una
@@ -138,8 +163,9 @@ export default function Projects() {
     return disponibles.length > 1 ? ['todos', ...disponibles] : []
   }, [projects])
 
-  const visibles =
+  const filtrados =
     filtro === 'todos' ? projects : projects.filter((p) => p.categoria.startsWith(filtro))
+  const visibles = todos ? filtrados : filtrados.slice(0, DESTACADOS)
 
   return (
     <Bloque id="labs" label={projectsMeta.label} titulo={projectsMeta.titulo} bajada={projectsMeta.bajada}>
@@ -167,6 +193,15 @@ export default function Projects() {
           <ProjectCard key={p.id} p={p} meta={projectsMeta} pipeline={pipelineDe(p.links.repo)} />
         ))}
       </div>
+
+      {filtrados.length > DESTACADOS && (
+        <div className="mt-6 flex justify-center">
+          <button type="button" onClick={() => setTodos((v) => !v)} aria-expanded={todos} className="btn-ghost">
+            {todos ? projectsMeta.verMenosLabs : projectsMeta.verTodos(filtrados.length)}
+            <ChevronDown size={16} className={`transition-transform duration-200 ${todos ? 'rotate-180' : ''}`} aria-hidden="true" />
+          </button>
+        </div>
+      )}
     </Bloque>
   )
 }
