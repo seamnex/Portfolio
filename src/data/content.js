@@ -326,7 +326,7 @@ export const projectsMeta = {
   label: 'DevOps Labs',
   titulo: 'Lo que construyo para entender cómo se rompe',
   bajada:
-    'Cada laboratorio nace de una pregunta operativa concreta. No son ejercicios de curso: son entornos donde reproduzco fallas, mido detección y valido que la respuesta funcione antes de necesitarla en producción.',
+    'Cada laboratorio nace de una pregunta operativa concreta: reproduzco la falla, mido la detección y valido la respuesta antes de necesitarla en producción.',
   problema: 'El problema',
   solucion: 'La solución',
   codigo: 'Código',
@@ -689,7 +689,7 @@ export const ui = {
       aviso: 'con simulacro',
       label: 'Observabilidad & SRE',
       bajada:
-        'Todo lo que este sitio mide de sí mismo, con la fuente de cada número a la vista: las métricas DORA del pipeline que publica esta página, la latencia p95 medida desde tu navegador, la topología en vivo de lo que hay abajo y el presupuesto de error que sale del SLO. Nada está precargado ni estimado.',
+        'Todo lo que este sitio mide de sí mismo, con la fuente de cada número a la vista. Nada está precargado ni estimado.',
     },
     laboratorio: {
       nav: 'Chaos Lab',
@@ -699,7 +699,7 @@ export const ui = {
       aviso: 'en curso',
       label: 'Chaos engineering & respuesta a incidentes',
       bajada:
-        'El ciclo completo de un incidente, en el orden en que ocurre: se inyecta el fallo, salta la alerta, el runbook lleva la respuesta paso a paso y la consola registra cada movimiento. Los simulacros no se cancelan al cambiar de vista: lo que se deja corriendo acá sigue corriendo.',
+        'El ciclo completo de un incidente, en el orden en que ocurre: fallo, alerta, runbook y consola. Lo que dejás corriendo acá sigue corriendo al cambiar de vista.',
     },
   },
 
@@ -793,7 +793,7 @@ export const ui = {
     label: 'Chaos engineering',
     titulo: 'Rompé el sitio a propósito',
     bajada:
-      'Un simulacro de incidente completo en diez segundos: se inyecta el fallo, salta la alerta, el panel de estado se pone en rojo, la bitácora registra cada fase y el auto-healing devuelve el servicio sin que nadie toque nada.',
+      'Un simulacro de incidente completo en diez segundos: se inyecta el fallo, salta la alerta y el auto-healing devuelve el servicio sin que nadie toque nada.',
     aviso:
       'Es un simulacro y está rotulado como tal en todas partes: no rompe nada, no afecta a otros visitantes y los chequeos reales siguen corriendo por debajo. Lo que se pone en rojo es el escenario, no el sitio.',
     simulacro: 'Simulacro',
@@ -917,7 +917,7 @@ export const ui = {
     label: 'Telemetría & DORA',
     titulo: 'El tablero con el que este sitio se mira a sí mismo',
     bajada:
-      'Las métricas DORA calculadas sobre el pipeline que publica esta página, más la latencia que está midiendo tu navegador ahora mismo. Cada tarjeta muestra arriba el valor medido y abajo el objetivo declarado: cuando no coinciden, se ve.',
+      'Las métricas DORA del pipeline que publica esta página, más la latencia que mide tu navegador ahora mismo. Arriba el valor medido, abajo el objetivo: cuando no coinciden, se ve.',
     tablero: 'dora-board · portfolio',
     ventana: (d) => `ventana ${d} d`,
     fuenteActions: 'fuente: github actions · main',
@@ -985,7 +985,7 @@ export const ui = {
     label: 'Command Center',
     titulo: 'El runbook, paso a paso y en la consola de abajo',
     bajada:
-      'Tres síntomas que aparecen en cualquier guardia: el proceso que se come la memoria, el que se come el CPU y el pool de conexiones agotado. Cada uno abre su runbook y se ejecuta un paso por vez, en el orden en que se haría de verdad — con el diagnóstico antes de la mitigación, porque reiniciar primero borra la evidencia y garantiza que el incidente vuelva.',
+      'Tres síntomas de cualquier guardia: memoria, CPU y pool de conexiones agotado. Cada runbook corre un paso por vez, con el diagnóstico antes de la mitigación: reiniciar primero borra la evidencia.',
     aviso:
       'Esto es procedimiento, no una corrida registrada: los comandos son los que se escribirían, y las salidas son ilustrativas. No hay un cluster en vivo detrás y cada bloque que imprime la consola lo dice en su propia cabecera. Los incidentes que sí ocurrieron, con bitácora y números medidos, están en la sección de post-mortems.',
     abrir: 'Abrir runbook',
@@ -1130,7 +1130,7 @@ export const ui = {
     label: 'SLO & Error Budget',
     titulo: 'Cuántos minutos de caída compra cada nueve',
     bajada:
-      'Un SLO no es una promesa: es un presupuesto. Elegí el objetivo y mirá cuánto tiempo caído permite en cada período — y cuánto de ese presupuesto se comieron los simulacros de chaos engineering que corriste en esta sesión.',
+      'Un SLO no es una promesa: es un presupuesto. Elegí el objetivo y mirá cuánta caída permite, y cuánto se comieron los simulacros que corriste en esta sesión.',
     tablero: 'slo-calculator · downtime permitido',
     elegirObjetivo: 'Elegir objetivo de disponibilidad',
     elegirPeriodo: 'Elegir período del presupuesto',
@@ -1179,7 +1179,7 @@ export const ui = {
     tablero: 'topology · live',
     pista: 'pasá el cursor o tabulá sobre un nodo',
     bajada:
-      'Las tres piezas que sirven esta página, con el estado y la latencia que se están midiendo ahora mismo. Las dos flechas salen del navegador porque este sitio es estático: no hay backend en el medio que llame a GitHub por vos.',
+      'Las tres piezas que sirven esta página, con el estado y la latencia que se miden ahora mismo. El sitio es estático: no hay backend en el medio.',
     leyenda:
       'Mismos chequeos que el panel de estado de arriba de la página. Si inyectás un fallo en el sandbox de chaos engineering, el nodo afectado se degrada acá también y queda rotulado como simulacro.',
     simulado: 'Este nodo está degradado por un simulacro: el valor es inventado a propósito y el chequeo real sigue corriendo por debajo.',
@@ -1248,7 +1248,7 @@ export const ui = {
     label: 'Consola',
     titulo: 'Probá los labs desde acá',
     bajada:
-      'Una consola de verdad, no un GIF. Escribí `help` para ver los comandos disponibles: consulta las métricas medidas, el estado en vivo de los servicios y la bitácora de incidentes sin salir de la página.',
+      'Una consola de verdad, no un GIF: consulta las métricas medidas, el estado en vivo y la bitácora de incidentes sin salir de la página.',
     titulobarra: 'portfolio-sandbox — sh',
     prompt: 'visitante@portfolio:~$',
     aviso:

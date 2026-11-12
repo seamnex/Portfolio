@@ -237,7 +237,14 @@ function PanelVivo() {
           Icono={FlaskConical}
           titulo={p.simulacro.titulo}
           texto={simulacro ? p.simulacro.enCurso : p.simulacro.texto}
-          onClick={() => inyectar('latency')}
+          onClick={() => {
+            inyectar('latency')
+            // En el teléfono el estado del panel puede haber quedado arriba,
+            // fuera de vista: se lo trae para que el cambio se vea.
+            if (window.matchMedia('(max-width: 1023px)').matches) {
+              document.getElementById('panel-vivo')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }
+          }}
           disabled={simulacro}
           vivo={simulacro}
         />

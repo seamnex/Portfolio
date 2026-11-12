@@ -260,7 +260,7 @@ export const projectsMeta = {
   label: 'DevOps Labs',
   titulo: 'What I build to understand how things break',
   bajada:
-    'Every lab starts from a concrete operational question. These are not course exercises: they are environments where I reproduce failures, measure detection and prove the response works before needing it in production.',
+    'Every lab starts from a concrete operational question: I reproduce the failure, measure detection and prove the response works before needing it in production.',
   problema: 'The problem',
   solucion: 'The solution',
   codigo: 'Code',
@@ -545,7 +545,7 @@ export const ui = {
       aviso: 'drill running',
       label: 'Observability & SRE',
       bajada:
-        'Everything this site measures about itself, with the source of every number in plain sight: DORA metrics from the pipeline that publishes this page, p95 latency measured from your browser, the live topology of what runs underneath and the error budget that comes out of the SLO. Nothing is preloaded or estimated.',
+        'Everything this site measures about itself, with the source of every number in plain sight. Nothing is preloaded or estimated.',
     },
     laboratorio: {
       nav: 'Chaos Lab',
@@ -555,7 +555,7 @@ export const ui = {
       aviso: 'running',
       label: 'Chaos engineering & incident response',
       bajada:
-        'The full incident cycle, in the order it happens: the fault is injected, the alert fires, the runbook walks the response step by step and the console logs every move. Drills are not cancelled when you switch views: whatever you leave running here keeps running.',
+        'The full incident cycle, in the order it happens: fault, alert, runbook and console. Whatever you leave running here keeps running when you switch views.',
     },
   },
 
@@ -639,7 +639,7 @@ export const ui = {
     label: 'Chaos engineering',
     titulo: 'Break this site on purpose',
     bajada:
-      'A full incident drill in ten seconds: the fault is injected, the alert fires, the status panel turns red, the log records every phase, and auto-healing brings the service back without anyone touching a thing.',
+      'A full incident drill in ten seconds: the fault is injected, the alert fires, and auto-healing brings the service back without anyone touching a thing.',
     aviso:
       'This is a drill and it is labelled as one everywhere: nothing breaks, no other visitor is affected, and the real checks keep running underneath. What turns red is the scenario, not the site.',
     simulacro: 'Drill',
@@ -749,7 +749,7 @@ export const ui = {
     label: 'Telemetry & DORA',
     titulo: 'The dashboard this site points at itself',
     bajada:
-      'DORA metrics computed over the pipeline that publishes this page, plus the latency your browser is measuring right now. Every card shows the measured value on top and the declared target underneath: when they disagree, you can see it.',
+      'DORA metrics from the pipeline that publishes this page, plus the latency your browser is measuring right now. Measured value on top, target underneath: when they disagree, you can see it.',
     tablero: 'dora-board · portfolio',
     ventana: (d) => `${d}d window`,
     fuenteActions: 'source: github actions · main',
@@ -811,7 +811,7 @@ export const ui = {
     label: 'Command Center',
     titulo: 'The runbook, one step at a time, in the console below',
     bajada:
-      'Three symptoms that show up on any on-call rotation: the process eating memory, the one eating CPU, and the exhausted connection pool. Each opens its runbook and runs one step at a time, in the order you would actually follow — diagnosis before mitigation, because restarting first destroys the evidence and guarantees the incident comes back.',
+      'Three symptoms from any on-call rotation: memory, CPU and an exhausted connection pool. Each runbook runs one step at a time, diagnosis before mitigation: restarting first destroys the evidence.',
     aviso:
       'This is procedure, not a recorded run: the commands are the ones you would type, and the outputs are illustrative. There is no live cluster behind this, and every block the console prints says so in its own header. The incidents that did happen, with logs and measured numbers, are in the post-mortems section.',
     abrir: 'Open runbook',
@@ -956,7 +956,7 @@ export const ui = {
     label: 'SLO & Error Budget',
     titulo: 'How many minutes of downtime each nine buys you',
     bajada:
-      'An SLO is not a promise: it is a budget. Pick the target and see how much downtime it allows per period — and how much of that budget was eaten by the chaos engineering drills you ran in this session.',
+      'An SLO is not a promise: it is a budget. Pick the target and see how much downtime it allows, and how much the drills you ran in this session have eaten.',
     tablero: 'slo-calculator · allowed downtime',
     elegirObjetivo: 'Choose an availability target',
     elegirPeriodo: 'Choose the budget period',
@@ -1005,7 +1005,7 @@ export const ui = {
     tablero: 'topology · live',
     pista: 'hover or tab onto a node',
     bajada:
-      'The three pieces that serve this page, with the health and latency being measured right now. Both arrows start at the browser because this site is static: there is no backend in between calling GitHub for you.',
+      'The three pieces that serve this page, with the health and latency being measured right now. The site is static: there is no backend in between.',
     leyenda:
       'Same checks as the status panel at the top of the page. If you inject a fault in the chaos engineering sandbox, the affected node degrades here too and is labelled as a drill.',
     simulado: 'This node is degraded by a drill: the value is deliberately fabricated and the real check keeps running underneath.',
@@ -1072,7 +1072,7 @@ export const ui = {
     label: 'Console',
     titulo: 'Try the labs from here',
     bajada:
-      'A real console, not a GIF. Type `help` to list the available commands: it queries the measured metrics, the live service status and the incident log without leaving the page.',
+      'A real console, not a GIF: it queries the measured metrics, the live status and the incident log without leaving the page.',
     titulobarra: 'portfolio-sandbox — sh',
     prompt: 'visitor@portfolio:~$',
     aviso:
