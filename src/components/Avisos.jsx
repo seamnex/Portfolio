@@ -143,7 +143,7 @@ export default function Avisos() {
       role="region"
       aria-live="polite"
       aria-label={ui.avisos.region}
-      className="pointer-events-none fixed inset-x-4 bottom-4 z-[70] flex flex-col gap-2.5 sm:inset-x-auto sm:right-5 sm:top-20 sm:w-[380px]"
+      className="pointer-events-none fixed inset-x-4 bottom-4 z-[70] flex flex-col gap-2.5 sm:inset-x-auto sm:bottom-5 sm:right-5 sm:w-[380px]"
     >
       {avisos.map((a, i) => (
         // La clave del incidente y no el id del aviso: cuando TRIGGERED pasa a

@@ -1,3 +1,4 @@
+import Marca from './Marca'
 /**
  * Cabecera de un bloque dentro de una vista del laboratorio.
  *
@@ -23,7 +24,7 @@ export default function Bloque({ id, label, titulo, bajada, children, className 
       <header className="max-w-3xl">
         {label && (
           <p className="section-label flex items-center gap-2.5 text-xs tracking-[0.12em]">
-            <span className="h-px w-6 bg-base-500" />
+            <Marca className="w-6" />
             {label}
           </p>
         )}

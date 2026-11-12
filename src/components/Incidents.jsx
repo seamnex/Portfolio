@@ -84,10 +84,10 @@ export default function Incidents() {
       {/* El aviso va arriba de las tarjetas, no en letra chica al pie: que
           las fallas sean inyectadas es lo primero que tiene que saber quien
           lee esto, y esconderlo sería justamente lo contrario del punto. */}
-      <div className="card mb-8 flex items-start gap-3 border-warn/25 bg-warn/[0.05] p-4">
-        <TriangleAlert size={15} className="mt-0.5 shrink-0 text-warn" aria-hidden="true" />
-        <p className="text-[13px] leading-relaxed text-slate-400">{incidentesMeta.aviso}</p>
-      </div>
+      <p className="mb-8 flex items-start gap-2 text-[13px] leading-relaxed text-slate-500">
+        <TriangleAlert size={14} className="mt-0.5 shrink-0 text-slate-500" aria-hidden="true" />
+        {incidentesMeta.aviso}
+      </p>
 
       <div className="grid gap-5 md:grid-cols-2">
         {incidentes.map((incidente) => (

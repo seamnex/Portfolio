@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { HeartPulse, PlugZap, ServerCrash, ShieldCheck, Timer, TriangleAlert, Zap } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useCaos } from '../caos/CaosProvider'
-import { ESCENARIOS, FASES, reloj } from '../lib/caos.js'
+import { ESCENARIOS, FASES, escenarioPorId, reloj } from '../lib/caos.js'
 import Bloque from './ui/Bloque'
 
 const iconos = { Timer, PlugZap, ServerCrash }
@@ -105,6 +105,13 @@ export default function ChaosPanel() {
   const { ui } = useContenido()
   const t = ui.caos
   const { escenario, fase, terminaEn, registro, activo, inyectar, restaurar, autohealingMs } = useCaos()
+  // La bitácora se vuelve a escribir con el idioma activo: cada línea
+  // guarda su fase y su escenario, no solo el texto ya armado.
+  const textoDe = (l) => {
+    const armar = ui.caos.fases[l.fase]
+    const esc = escenarioPorId(l.escenario)
+    return armar && esc ? armar(esc, ui) : l.texto
+  }
   const restante = useCuentaRegresiva(terminaEn)
 
   const tono = escenario ? IMPACTO[escenario.impacto] ?? IMPACTO.degradado : null
@@ -197,12 +204,12 @@ export default function ChaosPanel() {
             registro.map((l) => (
               <p key={l.id} className="flex gap-3">
                 <span className="shrink-0 text-slate-600">{reloj(l.ts)}</span>
-                <span className={NIVEL[l.nivel] ?? 'text-slate-400'}>{l.texto}</span>
+                <span className={NIVEL[l.nivel] ?? 'text-slate-400'}>{textoDe(l)}</span>
               </p>
             ))
           )}
           <span className="sr-only" aria-live="polite">
-            {registro.at(-1)?.texto}
+            {registro.length > 0 && textoDe(registro.at(-1))}
           </span>
         </div>
       </div>

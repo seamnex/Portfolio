@@ -57,6 +57,8 @@ function Linea({ linea }) {
   }
 }
 
+const SUGERIDOS = ['help', 'status', 'chaos latency', 'kubectl get pods', 'metrics']
+
 export default function Console() {
   const contenido = useContenido()
   const { ui, lang, cambiar } = contenido
@@ -262,10 +264,7 @@ export default function Console() {
       <div className="card overflow-hidden shadow-2xl shadow-black/40">
         {/* Barra de la ventana */}
         <div className="flex items-center gap-2 border-b border-base-600 bg-base-800/80 px-4 py-3">
-          <span className="h-2.5 w-2.5 rounded-full bg-crit/70" />
-          <span className="h-2.5 w-2.5 rounded-full bg-warn/70" />
-          <span className="h-2.5 w-2.5 rounded-full bg-ok/70" />
-          <span className="ml-2 flex items-center gap-1.5 font-mono text-xs text-slate-500">
+          <span className="flex items-center gap-1.5 font-mono text-xs text-slate-500">
             <TerminalSquare size={12} aria-hidden="true" />
             {ui.consola.titulobarra}
           </span>
@@ -340,6 +339,25 @@ export default function Console() {
             <CornerDownLeft size={15} aria-hidden="true" />
           </button>
         </form>
+      </div>
+
+      {/* Comandos para tocar: quien no sabe qué escribir prueba igual, y en
+          el teléfono no hace falta abrir el teclado para ver un simulacro. */}
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <span className="text-[13px] text-slate-500">{ui.consola.probar}</span>
+        {SUGERIDOS.map((cmd) => (
+          <button
+            key={cmd}
+            type="button"
+            onClick={() => {
+              correr(cmd)
+              setHistorial((prev) => (prev[prev.length - 1] === cmd ? prev : [...prev, cmd]))
+            }}
+            className="min-h-[40px] rounded-md border border-base-600 bg-base-800/60 px-3 font-mono text-xs text-slate-300 transition-colors hover:border-accent/50 hover:text-accent"
+          >
+            {cmd}
+          </button>
+        ))}
       </div>
     </Bloque>
   )

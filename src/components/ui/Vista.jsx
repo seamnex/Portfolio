@@ -1,3 +1,4 @@
+import Marca from './Marca'
 import { useVista } from '../../navegacion/VistaProvider'
 
 /**
@@ -44,7 +45,7 @@ export function EncabezadoVista({ label, titulo, bajada, children }) {
     <header className="relative z-10 border-b border-base-600/60 pb-12 pt-28 sm:pt-32">
       <div className="container-x">
         <p className="section-label flex items-center gap-3">
-          <span className="h-px w-8 bg-accent/60" />
+          <Marca />
           {label}
         </p>
         <h1 className="heading-2">{titulo}</h1>

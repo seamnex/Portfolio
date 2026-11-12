@@ -57,12 +57,12 @@ export const hero = {
     'I run P1/P2 incidents in high-volume environments — Fintech and Telco — leading War Rooms, restoring service and closing the loop with RCAs that stop the same failure from coming back. Today I am taking that operational discipline into SRE and DevOps: observability, automation and systems that fail rarely and recover fast.',
   panel: {
     titulo: 'This site, live',
-    tira: `${Math.round(MEDIDAS.ventanaInstrumento[0])} s of my resolution time were my own measurement`,
+    tira: `I detected and stopped a real outage in ${n(MEDIDAS.corte)} s`,
     tiraAria: 'See the live panel',
     simulacroActivo: 'Failure drill in progress',
-    hallazgoEtiqueta: 'What I found measuring my lab',
-    hallazgo: `${Math.round(MEDIDAS.ventanaInstrumento[0])} of the ${Math.round(MEDIDAS.mttr)} s it took me to resolve the outage were my own measurement`,
-    mttdTexto: `I measured a real outage (rising 5xx). Those ${Math.round(MEDIDAS.ventanaInstrumento[0])} s were my dashboard's sliding window dragging old errors, plus the 15 s of healthy rate I require before closing.`,
+    hallazgoEtiqueta: 'A real outage in my lab, measured end to end',
+    hallazgo: `I detected and stopped a real outage in ${n(MEDIDAS.corte)} seconds`,
+    mttdTexto: `And I over-measured: ${Math.round(MEDIDAS.ventanaInstrumento[0])} of the ${Math.round(MEDIDAS.mttr)} s I reported were my own dashboard confirming it.`,
     mttdEtiqueta: `measured · ${n(MEDIDAS.mttdSensible)} s with a more sensitive rule, at the cost of false alarms`,
     linea: {
       aria: (mttd, corte, mttr) =>
@@ -75,7 +75,9 @@ export const hero = {
     bitacora: 'See the run log',
     simulacro: {
       titulo: 'Break something and watch it recover',
-      texto: 'Chaos Lab: drills in your browser, nothing to install',
+      texto: 'Injects a latency failure right here; it self-heals in 10 s',
+      enCurso: 'Drill running: watch the status above and the alert',
+      masSimulacros: 'More drills, runbooks and the console in Chaos Lab',
     },
     tablero: {
       titulo: 'See the metrics dashboard',
@@ -519,7 +521,8 @@ export const ui = {
   idioma: {
     etiqueta: 'Language',
     cambiar: 'Change site language',
-    a: { es: 'Ver el sitio en español', en: 'View this site in English' },
+    // Empiezan con el rótulo visible: quien usa control por voz dice "EN" (WCAG 2.5.3).
+    a: { es: 'ES · Ver el sitio en español', en: 'EN · View this site in English' },
   },
 
   // Las tres vistas principales. Ver el comentario largo en content.js:
@@ -765,7 +768,7 @@ export const ui = {
       'Deployment frequency, lead time and change failure rate come from the public GitHub Actions API, over the real runs on main. MTTD comes from the observability-lab, with its log published. The p95 latency is measured by your own browser while you look at this panel. The target is a declared goal, not a result, which is why it is labelled separately.',
     duranteSimulacro:
       'A chaos engineering drill is running. This dashboard deliberately ignores it: these numbers are real measurements and a drill does not change them.',
-    muestras: (n) => `p95 over ${n} samples from this browser`,
+    muestras: (n) => `p95 over ${n} ${n === 1 ? 'sample' : 'samples'} from this browser`,
     medianaDe: (n) => `median of ${n} deploys with a dated commit`,
     corridasVerdes: (n) => `${n} green runs on main`,
     fallidasDe: (f, t) => `${f} failed of ${t} completed runs`,
@@ -1076,6 +1079,7 @@ export const ui = {
       'Sandbox: kubectl output replays runs recorded in the labs — there is no live cluster behind it. `status` and `curl /health` do query live.',
     ayudaInicial: 'Type `help` to start, or `metrics` to go straight to the numbers.',
     ejecutar: 'Run',
+    probar: 'Try:',
     limpiar: 'Clear console',
     focoAria: 'Interactive console: type a command and press Enter',
     desconocido: (cmd) => `sh: ${cmd}: command not found. Try \`help\`.`,

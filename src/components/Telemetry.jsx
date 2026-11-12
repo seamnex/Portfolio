@@ -230,15 +230,6 @@ export default function Telemetry() {
           </span>
         </div>
 
-        {snapshot && (
-          // GitHub no respondió en vivo (casi siempre, el límite de 60
-          // consultas por hora de la red del visitante) y los números salen
-          // de la foto tomada en el último despliegue. Se dice, con su edad.
-          <p className="border-b border-base-600 bg-base-800/60 px-5 py-2 font-mono text-xs text-slate-400">
-            {t.ultimoDato(haceCuanto(snapshot, lang))}
-          </p>
-        )}
-
         {simulacro && (
           // El simulacro no toca estos números y conviene decirlo justo acá:
           // alguien que acaba de inyectar un fallo espera ver el tablero en
@@ -360,10 +351,15 @@ export default function Telemetry() {
             {/* Sexta celda: el pie del tablero. Explica de dónde sale cada
                 cosa, que es lo que hace verificable a las otras cinco. */}
             <div className="flex h-full flex-col justify-center gap-2.5 rounded-lg border border-base-600/60 bg-base-800/40 p-5">
-              <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-accent">
-                <Radio size={12} /> {t.comoSeMide}
+              <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-slate-400">
+                <Radio size={12} aria-hidden="true" /> {t.comoSeMide}
               </p>
               <p className="text-xs leading-relaxed text-slate-500">{t.aviso}</p>
+              {/* Sin dato en vivo (límite de consultas de GitHub en la red del
+                  visitante), los números salen de la foto del último
+                  despliegue. Se dice acá, al pie, y no como primera línea
+                  del tablero: es un estado, no el titular. */}
+              {snapshot && <p className="font-mono text-xs leading-relaxed text-slate-400">{t.ultimoDato(haceCuanto(snapshot, lang))}</p>}
               {sinFuente && <p className="font-mono text-xs text-warn">{sinDato}</p>}
             </div>
           </div>

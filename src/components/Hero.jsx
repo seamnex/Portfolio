@@ -97,9 +97,16 @@ function LineaIncidente() {
           </span>
           <span className="absolute inset-x-0 bottom-1 h-1.5 rounded-t-[2px] border-x border-t border-accent/60" />
         </div>
-        <div className="flex h-3 animate-trazo gap-[3px] overflow-hidden rounded-[3px]">
-          {tramos.map((t) => (
-            <span key={t.id} className={`h-full ${t.barra}`} style={{ width: t.ancho }} />
+        {/* Sin `gap`: con hueco entre tramos el flex los encoge y el tramo
+            rayado ya no empieza donde marca la llave. El separador es un
+            borde interno, que no corre las proporciones. */}
+        <div className="flex h-3 animate-trazo overflow-hidden rounded-[3px]">
+          {tramos.map((t, i) => (
+            <span
+              key={t.id}
+              className={`h-full shrink-0 ${t.barra} ${i > 0 ? 'border-l-[3px] border-base-800' : ''}`}
+              style={{ width: t.ancho }}
+            />
           ))}
         </div>
         <div className="relative mt-1.5 h-4 font-mono text-xs tabular-nums text-slate-500">
@@ -121,6 +128,43 @@ function LineaIncidente() {
   )
 }
 
+/** Una fila de acceso del panel: icono, título, una línea y la flecha. */
+function Acceso({ Icono, titulo, texto, onClick, disabled = false, vivo = false }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className={`group flex w-full items-center gap-3.5 rounded-lg border px-4 py-3 text-left transition-colors duration-200 disabled:cursor-default ${
+        vivo
+          ? 'border-warn/40 bg-warn/[0.05]'
+          : 'border-base-600 bg-base-800/50 hover:border-accent/50 hover:bg-base-700/70'
+      }`}
+    >
+      <span
+        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md border bg-base-900 ${
+          vivo ? 'border-warn/40 text-warn' : 'border-accent/30 text-accent'
+        }`}
+      >
+        <Icono size={16} aria-hidden="true" />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-sm font-semibold text-white">{titulo}</span>
+        <span className="block text-[13px] leading-snug text-slate-400" aria-live={vivo ? 'polite' : undefined}>
+          {texto}
+        </span>
+      </span>
+      {!vivo && (
+        <ArrowRight
+          size={16}
+          className="shrink-0 text-slate-500 transition-[transform,color] duration-200 group-hover:translate-x-0.5 group-hover:text-accent"
+          aria-hidden="true"
+        />
+      )}
+    </button>
+  )
+}
+
 /**
  * La columna derecha de la portada: el sitio mostrándose a sí mismo.
  *
@@ -133,6 +177,7 @@ function PanelVivo() {
   const { hero, lang, labMetrics } = useContenido()
   const { irA } = useVista()
   const { estado, texto: textoEstado } = useEstadoPanel()
+  const { activo: simulacro, inyectar } = useCaos()
   const p = hero.panel
 
   const bitacora = labMetrics.items.find((m) => m.id === 'mttd')?.repo
@@ -153,8 +198,8 @@ function PanelVivo() {
         <p className="mt-2 text-balance text-2xl font-bold leading-[1.15] tracking-tight text-white sm:text-[2rem]">
           {p.hallazgo}
         </p>
+        <p className="mt-3 text-sm leading-relaxed text-slate-400">{p.mttdTexto}</p>
         <LineaIncidente />
-        <p className="mt-4 text-sm leading-relaxed text-slate-400">{p.mttdTexto}</p>
         <p className="mt-4 flex flex-wrap items-baseline gap-x-2 text-[13px] text-slate-400">
           <Sigla id="mttd">MTTD</Sigla>
           <span className="text-xl font-semibold tabular-nums text-white">{num(MEDIDAS.mttd, lang)} s</span>
@@ -185,30 +230,28 @@ function PanelVivo() {
       </div>
 
       <div className="mt-4 grid gap-2.5 border-t border-base-600 pt-5">
-        {[
-          { id: 'laboratorio', Icono: FlaskConical, ...p.simulacro },
-          { id: 'observabilidad', Icono: Activity, ...p.tablero },
-        ].map(({ id, Icono, titulo, texto }) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => irA(id)}
-            className="group flex w-full items-center gap-3.5 rounded-lg border border-base-600 bg-base-800/50 px-4 py-3 text-left transition-colors duration-200 hover:border-accent/50 hover:bg-base-700/70"
-          >
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-accent/30 bg-base-900 text-accent">
-              <Icono size={16} aria-hidden="true" />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-sm font-semibold text-white">{titulo}</span>
-              <span className="block text-[13px] leading-snug text-slate-400">{texto}</span>
-            </span>
-            <ArrowRight
-              size={16}
-              className="shrink-0 text-slate-500 transition-[transform,color] duration-200 group-hover:translate-x-0.5 group-hover:text-accent"
-              aria-hidden="true"
-            />
-          </button>
-        ))}
+        {/* El simulacro corre acá mismo: el estado de arriba pasa a
+            degradado, salta el aviso y en 10 s vuelve solo. Es el mejor
+            argumento del sitio y no tiene que costar un cambio de vista. */}
+        <Acceso
+          Icono={FlaskConical}
+          titulo={p.simulacro.titulo}
+          texto={simulacro ? p.simulacro.enCurso : p.simulacro.texto}
+          onClick={() => inyectar('latency')}
+          disabled={simulacro}
+          vivo={simulacro}
+        />
+        <Acceso Icono={Activity} titulo={p.tablero.titulo} texto={p.tablero.texto} onClick={() => irA('observabilidad')} />
+        <a
+          href="#caos"
+          onClick={(e) => {
+            e.preventDefault()
+            irA('laboratorio')
+          }}
+          className="inline-flex min-h-[40px] items-center gap-1.5 self-start text-[13px] font-medium text-slate-400 transition-colors hover:text-white"
+        >
+          {p.simulacro.masSimulacros} <ArrowRight size={14} aria-hidden="true" />
+        </a>
       </div>
     </div>
   )

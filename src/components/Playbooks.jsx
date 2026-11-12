@@ -88,8 +88,10 @@ export default function Playbooks() {
       {/* El rótulo va antes de las tarjetas, no al pie: quien mira esto
           tiene que saber qué está viendo ANTES de leer una salida de
           kubectl y darla por una corrida registrada. */}
-      <p className="mb-6 flex items-start gap-2.5 rounded-lg border border-warn/20 bg-warn/[0.05] px-4 py-3 text-[13px] leading-relaxed text-slate-400">
-        <TriangleAlert size={14} className="mt-0.5 shrink-0 text-warn" aria-hidden="true" />
+      {/* Una línea y no otro recuadro ámbar: el aviso fuerte de la vista
+          es el del sandbox de caos, y tres cajas iguales se dejan de leer. */}
+      <p className="mb-6 flex items-start gap-2 text-[13px] leading-relaxed text-slate-500">
+        <TriangleAlert size={14} className="mt-0.5 shrink-0 text-slate-500" aria-hidden="true" />
         {t.aviso}
       </p>
 

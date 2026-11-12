@@ -67,15 +67,17 @@ export const hero = {
   panel: {
     titulo: 'Este sitio, en vivo',
     // Tira compacta que lo anticipa en el teléfono, donde el panel queda abajo.
-    tira: `${Math.round(MEDIDAS.ventanaInstrumento[0])} s de mi tiempo de resolución eran mi propia medición`,
+    tira: `Detecté y corté una caída real en ${n(MEDIDAS.corte)} s`,
     tiraAria: 'Ver el panel en vivo',
     simulacroActivo: 'Simulacro de falla en curso',
     // El titular es el hallazgo, no el MTTD: el número no llega al objetivo,
     // y lo que vale mostrar es el diagnóstico, que es la habilidad.
-    hallazgoEtiqueta: 'Lo que encontré midiendo mi lab',
-    hallazgo: `${Math.round(MEDIDAS.ventanaInstrumento[0])} de los ${Math.round(MEDIDAS.mttr)} s que tardé en resolver la caída eran mi propia medición`,
+    hallazgoEtiqueta: 'Una caída real en mi lab, medida de punta a punta',
+    // El logro primero: es lo que se lleva quien lee 8 segundos. El matiz
+    // de la medición va en la bajada y en el diagnóstico.
+    hallazgo: `Detecté y corté una caída real en ${n(MEDIDAS.corte)} segundos`,
     // Bitácora del observability-lab: ventana deslizante de 30 s + 15 s de tasa sana sostenida.
-    mttdTexto: `Medí una caída real (5xx en aumento). Esos ${Math.round(MEDIDAS.ventanaInstrumento[0])} s fueron la ventana deslizante de mi tablero arrastrando errores viejos, más los 15 s de tasa sana que exijo antes de cerrar.`,
+    mttdTexto: `Y medí de más: ${Math.round(MEDIDAS.ventanaInstrumento[0])} de los ${Math.round(MEDIDAS.mttr)} s que reporté eran mi propio tablero confirmándolo.`,
     // 11,5 s no es una meta: es lo que dio la regla más sensible, y se paga
     // con falsas alarmas (ver la bitácora del observability-lab).
     mttdEtiqueta: `medido · ${n(MEDIDAS.mttdSensible)} s con una regla más sensible, a costa de falsas alarmas`,
@@ -91,7 +93,9 @@ export const hero = {
     bitacora: 'Ver la bitácora',
     simulacro: {
       titulo: 'Romper algo y ver cómo se recupera',
-      texto: 'Chaos Lab: simulacros en tu navegador, sin instalar nada',
+      texto: 'Inyecta una caída de latencia acá mismo; se cura sola en 10 s',
+      enCurso: 'Simulacro en curso: mirá el estado de arriba y el aviso',
+      masSimulacros: 'Más simulacros, runbooks y la consola en Chaos Lab',
     },
     tablero: {
       titulo: 'Ver el tablero de métricas',
@@ -647,7 +651,8 @@ export const ui = {
   idioma: {
     etiqueta: 'Idioma',
     cambiar: 'Cambiar idioma del sitio',
-    a: { es: 'Ver el sitio en español', en: 'View this site in English' },
+    // Empiezan con el rótulo visible: quien usa control por voz dice "EN" (WCAG 2.5.3).
+    a: { es: 'ES · Ver el sitio en español', en: 'EN · View this site in English' },
   },
 
   // ── Las tres vistas principales ─────────────────────────────
@@ -934,7 +939,7 @@ export const ui = {
       'Frecuencia de despliegue, lead time y change failure rate salen de la API pública de GitHub Actions, sobre las corridas reales de main. El MTTD sale del observability-lab, con su bitácora publicada. La latencia p95 la mide tu propio navegador mientras mirás este panel. El objetivo es una meta declarada, no un resultado, y por eso va rotulado aparte.',
     duranteSimulacro:
       'Hay un simulacro de chaos engineering en curso. Este tablero no lo refleja a propósito: sus números son mediciones reales y un simulacro no las cambia.',
-    muestras: (n) => `p95 sobre ${n} muestras desde este navegador`,
+    muestras: (n) => `p95 sobre ${n} ${n === 1 ? 'muestra' : 'muestras'} desde este navegador`,
     medianaDe: (n) => `mediana de ${n} despliegues con commit fechado`,
     corridasVerdes: (n) => `${n} corridas verdes en main`,
     fallidasDe: (f, t) => `${f} fallidas de ${t} corridas completadas`,
@@ -1250,6 +1255,7 @@ export const ui = {
       'Sandbox: las salidas de kubectl reproducen corridas registradas en los labs, no hay un cluster en vivo detrás. `status` y `curl /health` sí consultan en el momento.',
     ayudaInicial: 'Escribí `help` para empezar, o `metrics` para ir directo a los números.',
     ejecutar: 'Ejecutar',
+    probar: 'Probá:',
     limpiar: 'Limpiar consola',
     focoAria: 'Consola interactiva: escribí un comando y presioná Enter',
     desconocido: (cmd) => `sh: ${cmd}: comando no encontrado. Probá \`help\`.`,

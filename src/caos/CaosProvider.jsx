@@ -36,6 +36,12 @@ const REGISTRO_MAX = 60
 export function CaosProvider({ children }) {
   const { ui } = useContenido()
   const { avisar } = useAvisos()
+  // Las fases se disparan con setTimeout: el `ui` que vieron al inyectar
+  // puede no ser el de ahora si el visitante cambió de idioma a mitad del
+  // simulacro. Leerlo de un ref hace que cada línea salga en el idioma
+  // que está en pantalla cuando se escribe.
+  const uiRef = useRef(ui)
+  uiRef.current = ui
 
   // Un aviso por escenario, con clave fija: la tarjeta pasa de TRIGGERED
   // a ACKNOWLEDGED a RESOLVED en el mismo lugar, como en PagerDuty.
@@ -156,7 +162,7 @@ export function CaosProvider({ children }) {
       FASES.forEach((f) => {
         const disparar = () => {
           setFase(f.id)
-          anotar(lineaDeFase(f, elegido, ui))
+          anotar(lineaDeFase(f, elegido, uiRef.current))
           if (AVISO_POR_FASE[f.id]) avisarFase(elegido, AVISO_POR_FASE[f.id])
           // La última fase ES el auto-healing: el sistema vuelve solo, sin
           // que nadie toque un botón. Ese es el punto del simulacro.
