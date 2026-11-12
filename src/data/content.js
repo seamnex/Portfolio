@@ -17,6 +17,14 @@ export { incidentes, incidentesMeta } from './incidentes.js'
 
 const n = (v) => num(v, 'es')
 
+// Acción de auto-healing que cierra cada simulacro de Chaos Lab, por id
+// de escenario (ver src/lib/caos.js). Es lo único del escenario que se traduce.
+const REMEDIOS = {
+  latency: 'drain del edge PoP · reroute al más cercano',
+  'api-down': 'circuit breaker abierto · respuesta desde cache',
+  'error-500': 'rollback al despliegue anterior · readiness probe en verde',
+}
+
 // ── GitHub ───────────────────────────────────────────────────
 // Poné GITHUB_PUBLICO en false si alguna vez los repos dejan de ser
 // públicos: ahí desaparecen solos el ícono del nav, el del hero, el
@@ -772,12 +780,12 @@ export const ui = {
       recuperado: 'recuperado',
     },
     escenarios: {
-      latencia: {
+      latency: {
         titulo: 'Inyectar latencia',
         descripcion:
           'El origen sigue respondiendo 200, pero tarda cuatro segundos. Es el fallo más difícil de detectar: nada está caído, todo está lento.',
       },
-      'api-caida': {
+      'api-down': {
         titulo: 'Simular caída de API',
         descripcion:
           'La dependencia externa deja de responder. El sitio tiene que degradarse sin arrastrar consigo lo que sí funciona.',
@@ -792,11 +800,11 @@ export const ui = {
     // técnico, que no se traduce: la señal es la misma expresión en los dos
     // idiomas porque así se escribiría en una regla de alerta de verdad.
     fases: {
-      inyeccion: (e) => `chaos: inyectando "${e.id}" sobre ${e.servicio} · severidad ${e.severidad}`,
+      inyeccion: (e) => `chaos: inyectando "${e.id}" sobre ${e.svc} · severidad ${e.severidad}`,
       deteccion: (e) => `alerta disparada · ${e.senal}`,
-      diagnostico: (e) => `diagnóstico: el chequeo de ${e.servicio} confirma la condición · abriendo runbook`,
-      remediacion: (e) => `remediación automática · ${e.remedio}`,
-      recuperado: (e) => `${e.servicio} operativo · el auto-healing cerró el ciclo sin intervención manual`,
+      diagnostico: (e) => `diagnóstico: el chequeo de ${e.svc} confirma la condición · abriendo runbook`,
+      remediacion: (e) => `remediación automática · ${REMEDIOS[e.id]}`,
+      recuperado: (e) => `${e.svc} operativo · el auto-healing cerró el ciclo sin intervención manual`,
       restaurado: (e) => `restauración manual · "${e.id}" cancelado antes del auto-healing`,
     },
     consola: {
@@ -840,18 +848,18 @@ export const ui = {
       info: 'Info',
       error: 'Error',
     },
-    // Las alertas del simulacro. Reciben el escenario técnico; la señal y
-    // el remedio van tal cual porque así los escribiría la regla.
+    // Las alertas del simulacro. Reciben el escenario técnico; la señal va
+    // tal cual porque así la escribiría la regla, y el remedio sale de REMEDIOS.
     caos: {
       meta: (e) => `simulacro · chaos lab · ${e.id}`,
-      triggered: (e) => ({ titulo: `Alerta en ${e.servicio}`, detalle: e.senal }),
+      triggered: (e) => ({ titulo: `Alerta en ${e.svc}`, detalle: e.senal }),
       acknowledged: (e) => ({
         titulo: `Runbook tomó el incidente`,
-        detalle: `diagnóstico confirmado en ${e.servicio} · remediación automática en curso`,
+        detalle: `diagnóstico confirmado en ${e.svc} · remediación automática en curso`,
       }),
-      remediando: (e) => ({ titulo: `Remediando ${e.servicio}`, detalle: e.remedio }),
+      remediando: (e) => ({ titulo: `Remediando ${e.svc}`, detalle: REMEDIOS[e.id] }),
       resolved: (e) => ({
-        titulo: `${e.servicio} operativo`,
+        titulo: `${e.svc} operativo`,
         detalle: 'auto-healing cerró el ciclo sin intervención manual',
       }),
       restaurado: (e) => ({

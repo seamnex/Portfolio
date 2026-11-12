@@ -1,4 +1,4 @@
-import { useId, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { useContenido } from '../../i18n/LanguageProvider'
 
 /**
@@ -17,13 +17,25 @@ export default function Sigla({ id, children }) {
   const idTip = useId()
   const [abierta, setAbierta] = useState(false)
   const [descartada, setDescartada] = useState(false)
+  const raiz = useRef(null)
+  const visible = abierta && !descartada
+
+  // Tocar afuera la cierra. En iOS tocar una zona no enfocable no quita el
+  // foco del <abbr>, así que el onBlur solo no alcanza en el teléfono.
+  useEffect(() => {
+    if (!visible) return
+    const alTocar = (e) => {
+      if (!raiz.current?.contains(e.target)) setAbierta(false)
+    }
+    document.addEventListener('pointerdown', alTocar)
+    return () => document.removeEventListener('pointerdown', alTocar)
+  }, [visible])
 
   if (!definicion) return children
 
-  const visible = abierta && !descartada
-
   return (
     <span
+      ref={raiz}
       className="relative inline"
       onMouseEnter={() => {
         setDescartada(false)
@@ -39,9 +51,12 @@ export default function Sigla({ id, children }) {
           setAbierta(true)
         }}
         onBlur={() => setAbierta(false)}
+        // Abre siempre, no alterna: en un toque el foco ya la abrió y el
+        // click llega después; si alternara, la cerraría en el mismo gesto.
+        // Se cierra con Escape, al perder el foco o tocando afuera.
         onClick={() => {
           setDescartada(false)
-          setAbierta((v) => !v)
+          setAbierta(true)
         }}
         onKeyDown={(e) => {
           if (e.key === 'Escape') setDescartada(true)

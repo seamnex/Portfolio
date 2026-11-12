@@ -25,6 +25,14 @@ export { SITIO_URL } from './content.js'
 
 const n = (v) => num(v, 'en')
 
+// Auto-healing action that closes each Chaos Lab drill, keyed by scenario id
+// (see src/lib/caos.js). Same shape as REMEDIOS in content.js.
+const REMEDIOS = {
+  latency: 'drain edge PoP · reroute to the nearest one',
+  'api-down': 'circuit breaker open · serving from cache',
+  'error-500': 'rollback to the previous deploy · readiness probe green',
+}
+
 /** Merges translations into the Spanish records, matching by `id`. */
 const traducirPorId = (base, traducciones) =>
   base.map((item) => ({ ...item, ...(traducciones[item.id] ?? {}) }))
@@ -631,12 +639,12 @@ export const ui = {
       recuperado: 'recovered',
     },
     escenarios: {
-      latencia: {
+      latency: {
         titulo: 'Inject latency',
         descripcion:
           'The origin still answers 200, but it takes four seconds. The hardest kind of fault to catch: nothing is down, everything is slow.',
       },
-      'api-caida': {
+      'api-down': {
         titulo: 'Simulate API outage',
         descripcion:
           'The external dependency stops responding. The site has to degrade without dragging down the parts that still work.',
@@ -648,11 +656,11 @@ export const ui = {
       },
     },
     fases: {
-      inyeccion: (e) => `chaos: injecting "${e.id}" into ${e.servicio} · severity ${e.severidad}`,
+      inyeccion: (e) => `chaos: injecting "${e.id}" into ${e.svc} · severity ${e.severidad}`,
       deteccion: (e) => `alert fired · ${e.senal}`,
-      diagnostico: (e) => `diagnosis: the ${e.servicio} check confirms the condition · opening runbook`,
-      remediacion: (e) => `automated remediation · ${e.remedio}`,
-      recuperado: (e) => `${e.servicio} operational · auto-healing closed the loop with no manual intervention`,
+      diagnostico: (e) => `diagnosis: the ${e.svc} check confirms the condition · opening runbook`,
+      remediacion: (e) => `automated remediation · ${REMEDIOS[e.id]}`,
+      recuperado: (e) => `${e.svc} operational · auto-healing closed the loop with no manual intervention`,
       restaurado: (e) => `manual restore · "${e.id}" cancelled before auto-healing`,
     },
     consola: {
@@ -690,14 +698,14 @@ export const ui = {
     },
     caos: {
       meta: (e) => `drill · chaos lab · ${e.id}`,
-      triggered: (e) => ({ titulo: `Alert on ${e.servicio}`, detalle: e.senal }),
+      triggered: (e) => ({ titulo: `Alert on ${e.svc}`, detalle: e.senal }),
       acknowledged: (e) => ({
         titulo: `Runbook took the incident`,
-        detalle: `diagnosis confirmed on ${e.servicio} · automated remediation in progress`,
+        detalle: `diagnosis confirmed on ${e.svc} · automated remediation in progress`,
       }),
-      remediando: (e) => ({ titulo: `Remediating ${e.servicio}`, detalle: e.remedio }),
+      remediando: (e) => ({ titulo: `Remediating ${e.svc}`, detalle: REMEDIOS[e.id] }),
       resolved: (e) => ({
-        titulo: `${e.servicio} operational`,
+        titulo: `${e.svc} operational`,
         detalle: 'auto-healing closed the loop with no manual intervention',
       }),
       restaurado: (e) => ({

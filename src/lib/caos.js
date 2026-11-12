@@ -25,46 +25,50 @@ export const AUTOHEALING_MS = 10000
 /**
  * Escenarios inyectables.
  *
- * Los campos son técnicos y NO se traducen: son la señal, el síntoma y
- * el remedio tal como los escribiría una regla de alerta o un runbook.
+ * Los campos son técnicos y NO se traducen (van en inglés en los dos
+ * idiomas, como la regla PromQL): son la señal, el síntoma, el servicio y
+ * el id, tal como los escribiría una regla de alerta o un runbook.
  * El texto humano vive en `ui.caos` de cada idioma y se arma con esto.
  *
- *   · servicio  → id del servicio del panel al que afecta el simulacro
+ *   · servicio  → id interno del servicio del panel al que afecta
+ *   · svc       → su nombre técnico, el que aparece en la señal y la bitácora
  *   · impacto   → estado agregado que fuerza mientras dura
  *   · senal     → la expresión que dispararía la alerta
  *   · sintoma   → lo que vería el panel de estado durante el simulacro
- *   · remedio   → la acción de auto-healing que cierra el ciclo
+ *
+ * La acción de auto-healing que cierra cada ciclo sí se traduce: vive en
+ * `REMEDIOS` de cada archivo de contenido, indexada por id.
  */
 export const ESCENARIOS = [
   {
-    id: 'latencia',
+    id: 'latency',
     icono: 'Timer',
     servicio: 'origen',
+    svc: 'origin',
     impacto: 'degradado',
     severidad: 'P2',
-    senal: 'p95_latency_ms{svc="origen"} > 3000 for 1m',
+    senal: 'p95_latency_ms{svc="origin"} > 3000 for 1m',
     sintoma: { latencia: 4180, codigo: 200 },
-    remedio: 'drain edge PoP · reroute al más cercano',
   },
   {
-    id: 'api-caida',
+    id: 'api-down',
     icono: 'PlugZap',
     servicio: 'ci-portfolio',
+    svc: 'ci-portfolio',
     impacto: 'caido',
     severidad: 'P1',
     senal: 'up{job="github-actions-api"} == 0 for 30s',
     sintoma: { codigo: 0, motivo: 'red' },
-    remedio: 'circuit breaker abierto · respuesta desde cache',
   },
   {
     id: 'error-500',
     icono: 'ServerCrash',
     servicio: 'origen',
+    svc: 'origin',
     impacto: 'caido',
     severidad: 'P1',
     senal: 'rate(http_requests_total{code=~"5.."}[1m]) / rate(http_requests_total[1m]) > 0.05',
     sintoma: { codigo: 500, latencia: 91 },
-    remedio: 'rollback al despliegue anterior · readiness probe en verde',
   },
 ]
 
