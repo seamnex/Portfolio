@@ -65,6 +65,9 @@ function BotonEscenario({ escenario, texto, activo, onInyectar, ui }) {
       type="button"
       onClick={() => onInyectar(escenario.id)}
       aria-pressed={activo}
+      // Nombre corto: sin esto el lector de pantalla lee la tarjeta entera
+      // (descripción y regla de alerta incluidas) como nombre del botón.
+      aria-label={`${activo ? ui.caos.enCurso : ui.caos.inyectar}: ${texto.titulo}`}
       className={`card group flex h-full min-w-0 flex-col items-start p-5 text-left transition-all duration-200 ${
         activo ? tono.activo : `text-slate-400 ${tono.boton} hover:-translate-y-0.5`
       }`}
@@ -79,13 +82,16 @@ function BotonEscenario({ escenario, texto, activo, onInyectar, ui }) {
       <h3 className="mt-4 text-sm font-semibold text-white">{texto.titulo}</h3>
       <p className="mt-2 text-[13px] leading-relaxed text-slate-400">{texto.descripcion}</p>
 
-      <p className="mt-3 w-full whitespace-pre-wrap break-all font-mono text-[11px] text-slate-600">
-        {escenario.senal}
-      </p>
+      {/* La regla de alerta queda como detalle para quien es técnico:
+          rotulada en lenguaje simple y en segundo plano. */}
+      <p className="mt-3 w-full text-[12px] text-slate-500">{ui.caos.reglaAlerta}</p>
+      <p className="mb-4 mt-1 w-full whitespace-pre-wrap break-all font-mono text-[11px] text-slate-600">{escenario.senal}</p>
 
       <span
-        className={`mt-auto inline-flex items-center gap-1.5 pt-4 font-mono text-[11px] ${
-          activo ? tono.texto : 'text-slate-500 transition-colors group-hover:text-accent'
+        className={`mt-auto inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-[13px] font-semibold ${
+          activo
+            ? `border-current ${tono.texto}`
+            : 'border-base-500 text-slate-300 transition-colors group-hover:border-accent/60 group-hover:text-accent'
         }`}
       >
         <Zap size={12} />

@@ -1,19 +1,40 @@
-import { ArrowRightLeft, CheckCircle2 } from 'lucide-react'
+import { useId, useState } from 'react'
+import { ArrowRightLeft, CheckCircle2, ChevronDown } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import Section from './ui/Section'
 
 export default function About() {
   const { about } = useContenido()
+  // El primer párrafo y el puente cuentan el perfil; los otros dos son el
+  // recorrido en detalle, para quien quiere seguir leyendo.
+  const [completo, setCompleto] = useState(false)
+  const idResto = useId()
+  const [primero, ...resto] = about.parrafos
 
   return (
     <Section id="sobre-mi" label={about.label} titulo={about.titulo} bajada={about.bajada}>
       <div className="grid gap-12 lg:grid-cols-[1.15fr_.85fr]">
         <div className="space-y-5">
-          {about.parrafos.map((p, i) => (
-            <p key={i} className="text-[15px] leading-relaxed text-slate-400">
-              {p}
-            </p>
-          ))}
+          <p className="text-[15px] leading-relaxed text-slate-400">{primero}</p>
+
+          <div id={idResto} hidden={!completo} className="space-y-5">
+            {resto.map((p, i) => (
+              <p key={i} className="text-[15px] leading-relaxed text-slate-400">
+                {p}
+              </p>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setCompleto((v) => !v)}
+            aria-expanded={completo}
+            aria-controls={idResto}
+            className="inline-flex items-center gap-1.5 py-1.5 text-[14px] font-medium text-accent transition-colors hover:text-white"
+          >
+            {completo ? about.leerMenos : about.leerMas}
+            <ChevronDown size={15} className={`transition-transform duration-200 ${completo ? 'rotate-180' : ''}`} aria-hidden="true" />
+          </button>
 
           {/* Puente conceptual ITIL → SRE */}
           <div className="card mt-6 p-6">

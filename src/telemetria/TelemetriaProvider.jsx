@@ -78,6 +78,8 @@ export function TelemetriaProvider({ children, recurso = '/favicon.svg' }) {
       // te cortó por límite de consultas" que "el pipeline no existe".
       motivo: historial?.estado === 'ok' ? null : (historial?.motivo ?? null),
       cargando,
+      // Fecha de la foto del build cuando el dato no vino en vivo.
+      snapshot: historial?.deSnapshot ? historial.capturado : null,
       repo: REPO_DESPLIEGUE,
       ventanaDias: VENTANA_DIAS,
       refrescar,

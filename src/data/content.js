@@ -53,34 +53,30 @@ export const hero = {
   transicion: 'en transición a',
   subtitle:
     'Gestiono incidentes P1/P2 en entornos de alto volumen —Fintech y Telecomunicaciones— liderando War Rooms, restaurando el servicio y cerrando el ciclo con RCA que evitan la reincidencia. Hoy llevo esa disciplina operacional hacia SRE y DevOps: observabilidad, automatización y sistemas que fallan poco y se recuperan rápido.',
-  terminal: {
-    titulo: 'incident-console — bash',
-    prompt: 'samuel@sre-lab:~$',
-    comando: 'kubectl get incidents --severity=P1 --status=resolved',
-    salida: [
-      { k: 'MTTD medido en lab', v: `${n(MEDIDAS.mttd)} s — con bitácora`, tone: 'ok' },
-      { k: 'War Rooms liderados', v: 'Fintech · Telco', tone: 'accent' },
-      { k: 'Ciclo de mejora', v: 'Detectar → Mitigar → RCA → Prevenir', tone: 'muted' },
-      { k: 'Estado', v: 'ONLINE — abierto a propuestas', tone: 'ok' },
-    ],
-  },
-  // La invitación al laboratorio, arriba de los botones. Es lo que
-  // diferencia este sitio de un CV en PDF, así que no espera al banner
-  // del final de la portada: se ofrece antes de que nadie haga scroll.
-  sandbox: {
-    tag: 'Sandbox en vivo',
-    titulo: 'Inyectar fallas en vivo',
-    texto:
-      'Chaos engineering con auto-healing, runbooks y consola: rompé algo y mirá cómo se recupera. Corre en tu navegador, sin instalar nada.',
-    cta: 'Abrir el Chaos Lab',
+  // Panel de la columna derecha de la portada (Hero.jsx > PanelVivo).
+  panel: {
+    titulo: 'Este sitio, en vivo',
+    simulacroActivo: 'Simulacro de falla en curso',
+    mttdEtiqueta: 'medido en mi lab',
+    mttdTexto: `Una caída real (errores 5xx en aumento) se detectó en ${n(MEDIDAS.mttd)} s, medido en el observability-lab con la bitácora de la corrida publicada.`,
+    bitacora: 'Ver la bitácora',
+    simulacro: {
+      titulo: 'Romper algo y ver cómo se recupera',
+      texto: 'Chaos Lab: simulacros en tu navegador, sin instalar nada',
+    },
+    tablero: {
+      titulo: 'Ver el tablero de métricas',
+      texto: 'DORA del propio sitio y latencia medida desde tu navegador',
+    },
   },
 }
 
 export const metrics = [
-  { valor: '+4', unidad: 'años', label: 'en operaciones IT y soporte técnico N2-N3' },
-  { valor: 'P1/P2', unidad: '', label: 'gestión de incidentes críticos end-to-end' },
-  { valor: '24×7', unidad: '', label: 'entornos productivos de alta disponibilidad' },
-  { valor: '15+', unidad: 'tools', label: 'de monitoreo, observabilidad y automatización' },
+  // `corto` es la versión de una línea que usa la portada.
+  { valor: '+4', unidad: 'años', label: 'en operaciones IT y soporte técnico N2-N3', corto: '4+ años en operaciones IT' },
+  { valor: 'P1/P2', unidad: '', label: 'gestión de incidentes críticos end-to-end', corto: 'incidentes P1/P2 de punta a punta' },
+  { valor: '24×7', unidad: '', label: 'entornos productivos de alta disponibilidad', corto: 'entornos 24×7' },
+  { valor: '15+', unidad: 'tools', label: 'de monitoreo, observabilidad y automatización', corto: '15+ herramientas de observabilidad' },
 ]
 
 // ── Métricas de los labs ─────────────────────────────────────
@@ -147,7 +143,7 @@ export const about = {
   bajada:
     'La experiencia en gestión de incidentes no es un paso previo a SRE: es exactamente el insumo que hace valiosa la práctica SRE.',
   parrafos: [
-    'Soy un perfil híbrido: vengo de la trinchera de la operación —la llamada a las 3 AM, el servicio caído, el cliente esperando— y hacia allí llevo las prácticas de ingeniería que evitan que esa llamada vuelva a ocurrir.',
+    'Vengo de la trinchera de la operación —la llamada a las 3 AM, el servicio caído, el cliente esperando— y hacia allí llevo las prácticas de ingeniería que evitan que esa llamada vuelva a ocurrir.',
     'Durante años gestioné incidentes críticos en Personal Pay, la fintech del grupo Telecom Argentina: coordiné War Rooms con equipos de infraestructura, desarrollo y negocio, prioricé bajo presión con criterio de impacto real, comuniqué estado a stakeholders y cerré cada evento con un RCA accionable. Ese trabajo me dejó una convicción: la mayoría de los incidentes no son sorpresas, son deuda técnica y falta de observabilidad que se cobran factura.',
     'Por eso hoy me especializo en SRE y DevOps. La gestión de incidentes bajo ITIL me da algo que no se aprende en un curso: entender qué falla, por qué falla y qué señales lo anticipaban. Sumado a Docker, Kubernetes, Infrastructure as Code, CI/CD y scripting, esa perspectiva se convierte en prevención: alertas que importan, runbooks que se ejecutan solos y arquitecturas que degradan con elegancia en lugar de caer.',
   ],
@@ -162,6 +158,8 @@ export const about = {
       texto: 'Instrumentar, automatizar y diseñar para que no vuelva a pasar',
     },
   },
+  leerMas: 'Leer más sobre mi recorrido',
+  leerMenos: 'Mostrar menos',
   comoTrabajo: 'Cómo trabajo',
   principios: [
     {
@@ -175,7 +173,7 @@ export const about = {
         'Restaurar el servicio es la mitad del trabajo. La otra mitad es la causa raíz, la acción preventiva y su seguimiento hasta el cierre real.',
     },
     {
-      titulo: 'Blameless por default',
+      titulo: 'Sin culpables, por defecto',
       texto:
         'Los sistemas fallan, no las personas. Los post-mortems sin culpa son los que producen mejoras reales, porque la información fluye sin miedo.',
     },
@@ -303,7 +301,7 @@ export const projects = [
     id: 'vagrant-lab',
     titulo: 'Entorno de Virtualización con Vagrant + VirtualBox',
     categoria: 'DevOps Lab · Infrastructure as Code',
-    estado: 'En curso',
+    estado: 'Activo',
     problema:
       'Probar configuraciones de servidores y escenarios de falla en producción no es opción. Hacía falta un entorno local reproducible, descartable y versionado.',
     solucion:
@@ -322,7 +320,7 @@ export const projects = [
     id: 'observability-lab',
     titulo: 'Dashboard de Monitoreo & Análisis de Logs',
     categoria: 'DevOps Lab · Observabilidad',
-    estado: 'En curso',
+    estado: 'Activo',
     problema:
       'La detección tardía es la principal causa de un MTTR alto. Quise reproducir en laboratorio el ciclo completo: métrica → umbral → alerta → diagnóstico.',
     solucion:
@@ -341,7 +339,7 @@ export const projects = [
     id: 'k8s-lab',
     titulo: 'Cluster Kubernetes de Laboratorio',
     categoria: 'DevOps Lab · Orquestación',
-    estado: 'En curso',
+    estado: 'Activo',
     problema:
       'Entender la resiliencia de un sistema distribuido exige romperlo: ver qué pasa cuando un pod muere, cuando un nodo se cae o cuando un deploy sale mal.',
     solucion:
@@ -360,7 +358,7 @@ export const projects = [
     id: 'cicd-pipeline',
     titulo: 'Pipeline de CI/CD con escaneo de vulnerabilidades',
     categoria: 'DevOps Lab · CI/CD',
-    estado: 'En curso',
+    estado: 'Activo',
     problema:
       'En un War Room, "¿qué cambió?" tiene que tener respuesta en segundos. Una imagen construida a mano, sin saber de qué commit salió ni qué vulnerabilidades trae, no la tiene.',
     solucion:
@@ -379,7 +377,7 @@ export const projects = [
     id: 'terraform-gcp-lab',
     titulo: 'Infraestructura en Google Cloud con Terraform',
     categoria: 'DevOps Lab · Infrastructure as Code',
-    estado: 'En curso',
+    estado: 'Activo',
     problema:
       '"¿Quién abrió ese puerto?" no tiene respuesta si la infraestructura cambia a mano en la consola. Y un apply sin plan revisado es un cambio a ciegas.',
     solucion:
@@ -398,7 +396,7 @@ export const projects = [
     id: 'sre-slo-lab',
     titulo: 'SLOs, error budget y alertas por burn rate',
     categoria: 'DevOps Lab · SRE',
-    estado: 'En curso',
+    estado: 'Activo',
     problema:
       'Una alerta de umbral fijo despierta a alguien por un pico de 30 segundos y calla ante un 0,8 % sostenido que se come el margen del mes. El equipo termina ignorándolas.',
     solucion:
@@ -417,7 +415,7 @@ export const projects = [
     id: 'incident-postmortems',
     titulo: 'Postmortems y runbooks de incidentes',
     categoria: 'DevOps Lab · Incident Management',
-    estado: 'En curso',
+    estado: 'Activo',
     problema:
       'Un postmortem escrito para cerrar el ticket, con "error humano" como causa raíz y acciones sin dueño, es la forma más segura de que el mismo incidente vuelva.',
     solucion:
@@ -669,8 +667,18 @@ export const ui = {
       'Lo que viste acá es cómo trabajo: medir antes de opinar, romper a propósito para aprender y dejar todo por escrito. Si encaja con lo que buscás, hablemos.',
   },
 
+  // Definiciones en lenguaje simple de las siglas (ui/Sigla).
+  glosario: {
+    mttd: 'MTTD (tiempo medio de detección): cuánto tarda el monitoreo en darse cuenta de que algo se rompió. Más bajo es mejor: menos tiempo con clientes afectados sin que nadie lo sepa.',
+    p95: 'Percentil 95: el 95 % de las cargas tarda esto o menos. Mide la experiencia de los usuarios más lentos, no la del promedio.',
+    cfr: 'Change failure rate: qué porcentaje de los despliegues terminó en falla. Más bajo es mejor: mide cuán seguro es publicar cambios.',
+    leadTime: 'Lead time: cuánto tarda un cambio desde el commit hasta estar en producción. Más bajo es mejor.',
+    deployFreq: 'Frecuencia de despliegue: cada cuánto se publica a producción. Publicar seguido y en pasos chicos baja el riesgo de cada cambio.',
+  },
+
   nav: {
     cta: 'Contactar',
+    saltar: 'Saltar al contenido',
     volverArriba: 'Volver arriba',
     inicioAria: 'Samuel García — ir al inicio',
   },
@@ -746,6 +754,7 @@ export const ui = {
     avisoPanel:
       'Hay un simulacro de chaos engineering en curso: el servicio marcado muestra un valor inventado a propósito. Los demás siguen siendo chequeos reales, y al terminar el simulacro vuelve a verse el valor medido.',
     inyectar: 'Inyectar fallo',
+    reglaAlerta: 'Regla de alerta que lo detecta (PromQL):',
     enCurso: 'Inyectado',
     activo: (titulo) => `Simulacro en curso · ${titulo}`,
     listo: 'Sin simulacro activo',
@@ -809,7 +818,7 @@ export const ui = {
   // leyendo qué hay como se decide entrar.
   sandbox: {
     etiqueta: 'Sandbox interactivo',
-    titulo: 'Explorar el SRE Interactive Sandbox',
+    titulo: 'Explorar el sandbox interactivo de SRE',
     texto:
       'Nueve paneles con datos reales: las métricas DORA del pipeline que publica esta página, la latencia p95 medida en vivo, la topología, un sandbox de chaos engineering con auto-healing, los runbooks paso a paso, el presupuesto de error, los post-mortems con su bitácora y una consola que responde comandos. Corre entero en tu navegador y no hay nada que instalar.',
     abrir: 'Explorar el sandbox',
@@ -871,7 +880,7 @@ export const ui = {
     label: 'Telemetría & DORA',
     titulo: 'El tablero con el que este sitio se mira a sí mismo',
     bajada:
-      'Las métricas DORA calculadas sobre el pipeline que publica esta página, más la latencia que está midiendo tu navegador ahora mismo. Cada tile muestra arriba el valor medido y abajo el objetivo declarado: cuando no coinciden, se ve.',
+      'Las métricas DORA calculadas sobre el pipeline que publica esta página, más la latencia que está midiendo tu navegador ahora mismo. Cada tarjeta muestra arriba el valor medido y abajo el objetivo declarado: cuando no coinciden, se ve.',
     tablero: 'dora-board · portfolio',
     ventana: (d) => `ventana ${d} d`,
     fuenteActions: 'fuente: github actions · main',
@@ -879,6 +888,9 @@ export const ui = {
     cumple: 'cumple',
     noCumple: 'meta exigente',
     objetivoDiario: 'diario',
+    // Cuando GitHub no responde y el tablero usa la foto del último build.
+    ultimoDato: (hace) =>
+      `GitHub no respondió desde tu red (límite de consultas): se muestra el último dato conocido, tomado en el último despliegue, ${hace}.`,
     // Arriba del tablero: un número que no llega al objetivo no es una
     // falla escondida, es una meta exigente que se muestra igual.
     notaObjetivos:

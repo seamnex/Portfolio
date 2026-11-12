@@ -71,7 +71,7 @@ export default function Skills() {
 
   return (
     <Section id="skills" label={skillsMeta.label} titulo={skillsMeta.titulo} bajada={skillsMeta.bajada}>
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid items-start gap-5 lg:grid-cols-2">
         {skills.map((s) => (
           <SkillCard
             key={s.id}

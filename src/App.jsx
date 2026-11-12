@@ -28,7 +28,9 @@ function Vistas() {
   const { montadas } = useVista()
 
   return (
-    <main>
+    // `tabIndex -1`: el enlace "Saltar al contenido" de la barra le pasa el
+    // foco acá, y desde acá el tabulador sigue por la vista activa.
+    <main id="contenido" tabIndex={-1} className="focus:outline-none">
       <VistaPerfil />
       {montadas.includes('observabilidad') && <VistaObservabilidad />}
       {montadas.includes('laboratorio') && <VistaLaboratorio />}

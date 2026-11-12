@@ -1,19 +1,105 @@
-import { ArrowRight, Download, FlaskConical, Languages, Linkedin, MapPin, Github } from 'lucide-react'
+import { Activity, ArrowRight, ArrowUpRight, Download, FlaskConical, Languages, Linkedin, MapPin, Github } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useVista } from '../navegacion/VistaProvider'
+import { useEstado } from '../estado/EstadoProvider'
+import { useCaos } from '../caos/CaosProvider'
+import { MEDIDAS, num } from '../data/medidas.js'
 import StatusBadge from './ui/StatusBadge'
 import CopyButton from './ui/CopyButton'
+import Sigla from './ui/Sigla'
 
-const toneMap = {
-  ok: 'text-ok',
-  accent: 'text-accent',
-  crit: 'text-crit',
-  muted: 'text-slate-400',
+// Color del punto de estado según el agregado del panel. Un dato que no
+// se pudo verificar queda gris: nunca verde por defecto.
+const PUNTO = {
+  ok: 'bg-ok',
+  degradado: 'bg-warn',
+  caido: 'bg-crit',
+  desconocido: 'bg-slate-500',
+  cargando: 'bg-slate-500',
+}
+
+/**
+ * La columna derecha de la portada: el sitio mostrándose a sí mismo.
+ *
+ * Antes era una terminal decorativa con un comando inventado y una grilla
+ * de métricas de plantilla. Ahora es la prueba: el estado real del sitio
+ * consultado desde el navegador de quien mira, el MTTD medido en el lab
+ * con su bitácora, y las dos puertas a lo que un PDF no puede mostrar.
+ */
+function PanelVivo() {
+  const { hero, ui, lang, labMetrics } = useContenido()
+  const { irA } = useVista()
+  const { agregado } = useEstado()
+  const { activo: simulacro } = useCaos()
+  const p = hero.panel
+
+  const estado = simulacro ? 'degradado' : agregado
+  const textoEstado = simulacro ? p.simulacroActivo : ui.estado.banner[agregado]
+  const bitacora = labMetrics.items.find((m) => m.id === 'mttd')?.repo
+
+  return (
+    <div className="card p-6 shadow-2xl shadow-black/40">
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm font-semibold text-white">{p.titulo}</p>
+        <p className="flex items-center gap-2 text-[13px] text-slate-400" aria-live="polite">
+          <span className={`h-2 w-2 shrink-0 rounded-full ${PUNTO[estado] ?? PUNTO.desconocido}`} aria-hidden="true" />
+          {textoEstado}
+        </p>
+      </div>
+
+      <div className="mt-5 border-t border-base-600 pt-5">
+        <p className="text-[13px] text-slate-400">
+          <Sigla id="mttd">MTTD</Sigla> · {p.mttdEtiqueta}
+        </p>
+        <p className="mt-1 text-5xl font-bold tabular-nums tracking-tight text-white">
+          {num(MEDIDAS.mttd, lang)}
+          <span className="ml-1.5 text-xl font-medium text-slate-400">s</span>
+        </p>
+        <p className="mt-3 text-[14px] leading-relaxed text-slate-400">{p.mttdTexto}</p>
+        {bitacora && (
+          <a
+            href={bitacora}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="mt-2 inline-flex items-center gap-1.5 py-1.5 text-[13px] font-medium text-accent transition-colors hover:text-white"
+          >
+            {p.bitacora} <ArrowUpRight size={14} aria-hidden="true" />
+          </a>
+        )}
+      </div>
+
+      <div className="mt-4 grid gap-2.5 border-t border-base-600 pt-5">
+        {[
+          { id: 'laboratorio', Icono: FlaskConical, ...p.simulacro },
+          { id: 'observabilidad', Icono: Activity, ...p.tablero },
+        ].map(({ id, Icono, titulo, texto }) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => irA(id)}
+            className="group flex w-full items-center gap-3.5 rounded-lg border border-base-600 bg-base-800/50 px-4 py-3 text-left transition-colors duration-200 hover:border-accent/50 hover:bg-base-700/70"
+          >
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-accent/30 bg-base-900 text-accent">
+              <Icono size={16} aria-hidden="true" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-[14px] font-semibold text-white">{titulo}</span>
+              <span className="block text-[13px] leading-snug text-slate-400">{texto}</span>
+            </span>
+            <ArrowRight
+              size={16}
+              className="shrink-0 text-slate-500 transition-[transform,color] duration-200 group-hover:translate-x-0.5 group-hover:text-accent"
+              aria-hidden="true"
+            />
+          </button>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 export default function Hero() {
   const { hero, metrics, profile, ui } = useContenido()
-  const { irA } = useVista()
 
   return (
     <section id="inicio" className="relative z-10 overflow-hidden pb-10 pt-28 sm:pb-14 sm:pt-36">
@@ -37,6 +123,10 @@ export default function Hero() {
               <span className="text-accent">{profile.target}</span>
             </p>
 
+            {/* Lo que antes era una grilla de cuatro tarjetas: una línea.
+                Son credenciales, no la prueba; la prueba está a la derecha. */}
+            <p className="mt-3 text-[14px] text-slate-400">{metrics.map((m) => m.corto).join(" · ")}</p>
+
             <p className="mt-6 text-balance text-2xl font-semibold leading-snug tracking-tight text-slate-200 sm:text-[1.7rem]">
               {hero.headline[0]} <span className="text-accent">{hero.headline[1]}</span>
             </p>
@@ -44,7 +134,7 @@ export default function Hero() {
             <p className="mt-4 max-w-xl text-base leading-relaxed text-slate-400">{hero.subtitle}</p>
 
             {/* El par principal es CV y contacto: es lo que viene a hacer
-                un reclutador. A los labs se llega por la fila de abajo. */}
+                un reclutador. Al laboratorio se llega desde el panel. */}
             <div className="mt-8 flex flex-wrap gap-3">
               {/* `download` con nombre explícito: el archivo servido se llama
                   cv-…-sre.pdf, pero en la carpeta de descargas de un reclutador
@@ -56,36 +146,6 @@ export default function Hero() {
                 {ui.acciones.contactar} <ArrowRight size={16} />
               </a>
             </div>
-
-            {/* La puerta al laboratorio, ahora secundaria: es lo que un PDF
-                no puede ofrecer, pero no tiene que tapar al CV ni al
-                contacto. Una fila liviana, sin brillo, que cambia de vista
-                sin recargar. */}
-            <button
-              type="button"
-              onClick={() => irA('laboratorio')}
-              className="group mt-6 flex w-full max-w-xl items-center gap-3.5 rounded-xl border border-base-600 bg-base-700/40 px-4 py-3.5 text-left transition-colors duration-200 hover:border-accent/50 hover:bg-base-700/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-base-800"
-            >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-accent/30 bg-base-900 text-accent">
-                <FlaskConical size={18} aria-hidden="true" />
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-ok">
-                  <span className="relative flex h-2 w-2" aria-hidden="true">
-                    <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-ok" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-ok" />
-                  </span>
-                  {hero.sandbox.tag}
-                </span>
-                <span className="mt-0.5 block text-[15px] font-semibold text-white">{hero.sandbox.titulo}</span>
-                <span className="mt-0.5 block text-[13px] leading-snug text-slate-400">{hero.sandbox.texto}</span>
-              </span>
-              <ArrowRight
-                size={16}
-                className="shrink-0 text-slate-500 transition-[transform,color] duration-200 group-hover:translate-x-0.5 group-hover:text-accent"
-                aria-hidden="true"
-              />
-            </button>
 
             <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-slate-500">
               <span className="inline-flex items-center gap-1.5">
@@ -116,52 +176,9 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Columna derecha — terminal / status panel */}
+          {/* Columna derecha — el sitio en vivo */}
           <div className="animate-fade-up [animation-delay:120ms]">
-            <div className="card overflow-hidden shadow-2xl shadow-black/40">
-              <div className="flex items-center gap-2 border-b border-base-600 bg-base-800/80 px-4 py-3">
-                <span className="h-2.5 w-2.5 rounded-full bg-crit/70" />
-                <span className="h-2.5 w-2.5 rounded-full bg-warn/70" />
-                <span className="h-2.5 w-2.5 rounded-full bg-ok/70" />
-                <span className="ml-2 font-mono text-[11px] text-slate-500">{hero.terminal.titulo}</span>
-              </div>
-
-              <div className="relative p-5 font-mono text-[12.5px] leading-relaxed sm:text-[13px]">
-                <span className="pointer-events-none absolute inset-x-0 top-0 h-16 animate-scanline bg-gradient-to-b from-accent/[0.06] to-transparent" />
-
-                <p className="text-slate-500">
-                  <span className="text-ok">{hero.terminal.prompt}</span>{' '}
-                  <span className="text-slate-300">{hero.terminal.comando}</span>
-                </p>
-
-                <div className="mt-4 space-y-2.5">
-                  {hero.terminal.salida.map((linea) => (
-                    <div key={linea.k} className="flex items-baseline justify-between gap-4 border-b border-base-600/50 pb-2">
-                      <span className="text-slate-500">{linea.k}</span>
-                      <span className={`text-right ${toneMap[linea.tone]}`}>{linea.v}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <p className="mt-4 text-slate-500">
-                  <span className="text-ok">{hero.terminal.prompt}</span>{' '}
-                  <span className="animate-blink text-accent">▊</span>
-                </p>
-              </div>
-            </div>
-
-            {/* Métricas rápidas */}
-            <dl className="mt-5 grid grid-cols-2 gap-3">
-              {metrics.map((m) => (
-                <div key={m.label} className="card card-hover p-4">
-                  <dt className="text-xl font-bold text-white">
-                    {m.valor}
-                    {m.unidad && <span className="ml-1 text-xs font-medium text-accent">{m.unidad}</span>}
-                  </dt>
-                  <dd className="mt-1 text-[11.5px] leading-snug text-slate-500">{m.label}</dd>
-                </div>
-              ))}
-            </dl>
+            <PanelVivo />
           </div>
         </div>
       </div>

@@ -20,6 +20,7 @@ import { cadencia, cumple, formatearDuracion } from '../lib/dora.js'
 import { arranqueLatencia, rachaCfr, tendenciaLeadTime, VENTANA_CORTA } from '../lib/anotaciones.js'
 import Bloque from './ui/Bloque'
 import Sparkline from './ui/Sparkline'
+import Sigla from './ui/Sigla'
 
 const iconos = { Rocket, GitCommitHorizontal, ShieldAlert, Timer, Activity }
 
@@ -47,6 +48,7 @@ const tonos = {
 function Tile({
   icono,
   titulo,
+  sigla,
   valor,
   unidad,
   tone = 'accent',
@@ -72,7 +74,7 @@ function Tile({
             {Icono && <Icono size={13} />}
           </span>
           <h3 className="font-mono text-[11px] uppercase leading-tight tracking-[0.14em] text-slate-400">
-            {titulo}
+            {sigla ? <Sigla id={sigla}>{titulo}</Sigla> : titulo}
           </h3>
         </div>
         {veredicto != null && (
@@ -124,10 +126,19 @@ function Tile({
   )
 }
 
+/** "hace 3 h" / "3 hours ago", sin dependencias. */
+function haceCuanto(iso, lang) {
+  const seg = Math.max(0, (Date.now() - Date.parse(iso)) / 1000)
+  const rtf = new Intl.RelativeTimeFormat(lang === 'es' ? 'es-AR' : 'en', { numeric: 'auto' })
+  if (seg < 3600) return rtf.format(-Math.max(1, Math.round(seg / 60)), 'minute')
+  if (seg < 86400) return rtf.format(-Math.round(seg / 3600), 'hour')
+  return rtf.format(-Math.round(seg / 86400), 'day')
+}
+
 export default function Telemetry() {
   const { ui, lang } = useContenido()
   const t = ui.telemetria
-  const { dora, motivo, cargando, latencia, activarMuestreo, ventanaDias, repo } = useTelemetria()
+  const { dora, motivo, cargando, latencia, activarMuestreo, ventanaDias, repo, snapshot } = useTelemetria()
   const { activo: simulacro } = useCaos()
 
   // El muestreo de latencia arranca cuando el panel entra en pantalla y se
@@ -218,6 +229,15 @@ export default function Telemetry() {
           </span>
         </div>
 
+        {snapshot && (
+          // GitHub no respondió en vivo (casi siempre, el límite de 60
+          // consultas por hora de la red del visitante) y los números salen
+          // de la foto tomada en el último despliegue. Se dice, con su edad.
+          <p className="border-b border-base-600 bg-base-800/60 px-5 py-2 font-mono text-[11.5px] text-slate-400">
+            {t.ultimoDato(haceCuanto(snapshot, lang))}
+          </p>
+        )}
+
         {simulacro && (
           // El simulacro no toca estos números y conviene decirlo justo acá:
           // alguien que acaba de inyectar un fallo espera ver el tablero en
@@ -239,6 +259,7 @@ export default function Telemetry() {
               t={t}
               icono="Rocket"
               titulo={t.tiles.despliegues}
+              sigla="deployFreq"
               valor={dora ? dora.despliegues.valor : null}
               unidad={t.unidades.despliegues(ventanaDias)}
               tone={cumple(dora?.despliegues.valor, OBJETIVOS.despliegues) ? 'ok' : 'accent'}
@@ -259,6 +280,7 @@ export default function Telemetry() {
               t={t}
               icono="GitCommitHorizontal"
               titulo={t.tiles.leadTime}
+              sigla="leadTime"
               valor={lt?.valor ?? null}
               unidad={lt?.unidad}
               tone={cumple(dora?.leadTime?.valor, OBJETIVOS.leadTime) ? 'ok' : 'accent'}
@@ -279,6 +301,7 @@ export default function Telemetry() {
               t={t}
               icono="ShieldAlert"
               titulo={t.tiles.cfr}
+              sigla="cfr"
               valor={dora?.cfr ? num(dora.cfr.valor.toFixed(1), lang) : null}
               unidad="%"
               tone={cumple(dora?.cfr?.valor, OBJETIVOS.cfr) ? 'ok' : 'accent'}
@@ -297,6 +320,7 @@ export default function Telemetry() {
               t={t}
               icono="Timer"
               titulo={t.tiles.mttd}
+              sigla="mttd"
               valor={num(MEDIDAS.mttd, lang)}
               unidad="s"
               tone="accent"
@@ -315,6 +339,7 @@ export default function Telemetry() {
               t={t}
               icono="Activity"
               titulo={t.tiles.p95}
+              sigla="p95"
               valor={latencia.p95 != null ? num(latencia.p95.toFixed(1), lang) : null}
               unidad="ms"
               tone="accent"

@@ -45,31 +45,28 @@ export const hero = {
   transicion: 'moving into',
   subtitle:
     'I run P1/P2 incidents in high-volume environments — Fintech and Telco — leading War Rooms, restoring service and closing the loop with RCAs that stop the same failure from coming back. Today I am taking that operational discipline into SRE and DevOps: observability, automation and systems that fail rarely and recover fast.',
-  terminal: {
-    titulo: 'incident-console — bash',
-    prompt: 'samuel@sre-lab:~$',
-    comando: 'kubectl get incidents --severity=P1 --status=resolved',
-    salida: [
-      { k: 'MTTD measured in lab', v: `${n(MEDIDAS.mttd)} s — with a published log`, tone: 'ok' },
-      { k: 'War Rooms led', v: 'Fintech · Telco', tone: 'accent' },
-      { k: 'Improvement loop', v: 'Detect → Mitigate → RCA → Prevent', tone: 'muted' },
-      { k: 'Status', v: 'ONLINE — open to offers', tone: 'ok' },
-    ],
-  },
-  sandbox: {
-    tag: 'Live sandbox',
-    titulo: 'Inject failures live',
-    texto:
-      'Chaos engineering with auto-healing, runbooks and a console: break something and watch it recover. Runs in your browser, nothing to install.',
-    cta: 'Open the Chaos Lab',
+  panel: {
+    titulo: 'This site, live',
+    simulacroActivo: 'Failure drill in progress',
+    mttdEtiqueta: 'measured in my lab',
+    mttdTexto: `A real outage (rising 5xx errors) was detected in ${n(MEDIDAS.mttd)} s, measured in the observability-lab with the run log published.`,
+    bitacora: 'See the run log',
+    simulacro: {
+      titulo: 'Break something and watch it recover',
+      texto: 'Chaos Lab: drills in your browser, nothing to install',
+    },
+    tablero: {
+      titulo: 'See the metrics dashboard',
+      texto: 'The site’s own DORA metrics and latency measured from your browser',
+    },
   },
 }
 
 export const metrics = [
-  { valor: '4+', unidad: 'years', label: 'in IT operations and N2-N3 technical support' },
-  { valor: 'P1/P2', unidad: '', label: 'end-to-end critical incident management' },
-  { valor: '24×7', unidad: '', label: 'high-availability production environments' },
-  { valor: '15+', unidad: 'tools', label: 'for monitoring, observability and automation' },
+  { valor: '4+', unidad: 'years', label: 'in IT operations and N2-N3 technical support', corto: '4+ years in IT operations' },
+  { valor: 'P1/P2', unidad: '', label: 'end-to-end critical incident management', corto: 'end-to-end P1/P2 incidents' },
+  { valor: '24×7', unidad: '', label: 'high-availability production environments', corto: '24×7 environments' },
+  { valor: '15+', unidad: 'tools', label: 'for monitoring, observability and automation', corto: '15+ observability tools' },
 ]
 
 export const labMetrics = {
@@ -114,7 +111,7 @@ export const about = {
   bajada:
     'Incident management experience is not a stepping stone towards SRE: it is precisely the input that makes SRE practice worth anything.',
   parrafos: [
-    'I am a hybrid profile: I come from the operational trenches — the 3 AM call, the service down, the customer waiting — and I bring back to them the engineering practices that keep that call from happening again.',
+    'I come from the operational trenches — the 3 AM call, the service down, the customer waiting — and I bring back to them the engineering practices that keep that call from happening again.',
     'For years I ran critical incidents at Personal Pay, the fintech arm of the Telecom Argentina group: coordinating War Rooms with infrastructure, development and business teams, prioritising under pressure by real impact, communicating status to stakeholders and closing every event with an actionable RCA. That work left me with one conviction: most incidents are not surprises — they are technical debt and missing observability collecting their bill.',
     'That is why I specialise in SRE and DevOps today. Managing incidents under ITIL gives me something no course teaches: understanding what fails, why it fails and which signals were pointing at it beforehand. Combined with Docker, Kubernetes, Infrastructure as Code, CI/CD and scripting, that perspective turns into prevention: alerts that matter, runbooks that run themselves and architectures that degrade gracefully instead of falling over.',
   ],
@@ -123,6 +120,8 @@ export const about = {
     reactivo: { etiqueta: 'Reactive · ITIL', texto: 'Detect, mitigate and restore service under pressure' },
     preventivo: { etiqueta: 'Preventive · SRE', texto: 'Instrument, automate and design so it does not happen again' },
   },
+  leerMas: 'Read more about my path',
+  leerMenos: 'Show less',
   comoTrabajo: 'How I work',
   principios: [
     {
@@ -248,7 +247,7 @@ export const projects = traducirPorId(projectsEs, {
     imagen: '/proyectos/vagrant-lab-en',
     titulo: 'Virtualisation environment with Vagrant + VirtualBox',
     categoria: 'DevOps Lab · Infrastructure as Code',
-    estado: 'In progress',
+    estado: 'Active',
     problema:
       'Testing server configurations and failure scenarios in production is not an option. I needed a local environment that was reproducible, disposable and versioned.',
     solucion:
@@ -263,7 +262,7 @@ export const projects = traducirPorId(projectsEs, {
     imagen: '/proyectos/observability-lab-en',
     titulo: 'Monitoring dashboard & log analytics',
     categoria: 'DevOps Lab · Observability',
-    estado: 'In progress',
+    estado: 'Active',
     problema:
       'Late detection is the main driver of a high MTTR. I wanted to reproduce the full loop in a lab: metric → threshold → alert → diagnosis.',
     solucion:
@@ -278,7 +277,7 @@ export const projects = traducirPorId(projectsEs, {
     imagen: '/proyectos/k8s-lab-en',
     titulo: 'Kubernetes laboratory cluster',
     categoria: 'DevOps Lab · Orchestration',
-    estado: 'In progress',
+    estado: 'Active',
     problema:
       'Understanding the resilience of a distributed system requires breaking it: seeing what happens when a pod dies, a node goes down or a deploy goes wrong.',
     solucion:
@@ -293,7 +292,7 @@ export const projects = traducirPorId(projectsEs, {
     imagen: '/proyectos/cicd-pipeline-en',
     titulo: 'CI/CD pipeline with vulnerability scanning',
     categoria: 'DevOps Lab · CI/CD',
-    estado: 'In progress',
+    estado: 'Active',
     problema:
       'In a War Room, "what changed?" needs an answer in seconds. A hand-built image, with no record of which commit it came from or which vulnerabilities it carries, has none.',
     solucion:
@@ -308,7 +307,7 @@ export const projects = traducirPorId(projectsEs, {
     imagen: '/proyectos/terraform-gcp-lab-en',
     titulo: 'Google Cloud infrastructure with Terraform',
     categoria: 'DevOps Lab · Infrastructure as Code',
-    estado: 'In progress',
+    estado: 'Active',
     problema:
       '"Who opened that port?" has no answer if infrastructure changes by hand in the console. And an apply without a reviewed plan is a blind change.',
     solucion:
@@ -323,7 +322,7 @@ export const projects = traducirPorId(projectsEs, {
     imagen: '/proyectos/sre-slo-lab-en',
     titulo: 'SLOs, error budgets and burn-rate alerting',
     categoria: 'DevOps Lab · SRE',
-    estado: 'In progress',
+    estado: 'Active',
     problema:
       'A fixed-threshold alert wakes someone up for a 30-second spike and stays silent through a sustained 0.8% that eats the month\'s margin. The team ends up ignoring alerts.',
     solucion:
@@ -338,7 +337,7 @@ export const projects = traducirPorId(projectsEs, {
     imagen: '/proyectos/incident-postmortems-en',
     titulo: 'Incident postmortems and runbooks',
     categoria: 'DevOps Lab · Incident Management',
-    estado: 'In progress',
+    estado: 'Active',
     problema:
       'A postmortem written to close the ticket, with "human error" as root cause and ownerless action items, is the surest way for the same incident to come back.',
     solucion:
@@ -535,8 +534,17 @@ export const ui = {
       'What you just saw is how I work: measure before giving an opinion, break things on purpose to learn, and write it all down. If that fits what you need, let’s talk.',
   },
 
+  glosario: {
+    mttd: 'MTTD (mean time to detect): how long monitoring takes to notice something broke. Lower is better: less time with customers affected and nobody aware.',
+    p95: '95th percentile: 95% of loads take this long or less. It measures the experience of the slowest users, not the average one.',
+    cfr: 'Change failure rate: what share of deployments ended in a failure. Lower is better: it measures how safe it is to ship changes.',
+    leadTime: 'Lead time: how long a change takes from commit to production. Lower is better.',
+    deployFreq: 'Deployment frequency: how often code ships to production. Shipping often, in small steps, lowers the risk of each change.',
+  },
+
   nav: {
     cta: 'Get in touch',
+    saltar: 'Skip to content',
     volverArriba: 'Back to top',
     inicioAria: 'Samuel García — go to home',
   },
@@ -605,6 +613,7 @@ export const ui = {
     avisoPanel:
       'A chaos engineering drill is running: the flagged service is showing a deliberately fabricated value. The others are still real checks, and the measured value comes back as soon as the drill ends.',
     inyectar: 'Inject fault',
+    reglaAlerta: 'Alert rule that catches it (PromQL):',
     enCurso: 'Injected',
     activo: (titulo) => `Drill running · ${titulo}`,
     listo: 'No drill running',
@@ -713,7 +722,7 @@ export const ui = {
     label: 'Telemetry & DORA',
     titulo: 'The dashboard this site points at itself',
     bajada:
-      'DORA metrics computed over the pipeline that publishes this page, plus the latency your browser is measuring right now. Every tile shows the measured value on top and the declared target underneath: when they disagree, you can see it.',
+      'DORA metrics computed over the pipeline that publishes this page, plus the latency your browser is measuring right now. Every card shows the measured value on top and the declared target underneath: when they disagree, you can see it.',
     tablero: 'dora-board · portfolio',
     ventana: (d) => `${d}d window`,
     fuenteActions: 'source: github actions · main',
@@ -721,6 +730,8 @@ export const ui = {
     cumple: 'met',
     noCumple: 'stretch goal',
     objetivoDiario: 'daily',
+    ultimoDato: (hace) =>
+      `GitHub did not answer from your network (rate limit): showing the last known data, captured at the latest deploy, ${hace}.`,
     notaObjetivos:
       'The targets are goals I set for this site, stricter than a portfolio needs. When a number is not there yet, the dashboard marks it as a “stretch goal” instead of hiding it: the same principle as a blameless postmortem.',
     sinDatos: 'no data',

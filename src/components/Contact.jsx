@@ -200,8 +200,9 @@ export default function Contact() {
           </div>
         </div>
 
-        {/* Formulario */}
-        <form onSubmit={onSubmit} noValidate className="card p-6">
+        {/* Formulario. En el teléfono va primero: es la acción, y los
+            datos de contacto quedan como alternativa debajo. */}
+        <form onSubmit={onSubmit} noValidate className="card order-first p-6 lg:order-none">
           <div className="space-y-4">
             {/* Honeypot: los bots completan todo, las personas no ven este campo.
                 Formspree descarta el envío si viene con contenido. */}

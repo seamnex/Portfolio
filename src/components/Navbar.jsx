@@ -74,6 +74,18 @@ export default function Navbar() {
         scrolled ? 'border-b border-base-600/80 bg-base-900/85 backdrop-blur-lg' : 'border-b border-transparent'
       }`}
     >
+      {/* Saltar al contenido: invisible hasta que recibe foco con teclado.
+          No navega por hash (las vistas usan el hash): mueve el foco. */}
+      <a
+        href="#contenido"
+        onClick={(e) => {
+          e.preventDefault()
+          document.getElementById('contenido')?.focus()
+        }}
+        className="btn-primary sr-only absolute left-4 top-3 z-[60] focus:not-sr-only"
+      >
+        {ui.nav.saltar}
+      </a>
       <nav className="container-x flex h-16 items-center justify-between gap-2 sm:gap-4">
         <button
           type="button"

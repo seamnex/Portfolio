@@ -203,7 +203,31 @@ export function agregar(resultados) {
  * de 100 corridas en la ventana, la frecuencia de despliegue ya está muy
  * por encima de cualquier objetivo que valga la pena mirar.
  */
-export async function historialActions(repo, { usarCache = true, porPagina = 100 } = {}) {
+export async function historialActions(repo, opciones = {}) {
+  const vivo = await historialEnVivo(repo, opciones)
+  if (vivo.estado === 'ok') return vivo
+
+  // Sin dato en vivo, la última foto tomada en el build (ver
+  // scripts/generar-snapshot-github.mjs). Va marcada con su fecha para que
+  // el tablero diga "último dato conocido" y no la presente como recién
+  // medida. Solo el tablero DORA usa este respaldo: el panel de estado
+  // sigue diciendo "no se pudo verificar", porque una foto vieja no prueba
+  // que algo esté funcionando ahora.
+  const foto = await leerSnapshot()
+  const guardado = foto?.historial?.[repo]
+  if (!guardado) return vivo
+  return { ...guardado, deSnapshot: true, capturado: foto.capturado, motivoVivo: vivo.motivo }
+}
+
+let snapshot
+function leerSnapshot() {
+  snapshot ??= fetchConTimeout('/github-snapshot.json')
+    .then((res) => (res.ok ? res.json() : null))
+    .catch(() => null)
+  return snapshot
+}
+
+async function historialEnVivo(repo, { usarCache = true, porPagina = 100 } = {}) {
   const clave = `${repo}:historial`
   if (usarCache) {
     const guardado = leerCache(clave)

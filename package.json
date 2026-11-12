@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generar-cv.mjs && vite build",
+    "build": "node scripts/generar-cv.mjs && node scripts/generar-snapshot-github.mjs && vite build",
     "preview": "vite preview",
     "og": "node scripts/generar-og.mjs",
     "tarjetas": "node scripts/generar-tarjetas.mjs",
     "cv": "node scripts/generar-cv.mjs",
+    "snapshot": "node scripts/generar-snapshot-github.mjs",
     "verificar": "node scripts/verificar-contenido.mjs",
     "verificar:consola": "node scripts/verificar-consola.mjs"
   },

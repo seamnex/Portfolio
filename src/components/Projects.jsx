@@ -13,9 +13,10 @@ const CATEGORIAS = ['DevOps Lab', 'Proyecto Web']
 
 // Cuántos labs se muestran antes de "Ver los N". Siete tarjetas completas
 // hacían de esta vista un muro de ~15.000 px en el teléfono, y el cierre
-// de contacto quedaba donde nadie llega. Los primeros del array son los
+// de contacto quedaba donde nadie llega. Cuatro y no tres: en la grilla de
+// dos columnas, tres dejaban una tarjeta huérfana. Los primeros del array son los
 // destacados: el orden de `projects` en content.js es la curaduría.
-const DESTACADOS = 3
+const DESTACADOS = 4
 
 function ProjectCard({ p, meta, pipeline }) {
   const activo = p.estado === 'Activo' || p.estado === 'Active'
@@ -53,7 +54,8 @@ function ProjectCard({ p, meta, pipeline }) {
         </div>
         <span
           className={`shrink-0 rounded-full border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider ${
-            activo ? 'border-ok/30 bg-ok/10 text-ok' : 'border-warn/30 bg-warn/10 text-warn'
+            // Activo en gris neutro: el ámbar queda para alertas y simulacros.
+            activo ? 'border-base-500 bg-base-800 text-slate-300' : 'border-warn/30 bg-warn/10 text-warn'
           }`}
         >
           {p.estado}
