@@ -42,7 +42,7 @@ export const profile = {
   nombre: 'Samuel Eduardo García Baciliadis',
   alias: 'Samuel García',
   rol: 'IT Incident Manager / SRE Analyst',
-  target: 'Junior SRE / DevOps Engineer',
+  target: 'SRE / DevOps Engineer',
   ubicacion: 'Buenos Aires, Argentina · Remoto / Híbrido',
   idiomas: 'Español (nativo) · Inglés (intermedio)',
   disponibilidad: 'Disponible para nuevas oportunidades',
@@ -604,7 +604,7 @@ export const contacto = {
 //  sección de trayectoria del sitio.
 // ─────────────────────────────────────────────────────────────
 export const cv = {
-  titular: 'IT Incident Manager / SRE Analyst → Junior SRE / DevOps Engineer',
+  titular: 'IT Incident Manager / SRE Analyst → SRE / DevOps Engineer',
   resumen:
     'Más de 4 años en operaciones IT, con foco en la gestión de incidentes críticos P1/P2 (Major Incident Management) en Fintech y Telecomunicaciones: liderazgo de War Rooms, escalamiento, restauración del servicio bajo presión y cierre con RCA y acciones preventivas. Hoy oriento esa disciplina hacia SRE y DevOps —observabilidad, automatización y confiabilidad— con laboratorios propios donde inyecto fallas, mido detección y recuperación, y publico la bitácora de cada corrida.',
   secciones: {

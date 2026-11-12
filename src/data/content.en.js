@@ -41,7 +41,7 @@ const traducirPorId = (base, traducciones) =>
 export const profile = {
   ...profileEs,
   rol: 'IT Incident Manager / SRE Analyst',
-  target: 'Junior SRE / DevOps Engineer',
+  target: 'SRE / DevOps Engineer',
   ubicacion: 'Buenos Aires, Argentina · Remote / Hybrid',
   idiomas: 'Spanish (native) · English (intermediate)',
   disponibilidad: 'Open to new opportunities',
@@ -477,7 +477,7 @@ export const contacto = {
 //  derived from the other exports rather than written twice.
 // ─────────────────────────────────────────────────────────────
 export const cv = {
-  titular: 'IT Incident Manager / SRE Analyst → Junior SRE / DevOps Engineer',
+  titular: 'IT Incident Manager / SRE Analyst → SRE / DevOps Engineer',
   resumen:
     'Over 4 years in IT operations, focused on critical P1/P2 incident management (Major Incident Management) in Fintech and Telecommunications: leading War Rooms, escalations, restoring service under pressure and closing out with RCAs and preventive actions. Today I am directing that discipline towards SRE and DevOps — observability, automation and reliability — through personal labs where I inject faults, measure detection and recovery, and publish the log of every run.',
   secciones: {
