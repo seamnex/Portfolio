@@ -62,11 +62,23 @@
    pulsos, cursor que parpadea, el paquete de la topología— y los
    desplazamientos: las entradas pasan a ser solo de opacidad y las
    tarjetas dejan de levantarse al pasar el mouse. */
+/* Tramo rayado de la línea del incidente: el tiempo que no fue la falla
+   sino mi medición. Toma el color del texto, así se tiñe con la clase. */
+.rayado {
+  background-color: color-mix(in srgb, currentColor 18%, transparent);
+  background-image: repeating-linear-gradient(
+    135deg,
+    currentColor 0 2px,
+    transparent 2px 6px
+  );
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
+  .animate-trazo,
   .animate-scanline,
   .animate-pulse-dot,
   .animate-blink,

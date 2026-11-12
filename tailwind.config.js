@@ -59,6 +59,12 @@ export default {
         // El paquete del diagrama de topología. Dos keyframes y no uno con
         // transform porque el conector cambia de eje según el breakpoint:
         // vertical apilado en móvil, horizontal en escritorio.
+        // La línea del incidente se traza de izquierda a derecha una sola
+        // vez, como se lee el tiempo. Es el único movimiento de la portada.
+        trazo: {
+          '0%': { clipPath: 'inset(0 100% 0 0)' },
+          '100%': { clipPath: 'inset(0 0 0 0)' },
+        },
         flowX: {
           '0%': { left: '0%', opacity: '0' },
           '12%, 88%': { opacity: '1' },
@@ -76,6 +82,7 @@ export default {
         scanline: 'scanline 6s linear infinite',
         blink: 'blink 1.1s step-end infinite',
         'slide-in': 'slideIn .35s cubic-bezier(.2,.8,.2,1) both',
+        trazo: 'trazo 1.6s cubic-bezier(.16,1,.3,1) .45s both',
         'flow-x': 'flowX 2.4s linear infinite',
         'flow-y': 'flowY 2.4s linear infinite',
       },

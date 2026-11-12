@@ -22,6 +22,8 @@ export const MEDIDAS = {
   mttd: 25.6,
   /** Misma regla exigiendo una sola evaluación sobre el umbral. */
   mttdSensible: 11.5,
+  /** Degradación cortada por el runbook (marcador degradacion_detenida). */
+  corte: 30.0,
   /** Ciclo completo: inyección → alerta → runbook → servicio sano. */
   mttr: 75.1,
   /** Latencia de la propia ventana deslizante, medida dos veces. */

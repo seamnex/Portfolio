@@ -62,8 +62,15 @@ export const hero = {
     simulacroActivo: 'Failure drill in progress',
     hallazgoEtiqueta: 'What I found measuring my lab',
     hallazgo: `${Math.round(MEDIDAS.ventanaInstrumento[0])} of the ${Math.round(MEDIDAS.mttr)} s it took me to resolve the outage were my own measurement`,
-    mttdTexto: 'I measured a real outage (rising 5xx) and the longest stretch was not the incident: it was my alert evaluation window.',
+    mttdTexto: `I measured a real outage (rising 5xx). Those ${Math.round(MEDIDAS.ventanaInstrumento[0])} s were my dashboard's sliding window dragging old errors, plus the 15 s of healthy rate I require before closing.`,
     mttdEtiqueta: `measured · ${n(MEDIDAS.mttdSensible)} s with a more sensitive rule, at the cost of false alarms`,
+    linea: {
+      aria: (mttd, corte, mttr) =>
+        `Incident timeline: the alert fired at ${mttd} s, the failure was stopped at ${corte} s and the incident was marked resolved at ${mttr} s. Everything from the stop to the end was my own measurement.`,
+      detectar: 'the alert fires',
+      cortar: 'the runbook stops the failure',
+      medir: 'my measurement confirms it is over',
+    },
     diagnostico: 'See the diagnosis',
     bitacora: 'See the run log',
     simulacro: {

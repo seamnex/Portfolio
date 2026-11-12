@@ -74,10 +74,19 @@ export const hero = {
     // y lo que vale mostrar es el diagnóstico, que es la habilidad.
     hallazgoEtiqueta: 'Lo que encontré midiendo mi lab',
     hallazgo: `${Math.round(MEDIDAS.ventanaInstrumento[0])} de los ${Math.round(MEDIDAS.mttr)} s que tardé en resolver la caída eran mi propia medición`,
-    mttdTexto: `Medí una caída real (5xx en aumento) y el tramo más largo no era el incidente: era la ventana de evaluación de mi alerta.`,
+    // Bitácora del observability-lab: ventana deslizante de 30 s + 15 s de tasa sana sostenida.
+    mttdTexto: `Medí una caída real (5xx en aumento). Esos ${Math.round(MEDIDAS.ventanaInstrumento[0])} s fueron la ventana deslizante de mi tablero arrastrando errores viejos, más los 15 s de tasa sana que exijo antes de cerrar.`,
     // 11,5 s no es una meta: es lo que dio la regla más sensible, y se paga
     // con falsas alarmas (ver la bitácora del observability-lab).
     mttdEtiqueta: `medido · ${n(MEDIDAS.mttdSensible)} s con una regla más sensible, a costa de falsas alarmas`,
+    // Línea de tiempo de la corrida 1 del observability-lab (Hero > LineaIncidente).
+    linea: {
+      aria: (mttd, corte, mttr) =>
+        `Línea de tiempo del incidente: la alerta saltó a los ${mttd} s, la falla quedó cortada a los ${corte} s y el incidente se dio por resuelto a los ${mttr} s. Desde el corte hasta el final fue mi propia medición.`,
+      detectar: 'la alerta salta',
+      cortar: 'el runbook corta la falla',
+      medir: 'mi medición confirma que terminó',
+    },
     diagnostico: 'Ver el diagnóstico',
     bitacora: 'Ver la bitácora',
     simulacro: {

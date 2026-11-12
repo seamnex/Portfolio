@@ -65,6 +65,63 @@ function TiraVivo() {
 }
 
 /**
+ * El hallazgo dibujado: la corrida 1 del observability-lab en una línea.
+ *
+ * Dicho solo con palabras, "75 s para resolver la caída" se lee como
+ * lentitud. Dibujado, se ve lo que pasó: la falla quedó cortada a los
+ * 30 s y el resto fue mi instrumento confirmándolo. Las proporciones son
+ * los marcadores crudos de la bitácora, sin redondear ni estirar.
+ */
+function LineaIncidente() {
+  const { hero, lang } = useContenido()
+  const l = hero.panel.linea
+  const { mttd, corte, mttr } = MEDIDAS
+  const pct = (v) => `${(v / mttr) * 100}%`
+  const s = (v) => num(v, lang)
+  const medicion = Math.round(MEDIDAS.ventanaInstrumento[0])
+
+  const tramos = [
+    { id: 'detectar', ancho: pct(mttd), barra: 'bg-warn', punto: 'bg-warn', rango: `0–${s(mttd)} s`, texto: l.detectar },
+    { id: 'cortar', ancho: pct(corte - mttd), barra: 'bg-ok', punto: 'bg-ok', rango: `${s(mttd)}–${s(corte)} s`, texto: l.cortar },
+    { id: 'medir', ancho: pct(mttr - corte), barra: 'rayado text-accent', punto: 'rayado text-accent', rango: `${s(corte)}–${s(mttr)} s`, texto: l.medir },
+  ]
+
+  return (
+    <figure className="mt-5">
+      <figcaption className="sr-only">{l.aria(s(mttd), s(corte), s(mttr))}</figcaption>
+      <div aria-hidden="true">
+        {/* La llave sobre el tramo que es el hallazgo: los mismos 45 s del titular. */}
+        <div className="relative h-6" style={{ marginLeft: pct(corte) }}>
+          <span className="absolute inset-x-0 top-0 text-center font-mono text-[12px] font-semibold leading-none text-accent">
+            {medicion} s
+          </span>
+          <span className="absolute inset-x-0 bottom-1 h-1.5 rounded-t-[2px] border-x border-t border-accent/60" />
+        </div>
+        <div className="flex h-3 animate-trazo gap-[3px] overflow-hidden rounded-[3px]">
+          {tramos.map((t) => (
+            <span key={t.id} className={`h-full ${t.barra}`} style={{ width: t.ancho }} />
+          ))}
+        </div>
+        <div className="relative mt-1.5 h-4 font-mono text-[12px] tabular-nums text-slate-500">
+          <span className="absolute left-0">0 s</span>
+          <span className="absolute -translate-x-1/2" style={{ left: pct(corte) }}>{s(corte)} s</span>
+          <span className="absolute right-0">{s(mttr)} s</span>
+        </div>
+        <ul className="mt-3 grid gap-1.5 text-[13px] leading-snug">
+          {tramos.map((t) => (
+            <li key={t.id} className={`flex items-baseline gap-2.5 ${t.id === 'medir' ? 'text-slate-100' : 'text-slate-400'}`}>
+              <span className={`h-2 w-2 shrink-0 translate-y-[-1px] rounded-[2px] ${t.punto}`} />
+              <span className="w-[5.5rem] shrink-0 font-mono text-[12px] tabular-nums text-slate-500">{t.rango}</span>
+              <span>{t.texto}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </figure>
+  )
+}
+
+/**
  * La columna derecha de la portada: el sitio mostrándose a sí mismo.
  *
  * Antes era una terminal decorativa con un comando inventado y una grilla
@@ -82,8 +139,8 @@ function PanelVivo() {
 
   return (
     <div id="panel-vivo" className="card scroll-mt-24 p-6 shadow-2xl shadow-black/40">
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-white">{p.titulo}</p>
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+        <p className="whitespace-nowrap text-sm font-semibold text-white">{p.titulo}</p>
         <p className="flex items-center gap-2 text-[13px] text-slate-400" aria-live="polite">
           {estado in CON_DATO && <span className={`h-2 w-2 shrink-0 rounded-full ${PUNTO[estado]}`} aria-hidden="true" />}
           {textoEstado}
@@ -93,10 +150,11 @@ function PanelVivo() {
       <div className="mt-5 border-t border-base-600 pt-5">
         {/* El hallazgo es el titular; el MTTD queda abajo como dato. */}
         <p className="text-[13px] text-slate-400">{p.hallazgoEtiqueta}</p>
-        <p className="mt-2 text-balance text-2xl font-bold leading-tight tracking-tight text-white sm:text-[1.7rem]">
+        <p className="mt-2 text-balance text-2xl font-bold leading-[1.15] tracking-tight text-white sm:text-[2rem]">
           {p.hallazgo}
         </p>
-        <p className="mt-3 text-[14px] leading-relaxed text-slate-400">{p.mttdTexto}</p>
+        <LineaIncidente />
+        <p className="mt-4 text-[14px] leading-relaxed text-slate-400">{p.mttdTexto}</p>
         <p className="mt-4 flex flex-wrap items-baseline gap-x-2 text-[13px] text-slate-400">
           <Sigla id="mttd">MTTD</Sigla>
           <span className="text-xl font-semibold tabular-nums text-white">{num(MEDIDAS.mttd, lang)} s</span>
@@ -179,7 +237,7 @@ export default function Hero() {
               <span>{profile.rol}</span>
               <ArrowRight size={14} className="text-slate-500" aria-hidden="true" />
               <span className="sr-only">{hero.transicion}</span>
-              <span className="text-accent">{profile.target}</span>
+              <span className="text-slate-200">{profile.target}</span>
             </p>
 
             {/* Lo que antes era una grilla de cuatro tarjetas: una línea.
@@ -188,15 +246,18 @@ export default function Hero() {
 
             <TiraVivo />
 
-            <p className="mt-6 text-balance text-2xl font-semibold leading-snug tracking-tight text-slate-200 sm:text-[1.7rem]">
-              {hero.headline[0]} <span className="text-accent">{hero.headline[1]}</span>
+            {/* El eslogan va como entrada del párrafo, no como un segundo
+                titular: con el mismo cuerpo que el hallazgo del panel, el ojo
+                rebotaba entre los dos. */}
+            <p className="mt-7 text-balance text-lg font-semibold leading-snug text-white">
+              {hero.headline[0]} {hero.headline[1]}
             </p>
 
             {/* En el teléfono arranca en dos líneas para que la tira y los
                 botones entren en la primera pantalla; desde `lg` va entero. */}
             <p
               id="hero-subtitulo"
-              className={`mt-4 max-w-xl text-base leading-relaxed text-slate-400 lg:line-clamp-none ${
+              className={`mt-2 max-w-xl text-base leading-relaxed text-slate-400 lg:line-clamp-none ${
                 subtituloEntero ? '' : 'line-clamp-2'
               }`}
             >
