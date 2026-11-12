@@ -16,36 +16,50 @@ function SkillCard({ skill, abierto, onToggle }) {
   const Icono = iconos[skill.icono]
   const t = tonos[skill.tone]
 
+  const idPanel = `skill-${skill.id}-items`
+  const idTagline = `skill-${skill.id}-tagline`
+
   return (
     <article className={`card card-hover overflow-hidden ${abierto ? 'border-accent/40' : ''}`}>
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-expanded={abierto}
-        className="flex w-full items-start gap-4 p-6 text-left"
-      >
-        <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border ${t.icon}`}>
+      {/* El botón vive dentro del h3 y se estira sobre toda la cabecera con
+          un ::after: se puede tocar en cualquier parte, pero el lector de
+          pantalla lee un nombre corto y el h3 sigue en el índice de títulos. */}
+      <div className="relative flex items-start gap-4 p-6">
+        <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border ${t.icon}`} aria-hidden="true">
           <Icono size={20} />
         </span>
 
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-            <h3 className="text-base font-semibold text-white">{skill.titulo}</h3>
+            <h3 className="text-base font-semibold text-white">
+              <button
+                type="button"
+                onClick={onToggle}
+                aria-expanded={abierto}
+                aria-controls={idPanel}
+                aria-describedby={idTagline}
+                className="text-left after:absolute after:inset-0 after:rounded-xl after:content-[''] focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-accent"
+              >
+                {skill.titulo}
+              </button>
+            </h3>
             <span className={`rounded-md border px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider ${t.chip}`}>
               {skill.dominio}
             </span>
           </div>
-          <p className="mt-1 font-mono text-[11.5px] text-slate-500">{skill.tagline}</p>
+          <p id={idTagline} className="mt-1 font-mono text-[11.5px] text-slate-500">{skill.tagline}</p>
           <p className="mt-3 text-[13.5px] leading-relaxed text-slate-400">{skill.descripcion}</p>
         </div>
 
         <ChevronDown
           size={18}
+          aria-hidden="true"
           className={`mt-1 shrink-0 text-slate-500 transition-transform duration-300 ${abierto ? 'rotate-180 text-accent' : ''}`}
         />
-      </button>
+      </div>
 
       <div
+        id={idPanel}
         className={`grid transition-all duration-300 ease-out ${
           abierto ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
         }`}

@@ -49,7 +49,7 @@ export const profile = {
 }
 
 export const hero = {
-  headline: ['From the critical incident', 'to resilience by design.'],
+  headline: ['From the critical incident to', 'resilience by design.'],
   transicion: 'moving into',
   seguirLeyendo: 'Keep reading',
   subtitle:

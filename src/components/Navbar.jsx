@@ -82,7 +82,7 @@ export default function Navbar() {
           e.preventDefault()
           document.getElementById('contenido')?.focus()
         }}
-        className="btn-primary sr-only absolute left-4 top-3 z-[60] focus:not-sr-only"
+        className="btn-primary sr-only z-[60] transition-none focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:px-5 focus:py-3"
       >
         {ui.nav.saltar}
       </a>
@@ -90,6 +90,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => irA('perfil', 'inicio')}
+          aria-label={ui.nav.inicioAria}
           className="group hidden shrink-0 items-center gap-2.5 sm:flex"
         >
           {/* Abajo de `sm` este botón no se muestra: las tres pestañas, el

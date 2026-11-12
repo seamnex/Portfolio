@@ -108,8 +108,8 @@ export default function Timeline() {
                   className="flex w-full items-center justify-between gap-3 border-t border-base-600/70 px-6 py-3 font-mono text-[11px] text-slate-500 transition-colors hover:text-accent"
                 >
                   <span>
-                    {desplegado ? ui.trayectoria.ocultarLogros : ui.trayectoria.verLogros}
-                    <span className="ml-2 text-slate-600">{ui.trayectoria.cuantos(item.bullets.length)}</span>
+                    {desplegado ? ui.trayectoria.ocultarLogros : ui.trayectoria.verLogros}{' '}
+                    <span className="ml-1 text-slate-600">{ui.trayectoria.cuantos(item.bullets.length)}</span>
                   </span>
                   <ChevronDown
                     size={14}

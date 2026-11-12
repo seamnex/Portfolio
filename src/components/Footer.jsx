@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="text-center sm:text-left">
           <p className="font-mono text-sm text-white">
             {profile.alias}
-            <span className="text-accent">_</span>
+            <span className="text-accent" aria-hidden="true">_</span>
           </p>
           <p className="mt-1.5 text-[12px] text-slate-500">
             {profile.rol} · {profile.target}

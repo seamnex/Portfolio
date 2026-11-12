@@ -56,7 +56,7 @@ export const profile = {
 }
 
 export const hero = {
-  headline: ['Del incidente crítico', 'a la resiliencia por diseño.'],
+  headline: ['Del incidente crítico a la', 'resiliencia por diseño.'],
   // Lo lee el lector de pantalla en lugar de la flecha entre los dos roles.
   transicion: 'en transición a',
   // En el teléfono el subtítulo arranca en dos líneas: la prueba va primero.

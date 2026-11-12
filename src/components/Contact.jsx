@@ -4,7 +4,6 @@ import { useContenido } from '../i18n/LanguageProvider'
 import { useAvisos } from '../avisos/AvisosProvider'
 import Section from './ui/Section'
 import CopyButton from './ui/CopyButton'
-import StatusBadge from './ui/StatusBadge'
 import { abrirAviso } from './Legal'
 
 const inicial = { nombre: '', email: '', mensaje: '' }
@@ -147,9 +146,7 @@ export default function Contact() {
         {/* Datos directos */}
         <div className="space-y-4">
           <div className="card p-6">
-            <StatusBadge texto={profile.disponibilidad} tone="ok" />
-
-            <div className="mt-6 space-y-4">
+            <div className="space-y-4">
               <div className="flex items-center justify-between gap-3 border-b border-base-600 pb-4">
                 <span className="flex items-center gap-3 text-sm text-slate-300">
                   <Mail size={16} className="text-accent" /> {profile.email}
