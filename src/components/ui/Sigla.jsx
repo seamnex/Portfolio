@@ -5,7 +5,7 @@ import { useContenido } from '../../i18n/LanguageProvider'
  * Una sigla técnica con su definición en lenguaje simple.
  *
  * MTTD, p95 o CFR no le dicen nada a quien filtra CVs, y es justo quien
- * tiene que entender que 25,6 s es un buen número. La definición sale de
+ * tiene que entender qué significa el número. La definición sale de
  * `ui.glosario` y se muestra al pasar el mouse, al enfocar con teclado o
  * al tocar en el teléfono; Escape la cierra sin mover el foco (WCAG
  * 1.4.13). El texto visible no cambia: la sigla sigue siendo la que usa

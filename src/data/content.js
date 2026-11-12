@@ -65,8 +65,11 @@ export const hero = {
   panel: {
     titulo: 'Este sitio, en vivo',
     simulacroActivo: 'Simulacro de falla en curso',
-    mttdEtiqueta: 'medido en mi lab',
-    mttdTexto: `Una caída real (errores 5xx en aumento) se detectó en ${n(MEDIDAS.mttd)} s, medido en el observability-lab con la bitácora de la corrida publicada.`,
+    mttdEtiqueta: `medido en mi lab · objetivo < ${n(MEDIDAS.mttdSensible)} s`,
+    // El número no llega al objetivo y el texto lo dice: lo que se muestra
+    // es el diagnóstico, que es la habilidad, no el número.
+    mttdTexto: `Una caída real (5xx en aumento) tardó ${n(MEDIDAS.mttd)} s en detectarse: más que mi objetivo. Al medirlo encontré por qué: ${Math.round(MEDIDAS.ventanaInstrumento[0])} de los ${Math.round(MEDIDAS.mttr)} s del ciclo eran mi propia ventana de medición, no el incidente.`,
+    diagnostico: 'Ver el diagnóstico',
     bitacora: 'Ver la bitácora',
     simulacro: {
       titulo: 'Romper algo y ver cómo se recupera',

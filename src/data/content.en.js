@@ -56,8 +56,9 @@ export const hero = {
   panel: {
     titulo: 'This site, live',
     simulacroActivo: 'Failure drill in progress',
-    mttdEtiqueta: 'measured in my lab',
-    mttdTexto: `A real outage (rising 5xx errors) was detected in ${n(MEDIDAS.mttd)} s, measured in the observability-lab with the run log published.`,
+    mttdEtiqueta: `measured in my lab · target < ${n(MEDIDAS.mttdSensible)} s`,
+    mttdTexto: `A real outage (rising 5xx) took ${n(MEDIDAS.mttd)} s to detect: above my target. Measuring it showed why: ${Math.round(MEDIDAS.ventanaInstrumento[0])} of the ${Math.round(MEDIDAS.mttr)} s were my own measurement window, not the incident.`,
+    diagnostico: 'See the diagnosis',
     bitacora: 'See the run log',
     simulacro: {
       titulo: 'Break something and watch it recover',

@@ -56,16 +56,28 @@ function PanelVivo() {
           <span className="ml-1.5 text-xl font-medium text-slate-400">s</span>
         </p>
         <p className="mt-3 text-[14px] leading-relaxed text-slate-400">{p.mttdTexto}</p>
-        {bitacora && (
+        <div className="mt-2 flex flex-wrap items-center gap-x-5">
           <a
-            href={bitacora}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="mt-2 inline-flex items-center gap-1.5 py-1.5 text-[13px] font-medium text-accent transition-colors hover:text-white"
+            href="#hallazgo"
+            onClick={(e) => {
+              e.preventDefault()
+              irA(null, 'hallazgo')
+            }}
+            className="inline-flex items-center gap-1.5 py-1.5 text-[13px] font-medium text-accent transition-colors hover:text-white"
           >
-            {p.bitacora} <ArrowUpRight size={14} aria-hidden="true" />
+            {p.diagnostico} <ArrowRight size={14} aria-hidden="true" />
           </a>
-        )}
+          {bitacora && (
+            <a
+              href={bitacora}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-flex items-center gap-1.5 py-1.5 text-[13px] font-medium text-slate-400 transition-colors hover:text-white"
+            >
+              {p.bitacora} <ArrowUpRight size={14} aria-hidden="true" />
+            </a>
+          )}
+        </div>
       </div>
 
       <div className="mt-4 grid gap-2.5 border-t border-base-600 pt-5">

@@ -82,7 +82,7 @@ export default function LabMetrics() {
         ))}
       </div>
 
-      <div className="card mt-5 border-accent/20 bg-accent/[0.04] p-6">
+      <div id="hallazgo" className="card mt-5 scroll-mt-28 border-accent/20 bg-accent/[0.04] p-6">
         <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-accent">
           <FlaskConical size={13} /> {labMetrics.nota.titulo}
         </p>

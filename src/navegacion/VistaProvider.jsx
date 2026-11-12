@@ -42,7 +42,7 @@ export const VISTAS = ['perfil', 'observabilidad', 'laboratorio']
  */
 const ANCLAS = {
   perfil: ['inicio', 'sobre-mi', 'skills', 'trayectoria', 'sandbox', 'contacto'],
-  observabilidad: ['estado', 'telemetria', 'topologia', 'slo', 'metricas'],
+  observabilidad: ['estado', 'telemetria', 'topologia', 'slo', 'metricas', 'hallazgo'],
   laboratorio: ['caos', 'playbooks', 'consola', 'postmortems', 'labs'],
 }
 
