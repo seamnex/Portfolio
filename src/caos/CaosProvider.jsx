@@ -41,17 +41,14 @@ export function CaosProvider({ children }) {
   // a ACKNOWLEDGED a RESOLVED en el mismo lugar, como en PagerDuty.
   const avisarFase = useCallback(
     (escenarioActivo, { estado, texto }) => {
-      const { titulo, detalle } = ui.avisos.caos[texto](escenarioActivo)
       avisar({
         estado,
         clave: `caos:${escenarioActivo.id}`,
         severidad: escenarioActivo.severidad,
-        titulo,
-        detalle,
-        meta: ui.avisos.caos.meta(escenarioActivo),
+        textos: (u) => ({ ...u.avisos.caos[texto](escenarioActivo), meta: u.avisos.caos.meta(escenarioActivo) }),
       })
     },
-    [avisar, ui],
+    [avisar],
   )
 
   const [escenario, setEscenario] = useState(null)

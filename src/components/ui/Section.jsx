@@ -5,7 +5,7 @@ export default function Section({ id, label, titulo, bajada, children, className
         <header className="max-w-3xl">
           {label && (
             <p className="section-label flex items-center gap-3">
-              <span className="h-px w-8 bg-accent/60" />
+              <span className="h-px w-8 bg-base-500" />
               {label}
             </p>
           )}

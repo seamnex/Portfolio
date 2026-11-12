@@ -20,7 +20,7 @@ function SkillCard({ skill, abierto, onToggle }) {
   const idTagline = `skill-${skill.id}-tagline`
 
   return (
-    <article className={`card card-hover overflow-hidden ${abierto ? 'border-accent/40' : ''}`}>
+    <article className={`card card-hover overflow-hidden ${abierto ? 'border-base-500' : ''}`}>
       {/* El botón vive dentro del h3 y se estira sobre toda la cabecera con
           un ::after: se puede tocar en cualquier parte, pero el lector de
           pantalla lee un nombre corto y el h3 sigue en el índice de títulos. */}
@@ -48,7 +48,6 @@ function SkillCard({ skill, abierto, onToggle }) {
             </span>
           </div>
           <p id={idTagline} className="mt-1 font-mono text-[11.5px] text-slate-500">{skill.tagline}</p>
-          <p className="mt-3 text-[13.5px] leading-relaxed text-slate-400">{skill.descripcion}</p>
         </div>
 
         <ChevronDown
@@ -65,7 +64,10 @@ function SkillCard({ skill, abierto, onToggle }) {
         }`}
       >
         <div className="overflow-hidden">
-          <ul className="grid gap-2 border-t border-base-600 px-6 py-5 sm:grid-cols-2">
+          {/* La descripción va adentro: cerradas, las cuatro tarjetas se leen
+              como un índice de una línea cada una. */}
+          <p className="border-t border-base-600 px-6 pt-5 text-[14px] leading-relaxed text-slate-400">{skill.descripcion}</p>
+          <ul className="grid gap-2 px-6 py-5 sm:grid-cols-2">
             {skill.items.map((item) => (
               <li key={item} className="flex items-center gap-2.5 text-[13px] text-slate-400">
                 <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${t.bar}`} />
@@ -81,7 +83,9 @@ function SkillCard({ skill, abierto, onToggle }) {
 
 export default function Skills() {
   const { skills, skillsMeta } = useContenido()
-  const [abierto, setAbierto] = useState('incident')
+  // Cerradas al llegar: la cabecera de cada tarjeta ya dice el dominio y el
+  // resumen, y abiertas por defecto sumaban media pantalla en el teléfono.
+  const [abierto, setAbierto] = useState(null)
 
   return (
     <Section id="skills" label={skillsMeta.label} titulo={skillsMeta.titulo} bajada={skillsMeta.bajada}>
@@ -96,9 +100,6 @@ export default function Skills() {
         ))}
       </div>
 
-      <p className="mt-6 text-center font-mono text-[11px] text-slate-600">
-        {skillsMeta.hint}
-      </p>
     </Section>
   )
 }

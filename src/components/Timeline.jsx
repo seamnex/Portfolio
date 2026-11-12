@@ -24,14 +24,21 @@ import Section from './ui/Section'
 //  tarjeta que dice con quién— para que nadie lea "especialización" como
 //  "dejó el puesto para estudiar".
 // ─────────────────────────────────────────────────────────────
+const VISIBLES = 3
+
 export default function Timeline() {
   const { timeline, timelineMeta, ui } = useContenido()
   const [abierto, setAbierto] = useState(() => Math.max(0, timeline.findIndex((e) => !e.paralelo)))
+  // Los puestos más viejos quedan detrás de un botón: el CV los tiene
+  // completos, y abiertos sumaban dos pantallas en el teléfono.
+  const [todos, setTodos] = useState(false)
+  const visibles = todos ? timeline : timeline.slice(0, VISIBLES)
+  const ocultos = timeline.length - VISIBLES
 
   return (
     <Section id="trayectoria" label={timelineMeta.label} titulo={timelineMeta.titulo} bajada={timelineMeta.bajada}>
       <ol className="relative space-y-5 border-l border-base-600 pl-8 sm:pl-10">
-        {timeline.map((item, i) => {
+        {visibles.map((item, i) => {
           const esFormacion = item.tipo === 'formacion'
           const Icono = esFormacion ? GraduationCap : Briefcase
           const desplegado = abierto === i
@@ -42,7 +49,7 @@ export default function Timeline() {
               {/* Nodo */}
               <span
                 className={`absolute -left-[41px] flex h-6 w-6 items-center justify-center rounded-full border sm:-left-[49px] ${
-                  esFormacion ? 'border-ok/40 bg-base-900 text-ok' : 'border-accent/40 bg-base-900 text-accent'
+                  esFormacion ? 'border-ok/40 bg-base-900 text-ok' : 'border-base-500 bg-base-900 text-slate-300'
                 }`}
               >
                 <Icono size={12} />
@@ -63,7 +70,7 @@ export default function Timeline() {
               )}
 
               <article
-                className={`card overflow-hidden ${desplegado ? 'border-accent/40' : 'card-hover'} ${
+                className={`card overflow-hidden ${desplegado ? 'border-base-500' : ''} ${
                   item.paralelo ? 'border-ok/30' : ''
                 }`}
               >
@@ -71,7 +78,7 @@ export default function Timeline() {
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <h3 className="text-base font-semibold text-white">{item.rol}</h3>
-                      <p className="mt-1 font-mono text-[12px] text-accent">{item.org}</p>
+                      <p className="mt-1 text-[13px] font-medium text-slate-300">{item.org}</p>
                     </div>
                     <span
                       className={`rounded-md border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider ${
@@ -105,7 +112,7 @@ export default function Timeline() {
                   onClick={() => setAbierto(desplegado ? null : i)}
                   aria-expanded={desplegado}
                   aria-controls={panelId}
-                  className="flex w-full items-center justify-between gap-3 border-t border-base-600/70 px-6 py-3 font-mono text-[11px] text-slate-500 transition-colors hover:text-accent"
+                  className="flex w-full items-center justify-between gap-3 border-t border-base-600/70 min-h-[44px] px-6 py-3 text-[13px] text-slate-400 transition-colors hover:text-accent"
                 >
                   <span>
                     {desplegado ? ui.trayectoria.ocultarLogros : ui.trayectoria.verLogros}{' '}
@@ -127,7 +134,7 @@ export default function Timeline() {
                     <ul className="space-y-2 border-t border-base-600/70 px-6 py-5">
                       {item.bullets.map((b) => (
                         <li key={b} className="flex items-start gap-2.5 text-[13px] leading-relaxed text-slate-400">
-                          <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-accent/70" />
+                          <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-slate-500" />
                           {b}
                         </li>
                       ))}
@@ -139,6 +146,18 @@ export default function Timeline() {
           )
         })}
       </ol>
+
+      {ocultos > 0 && (
+        <button
+          type="button"
+          onClick={() => setTodos((v) => !v)}
+          aria-expanded={todos}
+          className="ml-8 mt-5 inline-flex min-h-[44px] items-center gap-2 text-sm font-medium text-accent transition-colors hover:text-white sm:ml-10"
+        >
+          {todos ? ui.trayectoria.menosPuestos : ui.trayectoria.masPuestos(ocultos)}
+          <ChevronDown size={15} className={`transition-transform duration-300 ${todos ? 'rotate-180' : ''}`} aria-hidden="true" />
+        </button>
+      )}
     </Section>
   )
 }

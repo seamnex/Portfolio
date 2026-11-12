@@ -84,7 +84,7 @@ export default function Contact() {
       setEstado('ok')
       setForm(inicial)
       setTocados({})
-      avisar({ estado: 'info', titulo: ui.form.okMailto })
+      avisar({ estado: 'info', textos: (u) => ({ titulo: u.form.okMailto }) })
       setTimeout(() => setEstado('idle'), 6000)
       return
     }
@@ -115,14 +115,14 @@ export default function Contact() {
       setEstado('ok')
       setForm(inicial)
       setTocados({})
-      avisar({ estado: 'resolved', titulo: ui.form.okFormspree, meta: ui.form.avisoMeta })
+      avisar({ estado: 'resolved', textos: (u) => ({ titulo: u.form.okFormspree, meta: u.form.avisoMeta }) })
       setTimeout(() => setEstado('idle'), 8000)
     } catch (err) {
       // Sin backend propio no hay reintento que valga: lo honesto es avisar
       // y dejar la vía directa a mano, no tragarse el error en silencio.
       console.error('contacto → formspree', err)
       setEstado('error')
-      avisar({ estado: 'error', titulo: ui.form.error, detalle: ui.form.errorDetalle(profile.email) })
+      avisar({ estado: 'error', textos: (u) => ({ titulo: u.form.error, detalle: u.form.errorDetalle(profile.email) }) })
     } finally {
       clearTimeout(corte)
     }
@@ -149,7 +149,7 @@ export default function Contact() {
             <div className="space-y-4">
               <div className="flex items-center justify-between gap-3 border-b border-base-600 pb-4">
                 <span className="flex items-center gap-3 text-sm text-slate-300">
-                  <Mail size={16} className="text-accent" /> {profile.email}
+                  <Mail size={16} className="text-slate-500" aria-hidden="true" /> {profile.email}
                 </span>
                 <CopyButton value={profile.email} />
               </div>
@@ -161,7 +161,7 @@ export default function Contact() {
                 className="flex items-center justify-between gap-3 border-b border-base-600 pb-4 text-sm text-slate-300 transition-colors hover:text-accent"
               >
                 <span className="flex items-center gap-3">
-                  <Linkedin size={16} className="text-accent" /> /in/samuel-garcia-baciliadis
+                  <Linkedin size={16} className="text-slate-500" aria-hidden="true" /> /in/samuel-garcia-baciliadis
                 </span>
                 <span className="font-mono text-[11px] text-slate-500">{ui.acciones.abrir}</span>
               </a>
@@ -174,17 +174,17 @@ export default function Contact() {
                   className="flex items-center justify-between gap-3 border-b border-base-600 pb-4 text-sm text-slate-300 transition-colors hover:text-accent"
                 >
                   <span className="flex items-center gap-3">
-                    <Github size={16} className="text-accent" /> {ui.form.githubLinea}
+                    <Github size={16} className="text-slate-500" aria-hidden="true" /> {ui.form.githubLinea}
                   </span>
                   <span className="font-mono text-[11px] text-slate-500">{ui.acciones.abrir}</span>
                 </a>
               )}
 
               <p className="flex items-center gap-3 text-sm text-slate-400">
-                <MapPin size={16} className="text-accent" /> {profile.ubicacion}
+                <MapPin size={16} className="text-slate-500" aria-hidden="true" /> {profile.ubicacion}
               </p>
               <p className="flex items-center gap-3 text-sm text-slate-400">
-                <Languages size={16} className="text-accent" /> {profile.idiomas}
+                <Languages size={16} className="text-slate-500" aria-hidden="true" /> {profile.idiomas}
               </p>
             </div>
           </div>

@@ -219,7 +219,6 @@ export const skillsMeta = {
   titulo: 'Stack técnico y dominios de trabajo',
   bajada:
     'Cuatro bloques que se refuerzan entre sí: lo que detecto con observabilidad, lo gestiono con procesos de incidentes, lo previengo con prácticas DevOps y lo automatizo con código.',
-  hint: 'Hacé clic en cada tarjeta para desplegar el detalle de herramientas',
 }
 
 // Cada tarjeta lleva `dominio`, el rótulo del área técnica que agrupa las
@@ -678,7 +677,7 @@ export const ui = {
       resumen: 'quién es, cómo trabaja y dónde estuvo',
     },
     observabilidad: {
-      nav: 'Observabilidad',
+      nav: 'Métricas',
       navCorto: 'Métricas',
       titulo: 'Observabilidad & Telemetría',
       resumen: 'DORA, p95, topología y presupuesto de error',
@@ -856,17 +855,6 @@ export const ui = {
   },
 
   // ── Banner del sandbox ──────────────────────────────────────
-  // Lo único que la portada dice sobre las otras dos vistas. Enumera lo
-  // que hay del otro lado en vez de resumirlo en un adjetivo, porque es
-  // leyendo qué hay como se decide entrar.
-  sandbox: {
-    etiqueta: 'Sandbox interactivo',
-    titulo: 'Explorar el sandbox interactivo de SRE',
-    texto:
-      'Las métricas de este sitio medidas en vivo, simulacros de falla con su runbook y una consola que responde comandos. Corre en tu navegador, sin instalar nada.',
-    pie: 'cambia de vista · no recarga la página',
-    vivo: 'quedó algo corriendo adentro',
-  },
 
   // ── Avisos flotantes (estilo PagerDuty) ─────────────────────
   // Los estados no se traducen: TRIGGERED / ACKNOWLEDGED / RESOLVED son
@@ -912,6 +900,8 @@ export const ui = {
     verLogros: 'Ver logros',
     ocultarLogros: 'Ocultar logros',
     cuantos: (n) => `(${n})`,
+    masPuestos: (n) => `Ver los ${n} puestos anteriores`,
+    menosPuestos: 'Ver menos',
     // Rótulo de una entrada que corre a la par de la siguiente
     // (`timeline[].paralelo`): dice con quién y que sigue en curso.
     paralelo: (org) => `En paralelo con ${org} · en curso`,

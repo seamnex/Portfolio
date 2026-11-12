@@ -16,6 +16,10 @@ import Avisos from '../components/Avisos'
 //  la misma clave se reemplazan en lugar de apilarse, que es lo que
 //  quiere un incidente que pasa de TRIGGERED a ACKNOWLEDGED — la tarjeta
 //  cambia de estado, no aparece una segunda debajo.
+//
+//  `textos(ui)` en lugar de strings: el texto se arma al dibujar, con el
+//  idioma activo. Así un aviso que entró en español pasa a inglés si el
+//  visitante cambia de idioma con la tarjeta todavía en pantalla.
 // ─────────────────────────────────────────────────────────────
 const AvisosContext = createContext(null)
 
@@ -36,9 +40,9 @@ export function AvisosProvider({ children }) {
   }, [])
 
   const avisar = useCallback(
-    ({ estado = 'info', clave, titulo, detalle, meta, severidad, duracion }) => {
+    ({ estado = 'info', clave, titulo, detalle, meta, textos, severidad, duracion }) => {
       const id = `${clave ?? 'aviso'}:${Date.now()}:${Math.random().toString(36).slice(2, 7)}`
-      const aviso = { id, estado, clave, titulo, detalle, meta, severidad, ts: Date.now() }
+      const aviso = { id, estado, clave, titulo, detalle, meta, textos, severidad, ts: Date.now() }
 
       setAvisos((prev) => {
         // Con la misma clave, el nuevo pisa al viejo en su lugar de la

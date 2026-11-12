@@ -60,6 +60,7 @@ function Tile({
   referencias,
   ventana,
   anotacion,
+  vacio,
   t,
 }) {
   const Icono = iconos[icono]
@@ -90,7 +91,7 @@ function Tile({
 
       <p className="mt-4 flex items-baseline gap-1.5">
         <span className={`font-mono text-[27px] font-bold leading-none tracking-tight ${tono.valor}`}>
-          {valor ?? t.sinDatos}
+          {valor ?? vacio ?? t.sinDatos}
         </span>
         {valor != null && unidad && <span className="font-mono text-[12px] text-slate-500">{unidad}</span>}
       </p>
@@ -344,6 +345,8 @@ export default function Telemetry() {
               unidad="ms"
               tone="accent"
               detalle={latencia.n ? t.muestras(latencia.n) : t.midiendo}
+              // Antes de la primera muestra no falta un dato: se está tomando.
+              vacio={t.midiendo}
               objetivo={latencia.p50 != null ? `p50 ${num(latencia.p50.toFixed(1), lang)} ms` : t.sinDatos}
               serie={latencia.muestras}
               // Línea de comparación al p50 medido: el p95 solo dice algo

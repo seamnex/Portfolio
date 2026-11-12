@@ -5,7 +5,6 @@ import About from '../About'
 import Evidencia from '../Evidencia'
 import Skills from '../Skills'
 import Timeline from '../Timeline'
-import SandboxBanner from '../SandboxBanner'
 import Contact from '../Contact'
 
 // ─────────────────────────────────────────────────────────────
@@ -16,9 +15,9 @@ import Contact from '../Contact'
 //
 //  El laboratorio entero —tablero DORA, topología, presupuesto de error,
 //  simulacros, runbooks, consola, post-mortems y labs— vive en las otras
-//  dos vistas. Acá aparece una sola vez, como banner: una tarjeta que
-//  dice qué hay del otro lado y lleva ahí. Quien solo quiere escribir un
-//  mail llega al formulario sin cruzar un sandbox.
+//  dos vistas. Acá la puerta es el panel de la portada, con sus dos
+//  accesos: el banner del sandbox que había antes de Contacto repetía
+//  esas mismas dos tarjetas y alargaba la vista sin decir nada nuevo.
 // ─────────────────────────────────────────────────────────────
 export default function VistaPerfil() {
   const { ui } = useContenido()
@@ -32,10 +31,6 @@ export default function VistaPerfil() {
       <Evidencia />
       <Skills />
       <Timeline />
-      {/* Entre la trayectoria y el contacto a propósito: es el punto del
-          recorrido donde alguien ya se convenció de algo y todavía no
-          decidió qué hacer al respecto. */}
-      <SandboxBanner />
       <Contact />
     </Vista>
   )

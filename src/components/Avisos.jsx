@@ -65,8 +65,9 @@ const SEVERIDAD = {
   P3: 'border-ok/40 bg-ok/10 text-ok',
 }
 
-function Aviso({ aviso, ultimo, onCerrar }) {
+function Aviso({ aviso: crudo, ultimo, onCerrar }) {
   const { ui } = useContenido()
+  const aviso = crudo.textos ? { ...crudo, ...crudo.textos(ui) } : crudo
   const t = ui.avisos
   const e = ESTILO[aviso.estado] ?? ESTILO.info
   const Icono = e.icono

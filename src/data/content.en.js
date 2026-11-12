@@ -174,7 +174,6 @@ export const skillsMeta = {
   titulo: 'Technical stack and working domains',
   bajada:
     'Four blocks that reinforce each other: what observability detects, incident process manages, DevOps practice prevents and code automates.',
-  hint: 'Click any card to expand the tooling detail',
 }
 
 export const skills = traducirPorId(skillsEs, {
@@ -536,7 +535,7 @@ export const ui = {
       resumen: 'who he is, how he works and where he has been',
     },
     observabilidad: {
-      nav: 'Observability',
+      nav: 'Metrics',
       navCorto: 'Metrics',
       titulo: 'Observability & Telemetry',
       resumen: 'DORA, p95, topology and error budget',
@@ -700,14 +699,6 @@ export const ui = {
     },
   },
 
-  sandbox: {
-    etiqueta: 'Interactive sandbox',
-    titulo: 'Explore the SRE Interactive Sandbox',
-    texto:
-      'Metrics from this site measured live, failure drills with their runbook and a console that answers commands. It runs in your browser, nothing to install.',
-    pie: 'switches view · no page reload',
-    vivo: 'something is still running inside',
-  },
 
   avisos: {
     region: 'Alerts and notifications',
@@ -746,6 +737,8 @@ export const ui = {
     verLogros: 'View highlights',
     ocultarLogros: 'Hide highlights',
     cuantos: (n) => `(${n})`,
+    masPuestos: (n) => `See ${n} earlier roles`,
+    menosPuestos: 'Show less',
     paralelo: (org) => `Alongside ${org} · ongoing`,
   },
 

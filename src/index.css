@@ -28,20 +28,6 @@
     @apply bg-accent/30 text-white;
   }
 
-  /* Grilla técnica sutil de fondo */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image:
-      linear-gradient(to right, rgba(148, 163, 184, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, #000 40%, transparent 100%);
-  }
-
   ::-webkit-scrollbar {
     width: 10px;
   }
@@ -153,8 +139,10 @@
     @apply btn border-2 border-accent/80 text-accent hover:border-accent hover:bg-accent/10;
   }
 
+  /* Rótulo de sección en gris: el cian queda para lo que se toca y lo que
+     está en vivo, y así vuelve a señalar algo. */
   .section-label {
-    @apply font-mono text-xs uppercase tracking-[0.25em] text-accent;
+    @apply font-mono text-xs uppercase tracking-[0.2em] text-slate-400;
   }
 
   .heading-2 {
