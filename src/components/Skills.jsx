@@ -43,11 +43,11 @@ function SkillCard({ skill, abierto, onToggle }) {
                 {skill.titulo}
               </button>
             </h3>
-            <span className={`rounded-md border px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider ${t.chip}`}>
+            <span className={`rounded-md border px-2 py-0.5 font-mono text-xs uppercase tracking-wider ${t.chip}`}>
               {skill.dominio}
             </span>
           </div>
-          <p id={idTagline} className="mt-1 font-mono text-[11.5px] text-slate-500">{skill.tagline}</p>
+          <p id={idTagline} className="mt-1 font-mono text-xs text-slate-500">{skill.tagline}</p>
         </div>
 
         <ChevronDown
@@ -66,7 +66,7 @@ function SkillCard({ skill, abierto, onToggle }) {
         <div className="overflow-hidden">
           {/* La descripción va adentro: cerradas, las cuatro tarjetas se leen
               como un índice de una línea cada una. */}
-          <p className="border-t border-base-600 px-6 pt-5 text-[14px] leading-relaxed text-slate-400">{skill.descripcion}</p>
+          <p className="border-t border-base-600 px-6 pt-5 text-sm leading-relaxed text-slate-400">{skill.descripcion}</p>
           <ul className="grid gap-2 px-6 py-5 sm:grid-cols-2">
             {skill.items.map((item) => (
               <li key={item} className="flex items-center gap-2.5 text-[13px] text-slate-400">

@@ -9,7 +9,7 @@ export default function StatusBadge({ texto, tone = 'ok' }) {
 
   return (
     <span
-      className={`inline-flex items-center gap-2.5 rounded-full border px-3.5 py-1.5 font-mono text-[11px] font-medium tracking-wide ${tones[tone]}`}
+      className={`inline-flex items-center gap-2.5 rounded-full border px-3.5 py-1.5 text-[13px] font-medium ${tones[tone]}`}
     >
       <span className="relative flex h-2 w-2">
         <span className={`absolute inline-flex h-full w-full rounded-full ${dots[tone]} animate-pulse-dot`} />

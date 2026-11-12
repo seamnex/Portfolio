@@ -27,7 +27,7 @@ export default function LangToggle({ className = '' }) {
             onClick={() => cambiar(codigo)}
             aria-pressed={activo}
             aria-label={ui.idioma.a[codigo]}
-            className={`min-h-[40px] min-w-[40px] rounded-md px-2.5 py-1 font-mono text-[12px] md:min-h-[28px] md:min-w-0 font-semibold uppercase tracking-wider transition-colors ${
+            className={`min-h-[40px] min-w-[40px] max-[359px]:min-w-[34px] max-[359px]:px-1.5 rounded-md px-2.5 py-1 font-mono text-xs md:min-h-[28px] md:min-w-0 font-semibold uppercase tracking-wider transition-colors ${
               activo ? 'bg-accent/15 text-accent' : 'text-slate-500 hover:text-white'
             }`}
           >

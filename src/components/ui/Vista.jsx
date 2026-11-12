@@ -48,7 +48,7 @@ export function EncabezadoVista({ label, titulo, bajada, children }) {
           {label}
         </p>
         <h1 className="heading-2">{titulo}</h1>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-400">{bajada}</p>
+        <p className="mt-4 max-w-[65ch] text-base leading-relaxed text-slate-400">{bajada}</p>
         {children}
       </div>
     </header>

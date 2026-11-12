@@ -10,7 +10,7 @@ export default function Section({ id, label, titulo, bajada, children, className
             </p>
           )}
           <h2 className="heading-2">{titulo}</h2>
-          {bajada && <p className="mt-4 text-base leading-relaxed text-slate-400">{bajada}</p>}
+          {bajada && <p className="mt-4 max-w-[65ch] text-base leading-relaxed text-slate-400">{bajada}</p>}
         </header>
         <div className="mt-8 sm:mt-10">{children}</div>
       </div>

@@ -35,18 +35,18 @@ function TarjetaPlaybook({ playbook, texto, activo, onElegir, t }) {
         <span className={`flex h-8 w-8 items-center justify-center rounded-lg border ${tono.icono}`}>
           {Icono && <Icono size={15} />}
         </span>
-        <span className={`pill font-mono text-[11px] ${tono.pill}`}>{playbook.severidad}</span>
+        <span className={`pill font-mono text-xs ${tono.pill}`}>{playbook.severidad}</span>
       </div>
 
       <h3 className="mt-4 text-sm font-semibold text-white">{texto.titulo}</h3>
       <p className="mt-2 text-[13px] leading-relaxed text-slate-400">{texto.descripcion}</p>
 
-      <p className="mt-3 w-full whitespace-pre-wrap break-all font-mono text-[11px] text-slate-600">
+      <p className="mt-3 w-full whitespace-pre-wrap break-all font-mono text-xs text-slate-600">
         {playbook.senal}
       </p>
 
       <span
-        className={`mt-auto inline-flex items-center gap-1.5 pt-4 font-mono text-[11px] ${
+        className={`mt-auto inline-flex items-center gap-1.5 pt-4 font-mono text-xs ${
           activo ? 'text-accent' : 'text-slate-500 transition-colors group-hover:text-accent'
         }`}
       >
@@ -88,7 +88,7 @@ export default function Playbooks() {
       {/* El rótulo va antes de las tarjetas, no al pie: quien mira esto
           tiene que saber qué está viendo ANTES de leer una salida de
           kubectl y darla por una corrida registrada. */}
-      <p className="mb-6 flex items-start gap-2.5 rounded-lg border border-warn/20 bg-warn/[0.05] px-4 py-3 text-[12.5px] leading-relaxed text-slate-400">
+      <p className="mb-6 flex items-start gap-2.5 rounded-lg border border-warn/20 bg-warn/[0.05] px-4 py-3 text-[13px] leading-relaxed text-slate-400">
         <TriangleAlert size={14} className="mt-0.5 shrink-0 text-warn" aria-hidden="true" />
         {t.aviso}
       </p>
@@ -115,7 +115,7 @@ export default function Playbooks() {
               <p className={`font-mono text-[13px] font-semibold ${activo ? 'text-accent' : 'text-slate-500'}`} aria-live="polite">
                 {activo ? texto.titulo : t.sinPlaybook}
               </p>
-              <p className="mt-0.5 font-mono text-[11px] text-slate-600">
+              <p className="mt-0.5 font-mono text-xs text-slate-600">
                 {activo
                   ? paso < 0
                     ? t.listoParaCorrer
@@ -130,7 +130,7 @@ export default function Playbooks() {
               type="button"
               onClick={correrPaso}
               disabled={!activo || completado}
-              className="inline-flex items-center gap-1.5 rounded-md border border-accent/40 bg-accent/10 px-3 py-2 font-mono text-[11px] text-accent transition-colors hover:border-accent/70 hover:bg-accent/15 disabled:opacity-40 disabled:hover:border-accent/40 disabled:hover:bg-accent/10"
+              className="inline-flex items-center gap-1.5 rounded-md border border-accent/40 bg-accent/10 px-3 py-2 font-mono text-xs text-accent transition-colors hover:border-accent/70 hover:bg-accent/15 disabled:opacity-40 disabled:hover:border-accent/40 disabled:hover:bg-accent/10"
             >
               {paso < 0 ? <Play size={12} /> : <ChevronRight size={12} />}
               {paso < 0 ? t.correrPrimero : completado ? t.finalizado : t.correrSiguiente}
@@ -166,7 +166,7 @@ export default function Playbooks() {
 
         {activo ? (
           <div className="p-5">
-            <p className="mb-4 text-[12.5px] leading-relaxed text-slate-400">{texto.hipotesis}</p>
+            <p className="mb-4 text-[13px] leading-relaxed text-slate-400">{texto.hipotesis}</p>
             <ol className="space-y-0">
               {activo.pasos.map((p, i) => {
                 const estado = i <= paso ? 'hecho' : i === paso + 1 ? 'actual' : 'pendiente'
@@ -177,7 +177,7 @@ export default function Playbooks() {
                     {/* Columna del hilo: punto y línea vertical */}
                     <div className="flex flex-col items-center">
                       <span
-                        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border font-mono text-[11px] ${tono.punto}`}
+                        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border font-mono text-xs ${tono.punto}`}
                       >
                         {i <= paso ? <Check size={11} /> : i + 1}
                       </span>
@@ -188,12 +188,12 @@ export default function Playbooks() {
 
                     <div className="min-w-0 flex-1">
                       <p className={`text-[13px] font-semibold ${tono.titulo}`}>{tp.titulo}</p>
-                      <p className={`mt-1 text-[12.5px] leading-relaxed ${tono.texto}`}>{tp.porQue}</p>
+                      <p className={`mt-1 text-[13px] leading-relaxed ${tono.texto}`}>{tp.porQue}</p>
                       {/* tabIndex: un comando largo scrollea en horizontal, y una zona
                           con scroll tiene que poder enfocarse para moverla con el teclado. */}
                       <p
                         tabIndex={0}
-                        className={`mt-2 overflow-x-auto whitespace-pre rounded border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent px-2.5 py-1.5 font-mono text-[11px] ${
+                        className={`mt-2 overflow-x-auto whitespace-pre rounded border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent px-2.5 py-1.5 font-mono text-xs ${
                           i <= paso
                             ? 'border-base-600 bg-base-900/60 text-slate-400'
                             : 'border-base-600/50 bg-base-900/30 text-slate-600'
@@ -207,13 +207,13 @@ export default function Playbooks() {
               })}
             </ol>
 
-            <p className="mt-2 flex items-center gap-2 border-t border-base-600/50 pt-4 font-mono text-[11px] text-slate-600">
+            <p className="mt-2 flex items-center gap-2 border-t border-base-600/50 pt-4 font-mono text-xs text-slate-600">
               <SquareTerminal size={12} aria-hidden="true" />
               {completado ? t.completado : t.salidaEnConsola}
             </p>
           </div>
         ) : (
-          <p className="px-5 py-8 text-center text-[12.5px] text-slate-600">{t.elegiUno}</p>
+          <p className="px-5 py-8 text-center text-[13px] text-slate-600">{t.elegiUno}</p>
         )}
       </div>
     </Bloque>

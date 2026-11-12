@@ -47,13 +47,13 @@ function ProjectCard({ p, meta, pipeline }) {
 
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-wider text-accent">{p.categoria}</p>
+          <p className="font-mono text-xs uppercase tracking-wider text-accent">{p.categoria}</p>
           <h3 className="mt-2 text-lg font-semibold text-white transition-colors group-hover:text-accent">
             {p.titulo}
           </h3>
         </div>
         <span
-          className={`shrink-0 rounded-full border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider ${
+          className={`shrink-0 rounded-full border px-2.5 py-1 font-mono text-xs uppercase tracking-wider ${
             // Activo en gris neutro: el ámbar queda para alertas y simulacros.
             activo ? 'border-base-500 bg-base-800 text-slate-300' : 'border-warn/30 bg-warn/10 text-warn'
           }`}
@@ -67,10 +67,10 @@ function ProjectCard({ p, meta, pipeline }) {
       <CIBadge pipeline={pipeline} className="mt-4 self-start" />
 
       <div className="mt-5">
-        <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-crit">
+        <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-crit">
           <TriangleAlert size={12} /> {meta.problema}
         </p>
-        <p className="mt-2 text-[13.5px] leading-relaxed text-slate-400">{p.problema}</p>
+        <p className="mt-2 text-sm leading-relaxed text-slate-400">{p.problema}</p>
       </div>
 
       <button
@@ -78,7 +78,7 @@ function ProjectCard({ p, meta, pipeline }) {
         onClick={() => setAbierta((v) => !v)}
         aria-expanded={abierta}
         aria-controls={idDetalle}
-        className="mt-4 inline-flex items-center gap-1.5 self-start py-1.5 font-mono text-[12px] text-accent transition-colors hover:text-white"
+        className="mt-4 inline-flex items-center gap-1.5 self-start py-1.5 font-mono text-xs text-accent transition-colors hover:text-white"
       >
         {abierta ? meta.verMenos : meta.verMas}
         <ChevronDown size={14} className={`transition-transform duration-200 ${abierta ? 'rotate-180' : ''}`} aria-hidden="true" />
@@ -87,16 +87,16 @@ function ProjectCard({ p, meta, pipeline }) {
       <div id={idDetalle} hidden={!abierta}>
       <div className="mt-4">
         <div>
-          <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-ok">
+          <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-ok">
             <Wrench size={12} /> {meta.solucion}
           </p>
-          <p className="mt-2 text-[13.5px] leading-relaxed text-slate-400">{p.solucion}</p>
+          <p className="mt-2 text-sm leading-relaxed text-slate-400">{p.solucion}</p>
         </div>
       </div>
 
       <ul className="mt-5 space-y-1.5">
         {p.highlights.map((h) => (
-          <li key={h} className="flex items-start gap-2 text-[12.5px] text-slate-500">
+          <li key={h} className="flex items-start gap-2 text-[13px] text-slate-500">
             <Sparkles size={12} className="mt-1 shrink-0 text-accent/70" />
             {h}
           </li>
@@ -105,7 +105,7 @@ function ProjectCard({ p, meta, pipeline }) {
 
       {p.comando && (
         <div className="mt-5 flex items-center justify-between gap-3 rounded-lg border border-base-600 bg-base-900/60 px-3 py-2.5">
-          <code className="min-w-0 truncate font-mono text-[12px] text-accent">
+          <code className="min-w-0 truncate font-mono text-xs text-accent">
             <span className="text-ok">$</span> {p.comando}
           </code>
           <CopyButton value={p.comando} className="shrink-0 border-0 px-1.5" />
@@ -178,7 +178,7 @@ export default function Projects() {
               key={id}
               type="button"
               onClick={() => setFiltro(id)}
-              className={`rounded-lg border px-4 py-2 font-mono text-[11.5px] transition-all ${
+              className={`rounded-lg border px-4 py-2 font-mono text-xs transition-all ${
                 filtro === id
                   ? 'border-accent/50 bg-accent/10 text-accent'
                   : 'border-base-600 text-slate-400 hover:border-accent/30 hover:text-white'

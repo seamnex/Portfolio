@@ -265,7 +265,7 @@ export default function Console() {
           <span className="h-2.5 w-2.5 rounded-full bg-crit/70" />
           <span className="h-2.5 w-2.5 rounded-full bg-warn/70" />
           <span className="h-2.5 w-2.5 rounded-full bg-ok/70" />
-          <span className="ml-2 flex items-center gap-1.5 font-mono text-[11px] text-slate-500">
+          <span className="ml-2 flex items-center gap-1.5 font-mono text-xs text-slate-500">
             <TerminalSquare size={12} aria-hidden="true" />
             {ui.consola.titulobarra}
           </span>
@@ -280,7 +280,7 @@ export default function Console() {
         </div>
 
         {/* Aviso: qué es real y qué es una reproducción */}
-        <p className="flex items-start gap-2 border-b border-base-600/60 bg-warn/[0.04] px-4 py-2.5 text-[11.5px] leading-relaxed text-slate-500">
+        <p className="flex items-start gap-2 border-b border-base-600/60 bg-warn/[0.04] px-4 py-2.5 text-xs leading-relaxed text-slate-500">
           <Info size={12} className="mt-0.5 shrink-0 text-warn/70" aria-hidden="true" />
           {ui.consola.aviso}
         </p>
@@ -289,7 +289,7 @@ export default function Console() {
         <div
           ref={scrollRef}
           onClick={() => inputRef.current?.focus()}
-          className="h-[24rem] overflow-auto p-4 font-mono text-[12px] leading-relaxed sm:text-[12.5px]"
+          className="h-[24rem] overflow-auto p-4 font-mono text-xs leading-relaxed sm:text-[13px]"
         >
           <p className="text-slate-600">{ui.consola.ayudaInicial}</p>
 
@@ -318,7 +318,7 @@ export default function Console() {
 
         {/* Entrada */}
         <form onSubmit={onSubmit} className="flex items-center gap-2 border-t border-base-600 bg-base-900/50 px-4 py-3">
-          <span className="shrink-0 font-mono text-[12.5px] text-ok">{ui.consola.prompt}</span>
+          <span className="shrink-0 font-mono text-[13px] text-ok">{ui.consola.prompt}</span>
           <input
             ref={inputRef}
             value={valor}
@@ -329,7 +329,7 @@ export default function Console() {
             autoComplete="off"
             autoCapitalize="off"
             autoCorrect="off"
-            className="min-w-0 flex-1 bg-transparent font-mono text-[12.5px] py-1.5 text-slate-200 outline-none placeholder:text-slate-500"
+            className="min-w-0 flex-1 bg-transparent font-mono text-[13px] py-1.5 text-slate-200 outline-none placeholder:text-slate-500"
             placeholder="help"
           />
           <button

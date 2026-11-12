@@ -24,7 +24,7 @@ export default function Evidencia() {
           <li key={lab.id} className="flex flex-col p-6">
             <p className="text-[13px] text-slate-500">{lab.categoria.replace(/^DevOps Lab · /, '')}</p>
             <h3 className="mt-1 text-base font-semibold leading-snug text-white">{lab.titulo}</h3>
-            <p className="mt-3 flex-1 text-[15px] leading-relaxed text-slate-300">{lab.highlights[0]}</p>
+            <p className="mt-3 flex-1 text-base leading-relaxed text-slate-300">{lab.highlights[0]}</p>
             <a
               href={lab.links.repo}
               target="_blank"

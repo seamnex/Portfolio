@@ -49,7 +49,7 @@ export default function CIBadge({ pipeline, className = '' }) {
     </>
   )
 
-  const claseBase = `inline-flex overflow-hidden rounded-md border border-base-600 font-mono text-[11px] leading-none ${className}`
+  const claseBase = `inline-flex overflow-hidden rounded-md border border-base-600 font-mono text-xs leading-none ${className}`
 
   // Sin URL de corrida (por ejemplo mientras se consulta) el badge no debe ser
   // un enlace: un <a> sin href es un elemento que no recibe foco ni anuncia rol.

@@ -76,7 +76,7 @@ function BotonEscenario({ escenario, texto, activo, onInyectar, ui }) {
         <span className={`flex h-8 w-8 items-center justify-center rounded-lg border ${tono.icono}`}>
           {Icono && <Icono size={15} />}
         </span>
-        <span className="pill font-mono text-[11px]">{escenario.severidad}</span>
+        <span className="pill font-mono text-xs">{escenario.severidad}</span>
       </div>
 
       <h3 className="mt-4 text-sm font-semibold text-white">{texto.titulo}</h3>
@@ -84,8 +84,8 @@ function BotonEscenario({ escenario, texto, activo, onInyectar, ui }) {
 
       {/* La regla de alerta queda como detalle para quien es técnico:
           rotulada en lenguaje simple y en segundo plano. */}
-      <p className="mt-3 w-full text-[12px] text-slate-500">{ui.caos.reglaAlerta}</p>
-      <p className="mb-4 mt-1 w-full whitespace-pre-wrap break-all font-mono text-[11px] text-slate-600">{escenario.senal}</p>
+      <p className="mt-3 w-full text-xs text-slate-500">{ui.caos.reglaAlerta}</p>
+      <p className="mb-4 mt-1 w-full whitespace-pre-wrap break-all font-mono text-xs text-slate-600">{escenario.senal}</p>
 
       <span
         className={`mt-auto inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-[13px] font-semibold ${
@@ -116,7 +116,7 @@ export default function ChaosPanel() {
       {/* Aviso primero, no al pie: el visitante tiene que saber que esto es
           un simulacro ANTES de apretar el botón, no después de ver el panel
           de estado en rojo y asustarse. */}
-      <p className="mb-6 flex items-start gap-2.5 rounded-lg border border-warn/20 bg-warn/[0.05] px-4 py-3 text-[12.5px] leading-relaxed text-slate-400">
+      <p className="mb-6 flex items-start gap-2.5 rounded-lg border border-warn/20 bg-warn/[0.05] px-4 py-3 text-[13px] leading-relaxed text-slate-400">
         <TriangleAlert size={14} className="mt-0.5 shrink-0 text-warn" aria-hidden="true" />
         {t.aviso}
       </p>
@@ -154,7 +154,7 @@ export default function ChaosPanel() {
               >
                 {activo ? t.activo(t.escenarios[escenario.id].titulo) : t.listo}
               </p>
-              <p className="mt-0.5 font-mono text-[11px] text-slate-600">
+              <p className="mt-0.5 font-mono text-xs text-slate-600">
                 {activo && indiceFase >= 0
                   ? `${t.fase} ${indiceFase + 1}/${FASES.length} · ${t.nombresFase[fase]}`
                   : t.listoDetalle}
@@ -164,7 +164,7 @@ export default function ChaosPanel() {
 
           <div className="flex items-center gap-3">
             {activo && (
-              <span className="inline-flex items-center gap-1.5 font-mono text-[11px] text-slate-400">
+              <span className="inline-flex items-center gap-1.5 font-mono text-xs text-slate-400">
                 <HeartPulse size={13} className="text-ok" />
                 {t.autoHealing(restante ?? 0)}
               </span>
@@ -173,7 +173,7 @@ export default function ChaosPanel() {
               type="button"
               onClick={() => restaurar()}
               disabled={!activo}
-              className="rounded-md border border-base-600 px-3 py-2 font-mono text-[11px] text-slate-400 transition-colors hover:border-ok/40 hover:text-ok disabled:opacity-40 disabled:hover:border-base-600 disabled:hover:text-slate-400"
+              className="rounded-md border border-base-600 px-3 py-2 font-mono text-xs text-slate-400 transition-colors hover:border-ok/40 hover:text-ok disabled:opacity-40 disabled:hover:border-base-600 disabled:hover:text-slate-400"
             >
               {t.restaurar}
             </button>
@@ -190,7 +190,7 @@ export default function ChaosPanel() {
 
         {/* Bitácora. Es la misma que se escribe en la consola del sitio:
             un simulacro sin registro no deja nada que revisar después. */}
-        <div className="h-52 overflow-y-auto p-4 font-mono text-[11.5px] leading-relaxed">
+        <div className="h-52 overflow-y-auto p-4 font-mono text-xs leading-relaxed">
           {registro.length === 0 ? (
             <p className="text-slate-600">{t.bitacoraVacia}</p>
           ) : (

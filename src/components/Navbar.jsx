@@ -86,7 +86,7 @@ export default function Navbar() {
       >
         {ui.nav.saltar}
       </a>
-      <nav className="container-x flex h-16 items-center justify-between gap-2 sm:gap-4">
+      <nav className="container-x flex h-16 items-center justify-between gap-2 max-[359px]:gap-1 max-[359px]:px-4 sm:gap-4">
         <button
           type="button"
           onClick={() => irA('perfil', 'inicio')}
@@ -137,7 +137,7 @@ export default function Navbar() {
                 aria-label={texto.titulo.includes(texto.nav) ? texto.titulo : `${texto.nav} — ${texto.titulo}`}
                 tabIndex={sel ? 0 : -1}
                 onClick={() => irA(p.id)}
-                className={`relative flex flex-col items-center gap-0.5 whitespace-nowrap rounded-md border px-1.5 py-1.5 sm:px-2 text-[13px] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-base-900 md:flex-row md:gap-2 md:px-3 md:py-2 ${
+                className={`relative flex flex-col items-center gap-0.5 whitespace-nowrap rounded-md border px-1 py-1.5 max-[359px]:px-0.5 sm:px-2 text-[13px] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-base-900 md:flex-row md:gap-2 md:px-3 md:py-2 ${
                   sel
                     ? 'border-accent/40 bg-accent/10 text-accent'
                     : 'border-transparent text-slate-400 hover:bg-base-700/60 hover:text-white'
@@ -148,7 +148,7 @@ export default function Navbar() {
                     apilado bajo el icono en móvil, el completo al lado
                     desde `md`. Ambos `aria-hidden`: el nombre ya lo da el
                     aria-label del botón y no hay que leerlo dos veces. */}
-                <span aria-hidden="true" className="font-mono text-[11px] uppercase tracking-wider md:hidden">
+                <span aria-hidden="true" className="font-mono text-xs md:hidden">
                   {texto.navCorto}
                 </span>
                 <span aria-hidden="true" className="hidden md:inline">
@@ -170,7 +170,7 @@ export default function Navbar() {
           })}
         </div>
 
-        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 max-[359px]:gap-1 sm:gap-2">
           <LangToggle />
 
           {profile.github && (

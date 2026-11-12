@@ -25,12 +25,12 @@ function IncidentCard({ incidente, cta, onAbrir }) {
     <article className={`card group flex flex-col p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-glow ${sev.borde}`}>
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[11px] tracking-wider text-slate-500">{incidente.codigo}</span>
-          <span className={`rounded-md border px-2 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-wider ${sev.chip}`}>
+          <span className="font-mono text-xs tracking-wider text-slate-500">{incidente.codigo}</span>
+          <span className={`rounded-md border px-2 py-0.5 font-mono text-xs font-semibold uppercase tracking-wider ${sev.chip}`}>
             {incidente.severidad}
           </span>
         </div>
-        <span className="font-mono text-[11px] text-slate-600">{incidente.lab}</span>
+        <span className="font-mono text-xs text-slate-600">{incidente.lab}</span>
       </div>
 
       <h3 className="mt-3 text-base font-semibold leading-snug text-white transition-colors group-hover:text-accent">
@@ -42,7 +42,7 @@ function IncidentCard({ incidente, cta, onAbrir }) {
       <dl className="mt-5 grid grid-cols-3 gap-2 border-t border-base-600/60 pt-4">
         {incidente.metricas.map((m) => (
           <div key={m.k} className="min-w-0">
-            <dt className="truncate font-mono text-[11px] uppercase tracking-wider text-slate-600" title={m.k}>
+            <dt className="truncate font-mono text-xs uppercase tracking-wider text-slate-600" title={m.k}>
               {m.k}
             </dt>
             <dd className={`mt-1 font-mono text-[13px] font-bold ${TONO_METRICA[m.tone] ?? TONO_METRICA.muted}`}>
@@ -86,7 +86,7 @@ export default function Incidents() {
           lee esto, y esconderlo sería justamente lo contrario del punto. */}
       <div className="card mb-8 flex items-start gap-3 border-warn/25 bg-warn/[0.05] p-4">
         <TriangleAlert size={15} className="mt-0.5 shrink-0 text-warn" aria-hidden="true" />
-        <p className="text-[12.5px] leading-relaxed text-slate-400">{incidentesMeta.aviso}</p>
+        <p className="text-[13px] leading-relaxed text-slate-400">{incidentesMeta.aviso}</p>
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
@@ -100,7 +100,7 @@ export default function Incidents() {
         ))}
       </div>
 
-      <p className="mt-6 flex items-center justify-center gap-2 text-center font-mono text-[11px] text-slate-600">
+      <p className="mt-6 flex items-center justify-center gap-2 text-center font-mono text-xs text-slate-600">
         <ShieldAlert size={12} aria-hidden="true" />
         {incidentesMeta.pista}
       </p>

@@ -49,7 +49,7 @@ function Dialogo({ id, datos, cerrar, actualizado }) {
             <strong className="font-medium text-slate-200">{titulo}.</strong> {texto}
           </p>
         ))}
-        <p className="font-mono text-[11px] text-slate-500">{actualizado}</p>
+        <p className="font-mono text-xs text-slate-500">{actualizado}</p>
       </div>
     </dialog>
   )

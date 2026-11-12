@@ -115,14 +115,14 @@ export default function SystemStatus() {
                 <p className={`font-mono text-[13px] font-semibold ${tono.texto}`} aria-live="polite">
                   {ui.estado.banner[agregado] ?? ui.estado.banner.desconocido}
                 </p>
-                <p className="mt-0.5 font-mono text-[11px] text-slate-600">
+                <p className="mt-0.5 font-mono text-xs text-slate-600">
                   {ui.estado.label}
                   {antiguedad != null && ` · ${ui.estado.chequeadoEn} ${ui.estado.hace(antiguedad)}`}
                 </p>
               </div>
 
               {escenario && (
-                <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-warn/40 bg-warn/10 px-2 py-1 font-mono text-[11px] uppercase tracking-wider text-warn">
+                <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-warn/40 bg-warn/10 px-2 py-1 font-mono text-xs uppercase tracking-wider text-warn">
                   <FlaskConical size={11} aria-hidden="true" />
                   {ui.caos.simulacro}
                 </span>
@@ -144,7 +144,7 @@ export default function SystemStatus() {
                 onClick={() => setAbierto((v) => !v)}
                 aria-expanded={abierto}
                 aria-controls="estado-detalle"
-                className="inline-flex items-center gap-1.5 rounded-md border border-base-600 px-3 py-2 font-mono text-[11px] text-slate-400 transition-colors hover:border-accent/40 hover:text-accent"
+                className="inline-flex items-center gap-1.5 rounded-md border border-base-600 px-3 py-2 font-mono text-xs text-slate-400 transition-colors hover:border-accent/40 hover:text-accent"
               >
                 {abierto ? ui.estado.ocultarDetalle : ui.estado.verDetalle}
                 <ChevronDown size={13} className={`transition-transform ${abierto ? 'rotate-180' : ''}`} />
@@ -169,21 +169,21 @@ export default function SystemStatus() {
                       className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b border-base-600/40 px-5 py-3 last:border-b-0"
                     >
                       <div className="min-w-0">
-                        <p className="font-mono text-[12px] text-slate-300">{s.etiqueta}</p>
-                        <p className="mt-0.5 text-[12px] leading-snug text-slate-500">{ui.estado.servicios[s.id]}</p>
+                        <p className="font-mono text-xs text-slate-300">{s.etiqueta}</p>
+                        <p className="mt-0.5 text-xs leading-snug text-slate-500">{ui.estado.servicios[s.id]}</p>
                       </div>
                       <div className="text-right">
-                        <p className={`font-mono text-[11.5px] font-medium ${SERVICIO[r.estado] ?? SERVICIO.desconocido}`}>
+                        <p className={`font-mono text-xs font-medium ${SERVICIO[r.estado] ?? SERVICIO.desconocido}`}>
                           {etiquetaEstado(r.estado, ui)}
                         </p>
-                        <p className="mt-0.5 font-mono text-[11px] text-slate-600">{detalle(r, ui)}</p>
+                        <p className="mt-0.5 font-mono text-xs text-slate-600">{detalle(r, ui)}</p>
                       </div>
                     </li>
                   )
                 })}
               </ul>
 
-              <p className="flex items-start gap-2 border-t border-base-600/70 px-5 py-3 text-[11.5px] leading-relaxed text-slate-500">
+              <p className="flex items-start gap-2 border-t border-base-600/70 px-5 py-3 text-xs leading-relaxed text-slate-500">
                 <Info size={13} className="mt-0.5 shrink-0 text-slate-600" aria-hidden="true" />
                 {escenario ? ui.caos.avisoPanel : ui.estado.aviso}
               </p>

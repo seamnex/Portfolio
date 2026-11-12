@@ -81,7 +81,7 @@ export default function Timeline() {
                       <p className="mt-1 text-[13px] font-medium text-slate-300">{item.org}</p>
                     </div>
                     <span
-                      className={`rounded-md border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider ${
+                      className={`rounded-md border px-2.5 py-1 font-mono text-xs uppercase tracking-wider ${
                         esFormacion ? 'border-ok/30 bg-ok/10 text-ok' : 'border-base-600 bg-base-800 text-slate-400'
                       }`}
                     >
@@ -90,13 +90,13 @@ export default function Timeline() {
                   </div>
 
                   {item.paralelo && (
-                    <p className="mt-3 inline-flex items-center gap-2 rounded-md border border-ok/25 bg-ok/[0.06] px-2.5 py-1 font-mono text-[11px] text-ok">
+                    <p className="mt-3 inline-flex items-center gap-2 rounded-md border border-ok/25 bg-ok/[0.06] px-2.5 py-1 font-mono text-xs text-ok">
                       <GitBranch size={12} aria-hidden="true" />
                       {ui.trayectoria.paralelo(item.paralelo)}
                     </p>
                   )}
 
-                  <p className="mt-4 text-[13.5px] leading-relaxed text-slate-400">{item.resumen}</p>
+                  <p className="mt-4 text-sm leading-relaxed text-slate-400">{item.resumen}</p>
 
                   <div className="mt-5 flex flex-wrap items-center gap-1.5">
                     {item.tags.map((t) => (

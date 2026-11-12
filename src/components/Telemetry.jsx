@@ -74,13 +74,13 @@ function Tile({
           <span className={`flex h-7 w-7 items-center justify-center rounded-md border ${tono.icono}`}>
             {Icono && <Icono size={13} />}
           </span>
-          <h3 className="font-mono text-[11px] uppercase leading-tight tracking-[0.14em] text-slate-400">
+          <h3 className="font-mono text-xs uppercase leading-tight tracking-[0.06em] text-slate-400">
             {sigla ? <Sigla id={sigla}>{titulo}</Sigla> : titulo}
           </h3>
         </div>
         {veredicto != null && (
           <span
-            className={`shrink-0 rounded border px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wider ${
+            className={`shrink-0 rounded border px-1.5 py-0.5 font-mono text-xs uppercase tracking-wider ${
               veredicto ? 'border-ok/30 bg-ok/10 text-ok' : 'border-base-500 bg-base-800 text-slate-400'
             }`}
           >
@@ -93,7 +93,7 @@ function Tile({
         <span className={`font-mono text-[27px] font-bold leading-none tracking-tight ${tono.valor}`}>
           {valor ?? vacio ?? t.sinDatos}
         </span>
-        {valor != null && unidad && <span className="font-mono text-[12px] text-slate-500">{unidad}</span>}
+        {valor != null && unidad && <span className="font-mono text-xs text-slate-500">{unidad}</span>}
       </p>
 
       <div className="mt-3">
@@ -111,17 +111,17 @@ function Tile({
           de la serie que está justo arriba, y separarla la dejaría flotando
           como una afirmación suelta sin el dibujo que la respalda. */}
       {anotacion && (
-        <p className={`mt-2 flex items-start gap-1.5 font-mono text-[11px] leading-relaxed ${tonos[anotacion.tone]?.valor ?? tonos.muted.valor}`}>
+        <p className={`mt-2 flex items-start gap-1.5 font-mono text-xs leading-relaxed ${tonos[anotacion.tone]?.valor ?? tonos.muted.valor}`}>
           {IconoAnotacion && <IconoAnotacion size={11} className="mt-px shrink-0" aria-hidden="true" />}
           {anotacion.texto}
         </p>
       )}
 
-      <p className="mt-2 font-mono text-[11px] leading-relaxed text-slate-600">{detalle}</p>
+      <p className="mt-2 font-mono text-xs leading-relaxed text-slate-600">{detalle}</p>
 
       <div className="mt-auto flex items-baseline justify-between gap-2 border-t border-base-600/50 pt-3">
-        <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-slate-600">{t.objetivo}</span>
-        <span className="font-mono text-[11px] text-slate-400">{objetivo}</span>
+        <span className="font-mono text-xs uppercase tracking-[0.12em] text-slate-600">{t.objetivo}</span>
+        <span className="font-mono text-xs text-slate-400">{objetivo}</span>
       </div>
     </article>
   )
@@ -222,10 +222,10 @@ export default function Telemetry() {
               <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-ok" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-ok" />
             </span>
-            <span className="font-mono text-[11px] text-slate-300">{t.tablero}</span>
+            <span className="font-mono text-xs text-slate-300">{t.tablero}</span>
             <span className="pill">{t.ventana(ventanaDias)}</span>
           </div>
-          <span className="truncate font-mono text-[11px] text-slate-600">
+          <span className="truncate font-mono text-xs text-slate-600">
             {t.fuenteActions} · {repo}
           </span>
         </div>
@@ -234,7 +234,7 @@ export default function Telemetry() {
           // GitHub no respondió en vivo (casi siempre, el límite de 60
           // consultas por hora de la red del visitante) y los números salen
           // de la foto tomada en el último despliegue. Se dice, con su edad.
-          <p className="border-b border-base-600 bg-base-800/60 px-5 py-2 font-mono text-[11.5px] text-slate-400">
+          <p className="border-b border-base-600 bg-base-800/60 px-5 py-2 font-mono text-xs text-slate-400">
             {t.ultimoDato(haceCuanto(snapshot, lang))}
           </p>
         )}
@@ -243,7 +243,7 @@ export default function Telemetry() {
           // El simulacro no toca estos números y conviene decirlo justo acá:
           // alguien que acaba de inyectar un fallo espera ver el tablero en
           // rojo, y el silencio se leería como que el tablero está roto.
-          <p className="border-b border-warn/20 bg-warn/[0.06] px-5 py-2 font-mono text-[11px] text-warn">
+          <p className="border-b border-warn/20 bg-warn/[0.06] px-5 py-2 font-mono text-xs text-warn">
             {t.duranteSimulacro}
           </p>
         )}
@@ -360,11 +360,11 @@ export default function Telemetry() {
             {/* Sexta celda: el pie del tablero. Explica de dónde sale cada
                 cosa, que es lo que hace verificable a las otras cinco. */}
             <div className="flex h-full flex-col justify-center gap-2.5 rounded-lg border border-base-600/60 bg-base-800/40 p-5">
-              <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
+              <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-accent">
                 <Radio size={12} /> {t.comoSeMide}
               </p>
-              <p className="text-[12px] leading-relaxed text-slate-500">{t.aviso}</p>
-              {sinFuente && <p className="font-mono text-[11px] text-warn">{sinDato}</p>}
+              <p className="text-xs leading-relaxed text-slate-500">{t.aviso}</p>
+              {sinFuente && <p className="font-mono text-xs text-warn">{sinDato}</p>}
             </div>
           </div>
         </div>

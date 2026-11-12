@@ -22,15 +22,15 @@ export default function Bloque({ id, label, titulo, bajada, children, className 
     <section id={id} aria-labelledby={`${id}-titulo`} className={`scroll-mt-28 ${className}`}>
       <header className="max-w-3xl">
         {label && (
-          <p className="section-label flex items-center gap-2.5 text-[11px] tracking-[0.2em]">
-            <span className="h-px w-6 bg-accent/60" />
+          <p className="section-label flex items-center gap-2.5 text-xs tracking-[0.12em]">
+            <span className="h-px w-6 bg-base-500" />
             {label}
           </p>
         )}
         <h2 id={`${id}-titulo`} className="mt-2.5 text-xl font-bold tracking-tight text-white sm:text-2xl">
           {titulo}
         </h2>
-        {bajada && <p className="mt-3 text-[13.5px] leading-relaxed text-slate-400">{bajada}</p>}
+        {bajada && <p className="mt-3 max-w-[70ch] text-sm leading-relaxed text-slate-400">{bajada}</p>}
       </header>
       <div className="mt-6">{children}</div>
     </section>

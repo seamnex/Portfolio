@@ -13,13 +13,13 @@ export default function Footer() {
             {profile.alias}
             <span className="text-accent" aria-hidden="true">_</span>
           </p>
-          <p className="mt-1.5 text-[12px] text-slate-500">
+          <p className="mt-1.5 text-xs text-slate-500">
             {profile.rol} · {profile.target}
           </p>
-          <p className="mt-3 font-mono text-[11px] text-slate-600">
+          <p className="mt-3 font-mono text-xs text-slate-600">
             © {new Date().getFullYear()} — {ui.footer.construido}
           </p>
-          <p className="mt-2 flex justify-center gap-4 font-mono text-[11px] sm:justify-start">
+          <p className="mt-2 flex justify-center gap-4 font-mono text-xs sm:justify-start">
             <button type="button" onClick={() => abrirAviso('privacidad')} className="py-1.5 text-slate-500 underline-offset-2 transition-colors hover:text-accent hover:underline">
               {ui.footer.privacidad}
             </button>

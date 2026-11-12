@@ -36,7 +36,7 @@ export default function CopyButton({ value, label, className = '' }) {
       type="button"
       onClick={copiar}
       aria-label={`${ui.acciones.copiar}: ${value}`}
-      className={`inline-flex items-center gap-1.5 rounded-md border border-base-600 px-2.5 py-1.5 font-mono text-[11px] text-slate-400 transition-colors hover:border-accent/50 hover:text-accent ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-md border border-base-600 px-2.5 py-1.5 font-mono text-xs text-slate-400 transition-colors hover:border-accent/50 hover:text-accent ${className}`}
     >
       {copiado ? <Check size={13} className="text-ok" /> : <Copy size={13} />}
       {copiado ? ui.acciones.copiado : etiqueta}

@@ -92,7 +92,7 @@ function LineaIncidente() {
       <div aria-hidden="true">
         {/* La llave sobre el tramo que es el hallazgo: los mismos 45 s del titular. */}
         <div className="relative h-6" style={{ marginLeft: pct(corte) }}>
-          <span className="absolute inset-x-0 top-0 text-center font-mono text-[12px] font-semibold leading-none text-accent">
+          <span className="absolute inset-x-0 top-0 text-center font-mono text-xs font-semibold leading-none text-accent">
             {medicion} s
           </span>
           <span className="absolute inset-x-0 bottom-1 h-1.5 rounded-t-[2px] border-x border-t border-accent/60" />
@@ -102,7 +102,7 @@ function LineaIncidente() {
             <span key={t.id} className={`h-full ${t.barra}`} style={{ width: t.ancho }} />
           ))}
         </div>
-        <div className="relative mt-1.5 h-4 font-mono text-[12px] tabular-nums text-slate-500">
+        <div className="relative mt-1.5 h-4 font-mono text-xs tabular-nums text-slate-500">
           <span className="absolute left-0">0 s</span>
           <span className="absolute -translate-x-1/2" style={{ left: pct(corte) }}>{s(corte)} s</span>
           <span className="absolute right-0">{s(mttr)} s</span>
@@ -111,7 +111,7 @@ function LineaIncidente() {
           {tramos.map((t) => (
             <li key={t.id} className={`flex items-baseline gap-2.5 ${t.id === 'medir' ? 'text-slate-100' : 'text-slate-400'}`}>
               <span className={`h-2 w-2 shrink-0 translate-y-[-1px] rounded-[2px] ${t.punto}`} />
-              <span className="w-[5.5rem] shrink-0 font-mono text-[12px] tabular-nums text-slate-500">{t.rango}</span>
+              <span className="w-[5.5rem] shrink-0 font-mono text-xs tabular-nums text-slate-500">{t.rango}</span>
               <span>{t.texto}</span>
             </li>
           ))}
@@ -154,7 +154,7 @@ function PanelVivo() {
           {p.hallazgo}
         </p>
         <LineaIncidente />
-        <p className="mt-4 text-[14px] leading-relaxed text-slate-400">{p.mttdTexto}</p>
+        <p className="mt-4 text-sm leading-relaxed text-slate-400">{p.mttdTexto}</p>
         <p className="mt-4 flex flex-wrap items-baseline gap-x-2 text-[13px] text-slate-400">
           <Sigla id="mttd">MTTD</Sigla>
           <span className="text-xl font-semibold tabular-nums text-white">{num(MEDIDAS.mttd, lang)} s</span>
@@ -199,7 +199,7 @@ function PanelVivo() {
               <Icono size={16} aria-hidden="true" />
             </span>
             <span className="min-w-0 flex-1">
-              <span className="block text-[14px] font-semibold text-white">{titulo}</span>
+              <span className="block text-sm font-semibold text-white">{titulo}</span>
               <span className="block text-[13px] leading-snug text-slate-400">{texto}</span>
             </span>
             <ArrowRight
@@ -242,7 +242,7 @@ export default function Hero() {
 
             {/* Lo que antes era una grilla de cuatro tarjetas: una línea.
                 Son credenciales, no la prueba; la prueba está a la derecha. */}
-            <p className="mt-3 text-[14px] text-slate-400">{metrics.map((m) => m.corto).join(" · ")}</p>
+            <p className="mt-3 text-sm text-slate-400">{metrics.map((m) => m.corto).join(" · ")}</p>
 
             <TiraVivo />
 

@@ -24,6 +24,20 @@
     outline-offset: 2px;
   }
 
+  /* Cortes de línea: los títulos se reparten parejo y los párrafos no
+     dejan una palabra sola en la última línea. Donde el navegador no lo
+     soporta, queda el corte de siempre. */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
+  }
+
   ::selection {
     @apply bg-accent/30 text-white;
   }
@@ -114,7 +128,7 @@
   }
 
   .pill {
-    @apply inline-flex items-center rounded-md border border-base-600 bg-base-800/80 px-2.5 py-1 font-mono text-[11px] font-medium tracking-wide text-slate-400 transition-colors;
+    @apply inline-flex items-center rounded-md border border-base-600 bg-base-800/80 px-2.5 py-1 font-mono text-xs font-medium tracking-wide text-slate-400 transition-colors;
   }
 
   .pill-accent {
@@ -142,7 +156,7 @@
   /* Rótulo de sección en gris: el cian queda para lo que se toca y lo que
      está en vivo, y así vuelve a señalar algo. */
   .section-label {
-    @apply font-mono text-xs uppercase tracking-[0.2em] text-slate-400;
+    @apply font-mono text-xs uppercase tracking-[0.12em] text-slate-400;
   }
 
   .heading-2 {

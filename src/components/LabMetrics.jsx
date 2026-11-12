@@ -42,21 +42,21 @@ function MetricCard({ m, verBitacora }) {
         <span className="font-mono text-sm font-medium text-slate-500">{m.unidad}</span>
       </p>
 
-      <p className="mt-3 text-[13.5px] leading-relaxed text-slate-400">{m.resumen}</p>
+      <p className="mt-3 text-sm leading-relaxed text-slate-400">{m.resumen}</p>
 
-      <p className="mt-4 border-l-2 border-base-600 pl-3 text-[12.5px] leading-relaxed text-slate-500">
+      <p className="mt-4 border-l-2 border-base-600 pl-3 text-[13px] leading-relaxed text-slate-500">
         {m.evidencia}
       </p>
 
       <div className="mt-auto pt-5">
-        <p className="font-mono text-[11px] uppercase leading-relaxed tracking-wider text-slate-600">
+        <p className="font-mono text-xs uppercase leading-relaxed tracking-wider text-slate-600">
           {m.metodo}
         </p>
         <a
           href={m.repo}
           target="_blank"
           rel="noreferrer noopener"
-          className="mt-2 inline-flex items-center gap-1.5 py-1.5 font-mono text-[11.5px] text-slate-400 transition-colors hover:text-accent"
+          className="mt-2 inline-flex items-center gap-1.5 py-1.5 font-mono text-xs text-slate-400 transition-colors hover:text-accent"
         >
           {verBitacora}
           <ArrowUpRight size={13} className="transition-transform group-hover:translate-x-0.5" />
@@ -83,10 +83,10 @@ export default function LabMetrics() {
       </div>
 
       <div id="hallazgo" className="card mt-5 scroll-mt-28 border-accent/20 bg-accent/[0.04] p-6">
-        <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-accent">
+        <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-accent">
           <FlaskConical size={13} /> {labMetrics.nota.titulo}
         </p>
-        <p className="mt-3 max-w-4xl text-[13.5px] leading-relaxed text-slate-400">
+        <p className="mt-3 max-w-4xl text-sm leading-relaxed text-slate-400">
           {labMetrics.nota.texto}
         </p>
       </div>

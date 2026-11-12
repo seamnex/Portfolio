@@ -163,7 +163,7 @@ export default function Contact() {
                 <span className="flex items-center gap-3">
                   <Linkedin size={16} className="text-slate-500" aria-hidden="true" /> /in/samuel-garcia-baciliadis
                 </span>
-                <span className="font-mono text-[11px] text-slate-500">{ui.acciones.abrir}</span>
+                <span className="font-mono text-xs text-slate-500">{ui.acciones.abrir}</span>
               </a>
 
               {profile.github && (
@@ -176,7 +176,7 @@ export default function Contact() {
                   <span className="flex items-center gap-3">
                     <Github size={16} className="text-slate-500" aria-hidden="true" /> {ui.form.githubLinea}
                   </span>
-                  <span className="font-mono text-[11px] text-slate-500">{ui.acciones.abrir}</span>
+                  <span className="font-mono text-xs text-slate-500">{ui.acciones.abrir}</span>
                 </a>
               )}
 
@@ -190,7 +190,7 @@ export default function Contact() {
           </div>
 
           <div className="card p-5">
-            <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500">{ui.form.tiempoRespuesta}</p>
+            <p className="font-mono text-xs uppercase tracking-wider text-slate-500">{ui.form.tiempoRespuesta}</p>
             <p className="mt-2 text-sm text-slate-400">
               <span className="font-mono text-ok">{ui.form.sla}</span> {ui.form.slaTexto}
             </p>
@@ -213,7 +213,7 @@ export default function Contact() {
             />
 
             <div>
-              <label htmlFor="nombre" className="mb-2 block font-mono text-[11px] uppercase tracking-wider text-slate-500">
+              <label htmlFor="nombre" className="mb-2 block font-mono text-xs uppercase tracking-wider text-slate-500">
                 {ui.form.nombre}
               </label>
               <input
@@ -230,14 +230,14 @@ export default function Contact() {
                 className={inputCls('nombre')}
               />
               {errores.nombre && (
-                <p id="nombre-error" className="mt-1.5 font-mono text-[11px] text-crit">
+                <p id="nombre-error" className="mt-1.5 font-mono text-xs text-crit">
                   {errores.nombre}
                 </p>
               )}
             </div>
 
             <div>
-              <label htmlFor="email" className="mb-2 block font-mono text-[11px] uppercase tracking-wider text-slate-500">
+              <label htmlFor="email" className="mb-2 block font-mono text-xs uppercase tracking-wider text-slate-500">
                 {ui.form.email}
               </label>
               <input
@@ -254,14 +254,14 @@ export default function Contact() {
                 className={inputCls('email')}
               />
               {errores.email && (
-                <p id="email-error" className="mt-1.5 font-mono text-[11px] text-crit">
+                <p id="email-error" className="mt-1.5 font-mono text-xs text-crit">
                   {errores.email}
                 </p>
               )}
             </div>
 
             <div>
-              <label htmlFor="mensaje" className="mb-2 block font-mono text-[11px] uppercase tracking-wider text-slate-500">
+              <label htmlFor="mensaje" className="mb-2 block font-mono text-xs uppercase tracking-wider text-slate-500">
                 {ui.form.mensaje}
               </label>
               <textarea
@@ -277,7 +277,7 @@ export default function Contact() {
                 className={`${inputCls('mensaje')} resize-none`}
               />
               {errores.mensaje && (
-                <p id="mensaje-error" className="mt-1.5 font-mono text-[11px] text-crit">
+                <p id="mensaje-error" className="mt-1.5 font-mono text-xs text-crit">
                   {errores.mensaje}
                 </p>
               )}
@@ -301,13 +301,13 @@ export default function Contact() {
 
             <div aria-live="polite">
               {estado === 'ok' && (
-                <p className="rounded-lg border border-ok/30 bg-ok/10 px-4 py-3 text-center font-mono text-[12px] text-ok">
+                <p className="rounded-lg border border-ok/30 bg-ok/10 px-4 py-3 text-center font-mono text-xs text-ok">
                   {ENDPOINT ? ui.form.okFormspree : ui.form.okMailto}
                 </p>
               )}
 
               {estado === 'error' && (
-                <p className="rounded-lg border border-crit/30 bg-crit/10 px-4 py-3 text-center font-mono text-[12px] text-crit">
+                <p className="rounded-lg border border-crit/30 bg-crit/10 px-4 py-3 text-center font-mono text-xs text-crit">
                   {ui.form.error}{' '}
                   <button
                     type="button"
@@ -321,10 +321,10 @@ export default function Contact() {
               )}
             </div>
 
-            <p className="text-center font-mono text-[11px] text-slate-600">
+            <p className="text-center font-mono text-xs text-slate-600">
               {ENDPOINT ? ui.form.pieFormspree(profile.email) : ui.form.pieMailto(profile.email)}
             </p>
-            <p className="text-center font-mono text-[11px] text-slate-600">
+            <p className="text-center font-mono text-xs text-slate-600">
               {ui.form.privacidadAntes}{' '}
               <button type="button" onClick={() => abrirAviso('privacidad')} className="underline underline-offset-2 hover:text-accent">
                 {ui.footer.privacidad}

@@ -48,8 +48,8 @@ const esPendiente = (estado) => /^(pendiente|pending)$/i.test(estado)
 function Campo({ etiqueta, valor }) {
   return (
     <div className="min-w-0">
-      <dt className="font-mono text-[11px] uppercase tracking-wider text-slate-600">{etiqueta}</dt>
-      <dd className="mt-1 text-[12.5px] leading-snug text-slate-300">{valor}</dd>
+      <dt className="font-mono text-xs uppercase tracking-wider text-slate-600">{etiqueta}</dt>
+      <dd className="mt-1 text-[13px] leading-snug text-slate-300">{valor}</dd>
     </div>
   )
 }
@@ -57,7 +57,7 @@ function Campo({ etiqueta, valor }) {
 function Bloque({ icono: Icono, titulo, children }) {
   return (
     <section className="border-t border-base-600/70 px-6 py-6 sm:px-8">
-      <h3 className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
+      <h3 className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-accent">
         <Icono size={13} aria-hidden="true" />
         {titulo}
       </h3>
@@ -155,9 +155,9 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-mono text-[11px] tracking-wider text-slate-500">{incidente.codigo}</span>
+                <span className="font-mono text-xs tracking-wider text-slate-500">{incidente.codigo}</span>
                 <span
-                  className={`rounded-md border px-2 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-wider ${
+                  className={`rounded-md border px-2 py-0.5 font-mono text-xs font-semibold uppercase tracking-wider ${
                     SEVERIDAD[incidente.severidad] ?? SEVERIDAD.P4
                   }`}
                 >
@@ -198,14 +198,14 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
         <div className="grid gap-3 px-6 py-6 sm:grid-cols-3 sm:px-8">
           {incidente.metricas.map((m) => (
             <div key={m.k} className="rounded-lg border border-base-600 bg-base-900/50 px-4 py-3">
-              <p className="font-mono text-[11px] uppercase tracking-wider text-slate-600">{m.k}</p>
+              <p className="font-mono text-xs uppercase tracking-wider text-slate-600">{m.k}</p>
               <p className={`mt-1 font-mono text-lg font-bold ${TONO_TEXTO[m.tone] ?? TONO_TEXTO.muted}`}>{m.v}</p>
             </div>
           ))}
         </div>
 
         <Bloque icono={Crosshair} titulo={p.resumenEjecutivo}>
-          <p className="text-[13.5px] leading-relaxed text-slate-400">{incidente.resumen}</p>
+          <p className="text-sm leading-relaxed text-slate-400">{incidente.resumen}</p>
         </Bloque>
 
         <Bloque icono={Clock} titulo={p.timeline}>
@@ -218,7 +218,7 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
                   }`}
                   aria-hidden="true"
                 />
-                <p className={`font-mono text-[11.5px] font-semibold ${TONO_TEXTO[paso.tone] ?? TONO_TEXTO.muted}`}>
+                <p className={`font-mono text-xs font-semibold ${TONO_TEXTO[paso.tone] ?? TONO_TEXTO.muted}`}>
                   {paso.t}
                 </p>
                 <p className="mt-1 text-[13px] leading-relaxed text-slate-400">{paso.texto}</p>
@@ -231,7 +231,7 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
           <ul className="space-y-3">
             {incidente.causaRaiz.map((linea, i) => (
               <li key={i} className="flex gap-3 text-[13px] leading-relaxed text-slate-400">
-                <span className="mt-0.5 shrink-0 font-mono text-[11px] text-slate-600">{i + 1}.</span>
+                <span className="mt-0.5 shrink-0 font-mono text-xs text-slate-600">{i + 1}.</span>
                 {linea}
               </li>
             ))}
@@ -247,7 +247,7 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
             {incidente.acciones.map((a, i) => (
               <li key={i} className="flex items-start gap-3">
                 <span
-                  className={`mt-0.5 shrink-0 rounded border px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wider ${
+                  className={`mt-0.5 shrink-0 rounded border px-1.5 py-0.5 font-mono text-xs uppercase tracking-wider ${
                     esPendiente(a.estado)
                       ? 'border-warn/30 bg-warn/10 text-warn'
                       : 'border-ok/30 bg-ok/10 text-ok'
@@ -262,7 +262,7 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
         </Bloque>
 
         <Bloque icono={Lightbulb} titulo={p.leccion}>
-          <p className="border-l-2 border-accent/40 pl-4 text-[13.5px] italic leading-relaxed text-slate-300">
+          <p className="border-l-2 border-accent/40 pl-4 text-sm italic leading-relaxed text-slate-300">
             {incidente.leccion}
           </p>
         </Bloque>
@@ -291,7 +291,7 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
               href={incidente.repo}
               target="_blank"
               rel="noreferrer noopener"
-              className="inline-flex items-center gap-1.5 py-1.5 font-mono text-[11.5px] text-slate-400 transition-colors hover:text-accent"
+              className="inline-flex items-center gap-1.5 py-1.5 font-mono text-xs text-slate-400 transition-colors hover:text-accent"
             >
               {p.verBitacora}
               <ArrowUpRight size={13} />
@@ -299,7 +299,7 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="font-mono text-[11px] text-slate-600">
+            <span className="font-mono text-xs text-slate-600">
               {posicion.actual} / {posicion.total}
             </span>
             <button

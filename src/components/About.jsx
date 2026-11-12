@@ -15,11 +15,11 @@ export default function About() {
     <Section id="sobre-mi" label={about.label} titulo={about.titulo} bajada={about.bajada}>
       <div className="grid gap-12 lg:grid-cols-[1.15fr_.85fr]">
         <div className="space-y-5">
-          <p className="text-[15px] leading-relaxed text-slate-400">{primero}</p>
+          <p className="text-base leading-relaxed text-slate-400">{primero}</p>
 
           <div id={idResto} hidden={!completo} className="space-y-5">
             {resto.map((p, i) => (
-              <p key={i} className="text-[15px] leading-relaxed text-slate-400">
+              <p key={i} className="text-base leading-relaxed text-slate-400">
                 {p}
               </p>
             ))}
@@ -30,7 +30,7 @@ export default function About() {
             onClick={() => setCompleto((v) => !v)}
             aria-expanded={completo}
             aria-controls={idResto}
-            className="inline-flex items-center gap-1.5 py-1.5 text-[14px] font-medium text-accent transition-colors hover:text-white"
+            className="inline-flex items-center gap-1.5 py-1.5 text-sm font-medium text-accent transition-colors hover:text-white"
           >
             {completo ? about.leerMenos : about.leerMas}
             <ChevronDown size={15} className={`transition-transform duration-200 ${completo ? 'rotate-180' : ''}`} aria-hidden="true" />
@@ -41,12 +41,12 @@ export default function About() {
             <p className="section-label">{about.puente.label}</p>
             <div className="mt-5 grid items-center gap-5 sm:grid-cols-[1fr_auto_1fr]">
               <div className="rounded-lg border border-crit/25 bg-crit/[0.06] p-4">
-                <p className="font-mono text-[11px] uppercase tracking-wider text-crit">{about.puente.reactivo.etiqueta}</p>
+                <p className="font-mono text-xs uppercase tracking-wider text-crit">{about.puente.reactivo.etiqueta}</p>
                 <p className="mt-2 text-sm text-slate-300">{about.puente.reactivo.texto}</p>
               </div>
               <ArrowRightLeft size={20} className="mx-auto hidden text-slate-500 sm:block" aria-hidden="true" />
               <div className="rounded-lg border border-ok/25 bg-ok/[0.06] p-4">
-                <p className="font-mono text-[11px] uppercase tracking-wider text-ok">{about.puente.preventivo.etiqueta}</p>
+                <p className="font-mono text-xs uppercase tracking-wider text-ok">{about.puente.preventivo.etiqueta}</p>
                 <p className="mt-2 text-sm text-slate-300">{about.puente.preventivo.texto}</p>
               </div>
             </div>
@@ -60,11 +60,11 @@ export default function About() {
           <ul className="mt-5 divide-y divide-base-600/70 border-y border-base-600/70">
             {about.principios.map((pr) => (
               <li key={pr.titulo} className="py-4">
-                <h3 className="flex items-start gap-2.5 text-[15px] font-semibold text-white">
+                <h3 className="flex items-start gap-2.5 text-base font-semibold text-white">
                   <CheckCircle2 size={16} className="mt-[3px] shrink-0 text-slate-500" aria-hidden="true" />
                   {pr.titulo}
                 </h3>
-                <p className="mt-1.5 pl-[26px] text-[14px] leading-relaxed text-slate-400">{pr.texto}</p>
+                <p className="mt-1.5 pl-[26px] text-sm leading-relaxed text-slate-400">{pr.texto}</p>
               </li>
             ))}
           </ul>
