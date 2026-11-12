@@ -57,11 +57,11 @@ export const hero = {
     'I run P1/P2 incidents in high-volume environments — Fintech and Telco — leading War Rooms, restoring service and closing the loop with RCAs that stop the same failure from coming back. Today I am taking that operational discipline into SRE and DevOps: observability, automation and systems that fail rarely and recover fast.',
   panel: {
     titulo: 'This site, live',
-    tira: `I detected and stopped a real outage in ${n(MEDIDAS.corte)} s`,
+    tira: `I detected and stopped an injected failure in ${n(MEDIDAS.corte)} s`,
     tiraAria: 'See the live panel',
     simulacroActivo: 'Failure drill in progress',
-    hallazgoEtiqueta: 'A real outage in my lab, measured end to end',
-    hallazgo: `I detected and stopped a real outage in ${n(MEDIDAS.corte)} seconds`,
+    hallazgoEtiqueta: 'A failure I injected in my lab, measured end to end',
+    hallazgo: `I detected and stopped an injected failure in ${n(MEDIDAS.corte)} seconds`,
     mttdTexto: `And I over-measured: ${Math.round(MEDIDAS.ventanaInstrumento[0])} of the ${Math.round(MEDIDAS.mttr)} s I reported were my own dashboard confirming it.`,
     mttdEtiqueta: `measured · ${n(MEDIDAS.mttdSensible)} s with a more sensitive rule, at the cost of false alarms`,
     linea: {
@@ -545,7 +545,7 @@ export const ui = {
       aviso: 'drill running',
       label: 'Observability & SRE',
       bajada:
-        'Everything this site measures about itself, with the source of every number in plain sight. Nothing is preloaded or estimated.',
+        'Everything this site measures about itself, with the source of every number in plain sight. If a value could not be queried live, the last known one is shown and labelled.',
     },
     laboratorio: {
       nav: 'Chaos Lab',
@@ -615,7 +615,7 @@ export const ui = {
     ocultarDetalle: 'Hide detail',
     hace: (s) => (s < 60 ? `${s}s ago` : `${Math.floor(s / 60)}m ago`),
     aviso:
-      'Everything on this panel is queried from your browser right now: the latency comes from a real request to this site, and the CI status from the public GitHub API. Nothing is preloaded or simulated.',
+      'Everything on this panel is queried from your browser right now: the latency comes from a real request to this site, and the CI status from the public GitHub API. If GitHub does not respond, the last known run is shown, labelled as such.',
     etiquetas: {
       ok: 'Operational',
       fallo: 'Failing',

@@ -67,15 +67,15 @@ export const hero = {
   panel: {
     titulo: 'Este sitio, en vivo',
     // Tira compacta que lo anticipa en el teléfono, donde el panel queda abajo.
-    tira: `Detecté y corté una caída real en ${n(MEDIDAS.corte)} s`,
+    tira: `Detecté y corté una falla inyectada en ${n(MEDIDAS.corte)} s`,
     tiraAria: 'Ver el panel en vivo',
     simulacroActivo: 'Simulacro de falla en curso',
     // El titular es el hallazgo, no el MTTD: el número no llega al objetivo,
     // y lo que vale mostrar es el diagnóstico, que es la habilidad.
-    hallazgoEtiqueta: 'Una caída real en mi lab, medida de punta a punta',
+    hallazgoEtiqueta: 'Una falla que inyecté en mi lab, medida de punta a punta',
     // El logro primero: es lo que se lleva quien lee 8 segundos. El matiz
     // de la medición va en la bajada y en el diagnóstico.
-    hallazgo: `Detecté y corté una caída real en ${n(MEDIDAS.corte)} segundos`,
+    hallazgo: `Detecté y corté una falla inyectada en ${n(MEDIDAS.corte)} segundos`,
     // Bitácora del observability-lab: ventana deslizante de 30 s + 15 s de tasa sana sostenida.
     mttdTexto: `Y medí de más: ${Math.round(MEDIDAS.ventanaInstrumento[0])} de los ${Math.round(MEDIDAS.mttr)} s que reporté eran mi propio tablero confirmándolo.`,
     // 11,5 s no es una meta: es lo que dio la regla más sensible, y se paga
@@ -689,7 +689,7 @@ export const ui = {
       aviso: 'con simulacro',
       label: 'Observabilidad & SRE',
       bajada:
-        'Todo lo que este sitio mide de sí mismo, con la fuente de cada número a la vista. Nada está precargado ni estimado.',
+        'Todo lo que este sitio mide de sí mismo, con la fuente de cada número a la vista. Si un dato no se pudo consultar en vivo, se muestra el último conocido y se dice.',
     },
     laboratorio: {
       nav: 'Chaos Lab',
@@ -767,7 +767,7 @@ export const ui = {
     ocultarDetalle: 'Ocultar detalle',
     hace: (s) => (s < 60 ? `hace ${s} s` : `hace ${Math.floor(s / 60)} min`),
     aviso:
-      'Todo lo de este panel se consulta desde tu navegador en el momento: la latencia sale de una petición real a este sitio y el estado de CI, de la API pública de GitHub. Nada está precargado ni simulado.',
+      'Todo lo de este panel se consulta desde tu navegador en el momento: la latencia sale de una petición real a este sitio y el estado de CI, de la API pública de GitHub. Si GitHub no responde, se muestra la última corrida conocida, rotulada como tal.',
     // Etiquetas de estado por servicio.
     etiquetas: {
       ok: 'Operativo',
