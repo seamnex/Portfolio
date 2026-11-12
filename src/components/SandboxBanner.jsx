@@ -88,13 +88,8 @@ export default function SandboxBanner() {
               })}
             </ul>
 
-            <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3">
-              <button type="button" onClick={() => irA('observabilidad')} className="btn-ghost">
-                {t.abrir}
-                <ArrowRight size={16} aria-hidden="true" />
-              </button>
-              <span className="font-mono text-[11px] text-slate-600">{t.pie}</span>
-            </div>
+            {/* Sin botón aparte: repetía el destino de la primera tarjeta. */}
+            <p className="mt-4 font-mono text-[11px] text-slate-500">{t.pie}</p>
           </div>
         </div>
       </div>

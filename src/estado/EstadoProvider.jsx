@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { pipelines, servicios } from '../data/servicios.js'
+import { pipelines, REPOS_VIGILADOS as REPOS, servicios } from '../data/servicios.js'
 import { agregar, chequearActions, chequearOrigen, TTL_MS } from '../lib/estado.js'
 
 // Un solo proveedor para los tres consumidores del estado: el panel, los
@@ -7,14 +7,6 @@ import { agregar, chequearActions, chequearOrigen, TTL_MS } from '../lib/estado.
 // uno consultara por su cuenta, un repo vigilado por dos de ellos gastaría
 // dos de las 60 consultas por hora que da la API pública de GitHub.
 const EstadoContext = createContext(null)
-
-/** Repos únicos a consultar: los del panel más los que muestran badge. */
-const REPOS = [
-  ...new Set([
-    ...servicios.filter((s) => s.tipo === 'actions').map((s) => s.repo),
-    ...Object.values(pipelines).map((p) => p.repo),
-  ]),
-]
 
 const servicioOrigen = servicios.find((s) => s.tipo === 'origen')
 

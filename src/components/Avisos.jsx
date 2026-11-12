@@ -65,7 +65,7 @@ const SEVERIDAD = {
   P3: 'border-ok/40 bg-ok/10 text-ok',
 }
 
-function Aviso({ aviso, onCerrar }) {
+function Aviso({ aviso, ultimo, onCerrar }) {
   const { ui } = useContenido()
   const t = ui.avisos
   const e = ESTILO[aviso.estado] ?? ESTILO.info
@@ -74,7 +74,10 @@ function Aviso({ aviso, onCerrar }) {
   return (
     <div
       role="status"
-      className={`card pointer-events-auto relative w-full animate-slide-in overflow-hidden border bg-base-800/95 shadow-2xl shadow-black/50 backdrop-blur ${e.borde}`}
+      // En el teléfono la pila tapaba un tercio de la pantalla, justo encima
+      // del panel que el simulacro quiere que mires: ahí se ve solo el
+      // último aviso, sin la línea técnica. Desde `sm`, la pila completa.
+      className={`card pointer-events-auto relative w-full animate-slide-in ${ultimo ? '' : 'max-sm:hidden'} overflow-hidden border bg-base-800/95 shadow-2xl shadow-black/50 backdrop-blur ${e.borde}`}
     >
       <span className={`absolute inset-y-0 left-0 w-1 ${e.barra}`} aria-hidden="true" />
 
@@ -108,10 +111,10 @@ function Aviso({ aviso, onCerrar }) {
 
           <p className="mt-1.5 text-[13px] font-semibold leading-snug text-white">{aviso.titulo}</p>
           {aviso.detalle && (
-            <p className="mt-1 break-words font-mono text-[11px] leading-relaxed text-slate-400">{aviso.detalle}</p>
+            <p className="mt-1 hidden break-words font-mono text-[11px] leading-relaxed text-slate-400 sm:block">{aviso.detalle}</p>
           )}
           {aviso.meta && (
-            <p className="mt-1.5 font-mono text-[11px] uppercase tracking-wider text-slate-600">{aviso.meta}</p>
+            <p className="mt-1.5 hidden font-mono text-[11px] uppercase tracking-wider text-slate-600 sm:block">{aviso.meta}</p>
           )}
         </div>
 
@@ -119,7 +122,7 @@ function Aviso({ aviso, onCerrar }) {
           type="button"
           onClick={onCerrar}
           aria-label={t.cerrar}
-          className="-mr-1 -mt-1 shrink-0 rounded-md p-1.5 text-slate-500 transition-colors hover:bg-base-700 hover:text-white"
+          className="-my-2 -mr-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-slate-500 transition-colors hover:bg-base-700 hover:text-white"
         >
           <X size={14} aria-hidden="true" />
         </button>
@@ -141,10 +144,10 @@ export default function Avisos() {
       aria-label={ui.avisos.region}
       className="pointer-events-none fixed inset-x-4 bottom-4 z-[70] flex flex-col gap-2.5 sm:inset-x-auto sm:right-5 sm:top-20 sm:w-[380px]"
     >
-      {avisos.map((a) => (
+      {avisos.map((a, i) => (
         // La clave del incidente y no el id del aviso: cuando TRIGGERED pasa a
         // ACKNOWLEDGED la tarjeta cambia en su lugar en vez de volver a entrar.
-        <Aviso key={a.clave ?? a.id} aviso={a} onCerrar={() => cerrar(a.id)} />
+        <Aviso key={a.clave ?? a.id} aviso={a} ultimo={i === avisos.length - 1} onCerrar={() => cerrar(a.id)} />
       ))}
     </div>
   )

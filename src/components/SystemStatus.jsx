@@ -9,6 +9,7 @@ import { resultadoSimulado } from '../lib/caos.js'
 // purga por coincidencia textual y `border-${tono}/40` no la encuentra.
 const AGREGADO = {
   ok: { punto: 'bg-ok', texto: 'text-ok', borde: 'border-ok/25', fondo: 'bg-ok/[0.04]' },
+  respaldo: { punto: 'bg-ok', texto: 'text-ok', borde: 'border-ok/25', fondo: 'bg-ok/[0.04]' },
   degradado: { punto: 'bg-warn', texto: 'text-warn', borde: 'border-warn/30', fondo: 'bg-warn/[0.05]' },
   caido: { punto: 'bg-crit', texto: 'text-crit', borde: 'border-crit/30', fondo: 'bg-crit/[0.05]' },
   desconocido: { punto: 'bg-slate-500', texto: 'text-slate-400', borde: 'border-base-600', fondo: 'bg-base-700/40' },
@@ -57,6 +58,7 @@ function detalle(resultado, ui) {
   }
   if (resultado.estado === 'desconocido') return motivoLegible(resultado, ui)
   return [
+    resultado.deSnapshot ? ui.estado.deRespaldo : null,
     resultado.workflow,
     resultado.numero != null ? `${ui.estado.corrida} #${resultado.numero}` : null,
     resultado.rama ? `${ui.estado.rama} ${resultado.rama}` : null,

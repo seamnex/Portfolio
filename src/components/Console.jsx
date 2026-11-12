@@ -273,9 +273,9 @@ export default function Console() {
             type="button"
             onClick={() => setEntradas([])}
             aria-label={ui.consola.limpiar}
-            className="ml-auto rounded-md border border-base-600 p-1.5 text-slate-500 transition-colors hover:border-accent/40 hover:text-accent"
+            className="-my-2 ml-auto flex h-10 w-10 items-center justify-center rounded-md border border-base-600 text-slate-500 transition-colors hover:border-accent/40 hover:text-accent"
           >
-            <Eraser size={12} />
+            <Eraser size={14} aria-hidden="true" />
           </button>
         </div>
 
@@ -335,9 +335,9 @@ export default function Console() {
           <button
             type="submit"
             aria-label={ui.consola.ejecutar}
-            className="shrink-0 rounded-md border border-base-600 p-1.5 text-slate-500 transition-colors hover:border-accent/40 hover:text-accent"
+            className="-my-1.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-base-600 text-slate-500 transition-colors hover:border-accent/40 hover:text-accent"
           >
-            <CornerDownLeft size={13} />
+            <CornerDownLeft size={15} aria-hidden="true" />
           </button>
         </form>
       </div>

@@ -226,7 +226,7 @@ function cmdCurlHealth(ctx) {
 
   const cuerpo = {
     status:
-      agregado === 'ok'
+      agregado === 'ok' || agregado === 'respaldo'
         ? 'operational'
         : agregado === 'degradado'
           ? 'degraded'
@@ -235,6 +235,8 @@ function cmdCurlHealth(ctx) {
             : 'partial',
     checked_at: estado.verificadoEn ? new Date(estado.verificadoEn).toISOString() : null,
     source: 'browser-side checks',
+    // Con el CI de respaldo, el JSON lo dice: el verde no es de esta consulta.
+    ...(agregado === 'respaldo' && !escenario ? { ci_source: 'last known run (build snapshot)' } : {}),
     // El flag va en el JSON y no solo en un comentario: si alguien pega esta
     // salida en un ticket, el simulacro viaja con ella.
     ...(escenario ? { chaos_drill: { scenario: escenario.id, simulated: true } } : {}),

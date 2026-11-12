@@ -41,7 +41,7 @@ const traducirPorId = (base, traducciones) =>
 export const profile = {
   ...profileEs,
   rol: 'IT Incident Manager / SRE Analyst',
-  target: 'SRE / DevOps Engineer',
+  target: 'Junior SRE / DevOps Engineer',
   ubicacion: 'Buenos Aires, Argentina · Remote / Hybrid',
   idiomas: 'Spanish (native) · English (intermediate)',
   disponibilidad: 'Open to new opportunities',
@@ -57,13 +57,13 @@ export const hero = {
     'I run P1/P2 incidents in high-volume environments — Fintech and Telco — leading War Rooms, restoring service and closing the loop with RCAs that stop the same failure from coming back. Today I am taking that operational discipline into SRE and DevOps: observability, automation and systems that fail rarely and recover fast.',
   panel: {
     titulo: 'This site, live',
-    tira: `${Math.round(MEDIDAS.ventanaInstrumento[0])} s of my MTTR were my own measurement`,
+    tira: `${Math.round(MEDIDAS.ventanaInstrumento[0])} s of my resolution time were my own measurement`,
     tiraAria: 'See the live panel',
     simulacroActivo: 'Failure drill in progress',
     hallazgoEtiqueta: 'What I found measuring my lab',
-    hallazgo: `${Math.round(MEDIDAS.ventanaInstrumento[0])} of the ${Math.round(MEDIDAS.mttr)} s of my MTTR were my own measurement`,
+    hallazgo: `${Math.round(MEDIDAS.ventanaInstrumento[0])} of the ${Math.round(MEDIDAS.mttr)} s it took me to resolve the outage were my own measurement`,
     mttdTexto: 'I measured a real outage (rising 5xx) and the longest stretch was not the incident: it was my alert evaluation window.',
-    mttdEtiqueta: `measured · target < ${n(MEDIDAS.mttdSensible)} s`,
+    mttdEtiqueta: `measured · ${n(MEDIDAS.mttdSensible)} s with a more sensitive rule, at the cost of false alarms`,
     diagnostico: 'See the diagnosis',
     bitacora: 'See the run log',
     simulacro: {
@@ -460,7 +460,7 @@ export const contacto = {
 //  derived from the other exports rather than written twice.
 // ─────────────────────────────────────────────────────────────
 export const cv = {
-  titular: 'IT Incident Manager / SRE Analyst → SRE / DevOps Engineer',
+  titular: 'IT Incident Manager / SRE Analyst → Junior SRE / DevOps Engineer',
   resumen:
     'Over 4 years in IT operations, focused on critical P1/P2 incident management (Major Incident Management) in Fintech and Telecommunications: leading War Rooms, escalations, restoring service under pressure and closing out with RCAs and preventive actions. Today I am directing that discipline towards SRE and DevOps — observability, automation and reliability — through personal labs where I inject faults, measure detection and recovery, and publish the log of every run.',
   secciones: {
@@ -530,7 +530,7 @@ export const ui = {
     },
     observabilidad: {
       nav: 'Observability',
-      navCorto: 'Observ.',
+      navCorto: 'Metrics',
       titulo: 'Observability & Telemetry',
       resumen: 'DORA, p95, topology and error budget',
       aviso: 'drill running',
@@ -557,6 +557,7 @@ export const ui = {
   },
 
   glosario: {
+    mttr: 'MTTR (mean time to resolve): from the moment something breaks until it works again. It includes detecting, diagnosing and fixing.',
     mttd: 'MTTD (mean time to detect): how long monitoring takes to notice something broke. Lower is better: less time with customers affected and nobody aware.',
     p95: '95th percentile: 95% of loads take this long or less. It measures the experience of the slowest users, not the average one.',
     cfr: 'Change failure rate: what share of deployments ended in a failure. Lower is better: it measures how safe it is to ship changes.',
@@ -596,6 +597,7 @@ export const ui = {
       degradado: 'Degraded service',
       caido: 'Outage detected',
       desconocido: 'Partially verified',
+      respaldo: 'Site online · CI as of the last deploy',
       cargando: 'Checking service status…',
     },
     chequeadoEn: 'Checked',
@@ -619,6 +621,7 @@ export const ui = {
     sinPipeline: 'No pipeline of its own yet',
     corrida: 'run',
     rama: 'branch',
+    deRespaldo: 'last known result',
     limiteApi: 'The public GitHub API rate-limits by IP. Try again in a few minutes.',
     sinRed: 'The service could not be reached from this browser.',
   },
@@ -694,8 +697,7 @@ export const ui = {
     etiqueta: 'Interactive sandbox',
     titulo: 'Explore the SRE Interactive Sandbox',
     texto:
-      'Nine panels on real data: DORA metrics from the pipeline that publishes this page, p95 latency measured live, the topology, a chaos engineering sandbox with auto-healing, step-by-step runbooks, the error budget, the post-mortems with their logs and a console that answers commands. It all runs in your browser and there is nothing to install.',
-    abrir: 'Explore the sandbox',
+      'Metrics from this site measured live, failure drills with their runbook and a console that answers commands. It runs in your browser, nothing to install.',
     pie: 'switches view · no page reload',
     vivo: 'something is still running inside',
   },
@@ -1058,8 +1060,9 @@ export const ui = {
     passing: 'passing',
     failing: 'failing',
     corriendo: 'running',
-    desconocido: 'unknown',
+    desconocido: 'no data',
     verCorrida: 'See the run on GitHub',
+    ultimoConocido: (fecha) => `Last known run (snapshot from ${fecha}): GitHub did not respond from this network`,
   },
 
   consola: {

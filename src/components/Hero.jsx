@@ -9,15 +9,20 @@ import StatusBadge from './ui/StatusBadge'
 import CopyButton from './ui/CopyButton'
 import Sigla from './ui/Sigla'
 
-// Color del punto de estado según el agregado del panel. Un dato que no
-// se pudo verificar queda gris: nunca verde por defecto.
+// Color del punto de estado según el agregado del panel. Solo existe para
+// los estados con dato: lo que no se pudo verificar no lleva punto, y
+// nunca un verde por defecto.
 const PUNTO = {
   ok: 'bg-ok',
+  respaldo: 'bg-ok',
   degradado: 'bg-warn',
   caido: 'bg-crit',
-  desconocido: 'bg-slate-500',
-  cargando: 'bg-slate-500',
 }
+
+// Estados con un dato verificado detrás. Fuera de estos (cargando o sin
+// verificar) el punto no se dibuja: gris en la portada se lee como "algo
+// anda mal" y no dice nada.
+const CON_DATO = { ok: 1, respaldo: 1, degradado: 1, caido: 1 }
 
 /** El estado agregado del panel, con el simulacro por encima del real. */
 function useEstadoPanel() {
@@ -33,14 +38,12 @@ function useEstadoPanel() {
 /**
  * Anticipo del panel para el teléfono. Abajo de `lg` el panel queda debajo
  * del pliegue, y es justo el diferencial: esta tira lo trae a la primera
- * pantalla con el hallazgo, y lleva hasta él. El punto de estado solo
- * aparece cuando hay un dato verificado: un punto gris en la portada se
- * lee como "algo anda mal" y no dice nada.
+ * pantalla con el hallazgo, y lleva hasta él.
  */
 function TiraVivo() {
   const { hero } = useContenido()
   const { estado } = useEstadoPanel()
-  const conDato = estado === 'ok' || estado === 'degradado' || estado === 'caido'
+  const conDato = estado in CON_DATO
 
   return (
     <a
@@ -82,7 +85,7 @@ function PanelVivo() {
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm font-semibold text-white">{p.titulo}</p>
         <p className="flex items-center gap-2 text-[13px] text-slate-400" aria-live="polite">
-          <span className={`h-2 w-2 shrink-0 rounded-full ${PUNTO[estado] ?? PUNTO.desconocido}`} aria-hidden="true" />
+          {estado in CON_DATO && <span className={`h-2 w-2 shrink-0 rounded-full ${PUNTO[estado]}`} aria-hidden="true" />}
           {textoEstado}
         </p>
       </div>

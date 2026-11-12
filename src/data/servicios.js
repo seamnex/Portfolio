@@ -75,3 +75,11 @@ export const pipelines = {
     workflow: 'docs',
   },
 }
+
+/** Todos los repos que el sitio consulta: los del panel y los de los badges. */
+export const REPOS_VIGILADOS = [
+  ...new Set([
+    ...servicios.filter((s) => s.tipo === 'actions').map((s) => s.repo),
+    ...Object.values(pipelines).map((p) => p.repo),
+  ]),
+]

@@ -42,7 +42,7 @@ export const profile = {
   nombre: 'Samuel Eduardo García Baciliadis',
   alias: 'Samuel García',
   rol: 'IT Incident Manager / SRE Analyst',
-  target: 'SRE / DevOps Engineer',
+  target: 'Junior SRE / DevOps Engineer',
   ubicacion: 'Buenos Aires, Argentina · Remoto / Híbrido',
   idiomas: 'Español (nativo) · Inglés (intermedio)',
   disponibilidad: 'Disponible para nuevas oportunidades',
@@ -67,15 +67,17 @@ export const hero = {
   panel: {
     titulo: 'Este sitio, en vivo',
     // Tira compacta que lo anticipa en el teléfono, donde el panel queda abajo.
-    tira: `${Math.round(MEDIDAS.ventanaInstrumento[0])} s de mi MTTR eran mi propia medición`,
+    tira: `${Math.round(MEDIDAS.ventanaInstrumento[0])} s de mi tiempo de resolución eran mi propia medición`,
     tiraAria: 'Ver el panel en vivo',
     simulacroActivo: 'Simulacro de falla en curso',
     // El titular es el hallazgo, no el MTTD: el número no llega al objetivo,
     // y lo que vale mostrar es el diagnóstico, que es la habilidad.
     hallazgoEtiqueta: 'Lo que encontré midiendo mi lab',
-    hallazgo: `${Math.round(MEDIDAS.ventanaInstrumento[0])} de los ${Math.round(MEDIDAS.mttr)} s de mi MTTR eran mi propia medición`,
+    hallazgo: `${Math.round(MEDIDAS.ventanaInstrumento[0])} de los ${Math.round(MEDIDAS.mttr)} s que tardé en resolver la caída eran mi propia medición`,
     mttdTexto: `Medí una caída real (5xx en aumento) y el tramo más largo no era el incidente: era la ventana de evaluación de mi alerta.`,
-    mttdEtiqueta: `medido · objetivo < ${n(MEDIDAS.mttdSensible)} s`,
+    // 11,5 s no es una meta: es lo que dio la regla más sensible, y se paga
+    // con falsas alarmas (ver la bitácora del observability-lab).
+    mttdEtiqueta: `medido · ${n(MEDIDAS.mttdSensible)} s con una regla más sensible, a costa de falsas alarmas`,
     diagnostico: 'Ver el diagnóstico',
     bitacora: 'Ver la bitácora',
     simulacro: {
@@ -580,7 +582,7 @@ export const contacto = {
 //  sección de trayectoria del sitio.
 // ─────────────────────────────────────────────────────────────
 export const cv = {
-  titular: 'IT Incident Manager / SRE Analyst → SRE / DevOps Engineer',
+  titular: 'IT Incident Manager / SRE Analyst → Junior SRE / DevOps Engineer',
   resumen:
     'Más de 4 años en operaciones IT, con foco en la gestión de incidentes críticos P1/P2 (Major Incident Management) en Fintech y Telecomunicaciones: liderazgo de War Rooms, escalamiento, restauración del servicio bajo presión y cierre con RCA y acciones preventivas. Hoy oriento esa disciplina hacia SRE y DevOps —observabilidad, automatización y confiabilidad— con laboratorios propios donde inyecto fallas, mido detección y recuperación, y publico la bitácora de cada corrida.',
   secciones: {
@@ -668,7 +670,7 @@ export const ui = {
     },
     observabilidad: {
       nav: 'Observabilidad',
-      navCorto: 'Observ.',
+      navCorto: 'Métricas',
       titulo: 'Observabilidad & Telemetría',
       resumen: 'DORA, p95, topología y presupuesto de error',
       aviso: 'con simulacro',
@@ -697,6 +699,7 @@ export const ui = {
 
   // Definiciones en lenguaje simple de las siglas (ui/Sigla).
   glosario: {
+    mttr: 'MTTR (tiempo medio de resolución): desde que algo se rompe hasta que vuelve a funcionar. Incluye detectar, diagnosticar y arreglar.',
     mttd: 'MTTD (tiempo medio de detección): cuánto tarda el monitoreo en darse cuenta de que algo se rompió. Más bajo es mejor: menos tiempo con clientes afectados sin que nadie lo sepa.',
     p95: 'Percentil 95: el 95 % de las cargas tarda esto o menos. Mide la experiencia de los usuarios más lentos, no la del promedio.',
     cfr: 'Change failure rate: qué porcentaje de los despliegues terminó en falla. Más bajo es mejor: mide cuán seguro es publicar cambios.',
@@ -741,6 +744,8 @@ export const ui = {
       degradado: 'Servicio degradado',
       caido: 'Interrupción detectada',
       desconocido: 'Estado parcialmente verificado',
+      // El sitio respondió ahora; el CI se muestra con la última corrida conocida.
+      respaldo: 'Sitio en línea · CI según el último despliegue',
       cargando: 'Consultando el estado de los servicios…',
     },
     chequeadoEn: 'Verificado',
@@ -752,8 +757,8 @@ export const ui = {
       'Todo lo de este panel se consulta desde tu navegador en el momento: la latencia sale de una petición real a este sitio y el estado de CI, de la API pública de GitHub. Nada está precargado ni simulado.',
     // Etiquetas de estado por servicio.
     etiquetas: {
-      ok: 'Operational',
-      fallo: 'Failing',
+      ok: 'Operativo',
+      fallo: 'Con fallo',
       desconocido: 'Sin datos',
       consultando: 'Consultando…',
     },
@@ -765,6 +770,7 @@ export const ui = {
     sinPipeline: 'Sin pipeline propio todavía',
     corrida: 'corrida',
     rama: 'rama',
+    deRespaldo: 'último dato conocido',
     limiteApi: 'La API pública de GitHub limita las consultas por IP. Volvé a intentar en unos minutos.',
     sinRed: 'No se pudo alcanzar el servicio desde este navegador.',
   },
@@ -848,8 +854,7 @@ export const ui = {
     etiqueta: 'Sandbox interactivo',
     titulo: 'Explorar el sandbox interactivo de SRE',
     texto:
-      'Nueve paneles con datos reales: las métricas DORA del pipeline que publica esta página, la latencia p95 medida en vivo, la topología, un sandbox de chaos engineering con auto-healing, los runbooks paso a paso, el presupuesto de error, los post-mortems con su bitácora y una consola que responde comandos. Corre entero en tu navegador y no hay nada que instalar.',
-    abrir: 'Explorar el sandbox',
+      'Las métricas de este sitio medidas en vivo, simulacros de falla con su runbook y una consola que responde comandos. Corre en tu navegador, sin instalar nada.',
     pie: 'cambia de vista · no recarga la página',
     vivo: 'quedó algo corriendo adentro',
   },
@@ -1226,11 +1231,12 @@ export const ui = {
   // ── Badges de CI en las tarjetas de proyecto ────────────────
   ci: {
     titulo: 'GitHub Actions',
-    passing: 'passing',
-    failing: 'failing',
-    corriendo: 'running',
-    desconocido: 'unknown',
+    passing: 'ok',
+    failing: 'falló',
+    corriendo: 'en curso',
+    desconocido: 'sin datos',
     verCorrida: 'Ver la corrida en GitHub',
+    ultimoConocido: (fecha) => `Última corrida conocida (foto del ${fecha}): GitHub no respondió desde esta red`,
   },
 
   // ── Consola interactiva ─────────────────────────────────────

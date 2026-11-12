@@ -21,7 +21,7 @@ const ESTILOS = {
  * badge ya comunica lo correcto.
  */
 export default function CIBadge({ pipeline, className = '' }) {
-  const { ui } = useContenido()
+  const { ui, lang } = useContenido()
   if (!pipeline) return null
   if (pipeline.estado === 'desconocido' && pipeline.motivo === 'sin-pipeline') return null
 
@@ -66,7 +66,11 @@ export default function CIBadge({ pipeline, className = '' }) {
       href={pipeline.url}
       target="_blank"
       rel="noreferrer noopener"
-      title={`${ui.ci.verCorrida} · ${pipeline.repo}`}
+      title={
+        pipeline.deSnapshot
+          ? `${ui.ci.ultimoConocido(new Date(pipeline.capturado).toLocaleDateString(lang))} · ${pipeline.repo}`
+          : `${ui.ci.verCorrida} · ${pipeline.repo}`
+      }
       className={`${claseBase} transition-colors hover:border-accent/40`}
     >
       {contenido}

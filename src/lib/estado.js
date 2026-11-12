@@ -86,12 +86,56 @@ export async function chequearOrigen(recurso = '/favicon.svg') {
 }
 
 /**
+ * El resultado de una corrida de la API, con la forma que usan el panel,
+ * los badges y la consola. Lo comparte el script que toma la foto en el
+ * build, para que el dato de respaldo tenga exactamente la misma forma.
+ */
+export function resultadoDeCorrida(corrida, repo) {
+  return {
+    estado:
+      corrida.status !== 'completed'
+        ? 'corriendo'
+        : corrida.conclusion === 'success'
+          ? 'ok'
+          : 'fallo',
+    repo,
+    workflow: corrida.name,
+    numero: corrida.run_number,
+    rama: corrida.head_branch,
+    conclusion: corrida.conclusion,
+    url: corrida.html_url,
+    fecha: corrida.updated_at,
+  }
+}
+
+/**
+ * Última corrida de GitHub Actions en `main`, y si GitHub no responde, la
+ * última conocida.
+ *
+ * Detrás del NAT de una empresa el cupo de 60 consultas por hora puede
+ * estar agotado antes de que cargue la página, y cada tarjeta quedaba con
+ * un badge "unknown". El respaldo es la última corrida terminada que vio
+ * el build (scripts/generar-snapshot-github.mjs): un resultado real, de
+ * una corrida real, que va marcado con `deSnapshot` y su fecha para que
+ * nadie lo lea como consultado ahora. `agregar` no lo cuenta como verde.
+ */
+export async function chequearActions(repo, opciones = {}) {
+  const vivo = await chequearActionsEnVivo(repo, opciones)
+  if (vivo.estado !== 'desconocido' || vivo.motivo === 'sin-pipeline') return vivo
+
+  const foto = await leerSnapshot()
+  const guardado = foto?.ultimas?.[repo]
+  if (!guardado) return vivo
+  return { ...guardado, deSnapshot: true, capturado: foto.capturado, motivoVivo: vivo.motivo }
+}
+
+/**
  * Última corrida de GitHub Actions en `main` para un repo público.
  * Es el mismo dato que alimenta el badge del README, leído de la API en
  * vez de embebido como imagen: así se puede mostrar el número de corrida
  * y la fecha, y no depende de que el SVG de GitHub siga cacheado.
  */
-export async function chequearActions(repo, { usarCache = true } = {}) {
+async function chequearActionsEnVivo(repo, { usarCache = true } = {}) {
   if (usarCache) {
     const guardado = leerCache(repo)
     if (guardado) return { ...guardado, deCache: true }
@@ -132,22 +176,7 @@ export async function chequearActions(repo, { usarCache = true } = {}) {
   // Repo público sin workflows: no es un fallo, simplemente no hay pipeline.
   if (!corrida) return { estado: 'desconocido', motivo: 'sin-pipeline', repo }
 
-  const resultado = {
-    estado:
-      corrida.status !== 'completed'
-        ? 'corriendo'
-        : corrida.conclusion === 'success'
-          ? 'ok'
-          : 'fallo',
-    repo,
-    workflow: corrida.name,
-    numero: corrida.run_number,
-    rama: corrida.head_branch,
-    conclusion: corrida.conclusion,
-    url: corrida.html_url,
-    fecha: corrida.updated_at,
-    latencia,
-  }
+  const resultado = { ...resultadoDeCorrida(corrida, repo), latencia }
 
   // Una corrida en curso cambia en minutos: cachearla dejaría el panel
   // mostrando "running" mucho después de que terminó.
@@ -187,6 +216,9 @@ export function agregar(resultados) {
   const fallos = estados.filter((e) => e === 'fallo').length
   if (fallos > 0) return fallos === estados.length ? 'caido' : 'degradado'
   if (estados.some((e) => e === 'desconocido' || e === 'consultando')) return 'desconocido'
+  // Todo verde, pero parte del verde es la última corrida conocida y no una
+  // consulta de ahora: se dice con su propio estado, no como 'ok'.
+  if (Object.values(resultados).some((r) => r.deSnapshot)) return 'respaldo'
   return 'ok'
 }
 
