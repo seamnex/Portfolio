@@ -62,7 +62,9 @@ export default function SandboxBanner() {
                 const texto = ui.vistas[d.id]
                 const Icono = d.icono
                 return (
-                  <li key={d.id}>
+                  // min-w-0: un item de grilla no se encoge por debajo de su contenido,
+                  // y el `truncate` de adentro lo estiraba fuera de la tarjeta en el teléfono.
+                  <li key={d.id} className="min-w-0">
                     <button
                       type="button"
                       onClick={() => irA(d.id)}
