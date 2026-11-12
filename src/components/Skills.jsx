@@ -31,7 +31,7 @@ function SkillCard({ skill, abierto, onToggle }) {
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
             <h3 className="text-base font-semibold text-white">{skill.titulo}</h3>
-            <span className={`rounded-md border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider ${t.chip}`}>
+            <span className={`rounded-md border px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider ${t.chip}`}>
               {skill.dominio}
             </span>
           </div>

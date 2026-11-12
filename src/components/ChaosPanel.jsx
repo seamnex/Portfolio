@@ -73,13 +73,13 @@ function BotonEscenario({ escenario, texto, activo, onInyectar, ui }) {
         <span className={`flex h-8 w-8 items-center justify-center rounded-lg border ${tono.icono}`}>
           {Icono && <Icono size={15} />}
         </span>
-        <span className="pill font-mono text-[10px]">{escenario.severidad}</span>
+        <span className="pill font-mono text-[11px]">{escenario.severidad}</span>
       </div>
 
       <h3 className="mt-4 text-sm font-semibold text-white">{texto.titulo}</h3>
       <p className="mt-2 text-[13px] leading-relaxed text-slate-400">{texto.descripcion}</p>
 
-      <p className="mt-3 w-full whitespace-pre-wrap break-all font-mono text-[10px] text-slate-600">
+      <p className="mt-3 w-full whitespace-pre-wrap break-all font-mono text-[11px] text-slate-600">
         {escenario.senal}
       </p>
 
@@ -148,7 +148,7 @@ export default function ChaosPanel() {
               >
                 {activo ? t.activo(t.escenarios[escenario.id].titulo) : t.listo}
               </p>
-              <p className="mt-0.5 font-mono text-[10.5px] text-slate-600">
+              <p className="mt-0.5 font-mono text-[11px] text-slate-600">
                 {activo && indiceFase >= 0
                   ? `${t.fase} ${indiceFase + 1}/${FASES.length} · ${t.nombresFase[fase]}`
                   : t.listoDetalle}

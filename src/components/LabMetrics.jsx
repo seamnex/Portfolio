@@ -49,14 +49,14 @@ function MetricCard({ m, verBitacora }) {
       </p>
 
       <div className="mt-auto pt-5">
-        <p className="font-mono text-[10.5px] uppercase leading-relaxed tracking-wider text-slate-600">
+        <p className="font-mono text-[11px] uppercase leading-relaxed tracking-wider text-slate-600">
           {m.metodo}
         </p>
         <a
           href={m.repo}
           target="_blank"
           rel="noreferrer noopener"
-          className="mt-3 inline-flex items-center gap-1.5 font-mono text-[11.5px] text-slate-400 transition-colors hover:text-accent"
+          className="mt-2 inline-flex items-center gap-1.5 py-1.5 font-mono text-[11.5px] text-slate-400 transition-colors hover:text-accent"
         >
           {verBitacora}
           <ArrowUpRight size={13} className="transition-transform group-hover:translate-x-0.5" />

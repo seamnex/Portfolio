@@ -13,8 +13,8 @@ import Section from './ui/Section'
 //  bullets abiertos son casi una pantalla entera de lista, y en una
 //  portada eso compite con el resto por atención que no sobra.
 //
-//  El primero arranca abierto porque es el puesto actual: es el que casi
-//  todo el mundo viene a leer, y esconderlo detrás de un clic para
+//  Arranca abierto el puesto actual —la primera entrada que no corre
+//  en paralelo con otra—: es el que casi todo el mundo viene a leer, y esconderlo detrás de un clic para
 //  ahorrar cuatro renglones sería ahorrar en el lugar equivocado.
 //
 //  Una entrada con `paralelo` no vino después de la siguiente: corre a
@@ -26,7 +26,7 @@ import Section from './ui/Section'
 // ─────────────────────────────────────────────────────────────
 export default function Timeline() {
   const { timeline, timelineMeta, ui } = useContenido()
-  const [abierto, setAbierto] = useState(0)
+  const [abierto, setAbierto] = useState(() => Math.max(0, timeline.findIndex((e) => !e.paralelo)))
 
   return (
     <Section id="trayectoria" label={timelineMeta.label} titulo={timelineMeta.titulo} bajada={timelineMeta.bajada}>
@@ -74,7 +74,7 @@ export default function Timeline() {
                       <p className="mt-1 font-mono text-[12px] text-accent">{item.org}</p>
                     </div>
                     <span
-                      className={`rounded-md border px-2.5 py-1 font-mono text-[10.5px] uppercase tracking-wider ${
+                      className={`rounded-md border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider ${
                         esFormacion ? 'border-ok/30 bg-ok/10 text-ok' : 'border-base-600 bg-base-800 text-slate-400'
                       }`}
                     >

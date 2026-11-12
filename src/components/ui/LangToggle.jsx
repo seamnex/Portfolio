@@ -17,7 +17,7 @@ export default function LangToggle({ className = '' }) {
       aria-label={ui.idioma.cambiar}
       className={`inline-flex items-center gap-0.5 rounded-lg border border-base-600 bg-base-900/60 p-0.5 ${className}`}
     >
-      <Languages size={13} className="ml-1.5 mr-0.5 shrink-0 text-slate-500" aria-hidden="true" />
+      <Languages size={13} className="ml-1.5 mr-0.5 hidden shrink-0 text-slate-500 sm:block" aria-hidden="true" />
       {IDIOMAS_DISPONIBLES.map((codigo) => {
         const activo = codigo === lang
         return (
@@ -27,7 +27,7 @@ export default function LangToggle({ className = '' }) {
             onClick={() => cambiar(codigo)}
             aria-pressed={activo}
             aria-label={ui.idioma.a[codigo]}
-            className={`rounded-md px-2 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider transition-colors ${
+            className={`min-h-[28px] rounded-md px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider transition-colors ${
               activo ? 'bg-accent/15 text-accent' : 'text-slate-500 hover:text-white'
             }`}
           >

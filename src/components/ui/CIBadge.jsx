@@ -37,11 +37,11 @@ export default function CIBadge({ pipeline, className = '' }) {
 
   const contenido = (
     <>
-      <span className="flex items-center gap-1.5 rounded-l-[5px] bg-base-900/80 px-2 py-1 text-slate-400">
+      <span className="flex items-center gap-1.5 rounded-l-[5px] bg-base-900/80 px-2 py-1.5 text-slate-400">
         <GitBranch size={11} aria-hidden="true" />
         {ui.ci.titulo}
       </span>
-      <span className={`flex items-center gap-1.5 rounded-r-[5px] px-2 py-1 ${clase}`}>
+      <span className={`flex items-center gap-1.5 rounded-r-[5px] px-2 py-1.5 ${clase}`}>
         <Icono size={11} className={pipeline.estado === 'corriendo' ? 'animate-spin' : ''} aria-hidden="true" />
         {texto}
         {pipeline.numero != null && <span className="opacity-60">#{pipeline.numero}</span>}
@@ -49,7 +49,7 @@ export default function CIBadge({ pipeline, className = '' }) {
     </>
   )
 
-  const claseBase = `inline-flex overflow-hidden rounded-md border border-base-600 font-mono text-[10px] leading-none ${className}`
+  const claseBase = `inline-flex overflow-hidden rounded-md border border-base-600 font-mono text-[11px] leading-none ${className}`
 
   // Sin URL de corrida (por ejemplo mientras se consulta) el badge no debe ser
   // un enlace: un <a> sin href es un elemento que no recibe foco ni anuncia rol.

@@ -48,7 +48,7 @@ const esPendiente = (estado) => /^(pendiente|pending)$/i.test(estado)
 function Campo({ etiqueta, valor }) {
   return (
     <div className="min-w-0">
-      <dt className="font-mono text-[10px] uppercase tracking-wider text-slate-600">{etiqueta}</dt>
+      <dt className="font-mono text-[11px] uppercase tracking-wider text-slate-600">{etiqueta}</dt>
       <dd className="mt-1 text-[12.5px] leading-snug text-slate-300">{valor}</dd>
     </div>
   )
@@ -157,7 +157,7 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-mono text-[11px] tracking-wider text-slate-500">{incidente.codigo}</span>
                 <span
-                  className={`rounded-md border px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider ${
+                  className={`rounded-md border px-2 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-wider ${
                     SEVERIDAD[incidente.severidad] ?? SEVERIDAD.P4
                   }`}
                 >
@@ -198,7 +198,7 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
         <div className="grid gap-3 px-6 py-6 sm:grid-cols-3 sm:px-8">
           {incidente.metricas.map((m) => (
             <div key={m.k} className="rounded-lg border border-base-600 bg-base-900/50 px-4 py-3">
-              <p className="font-mono text-[10px] uppercase tracking-wider text-slate-600">{m.k}</p>
+              <p className="font-mono text-[11px] uppercase tracking-wider text-slate-600">{m.k}</p>
               <p className={`mt-1 font-mono text-lg font-bold ${TONO_TEXTO[m.tone] ?? TONO_TEXTO.muted}`}>{m.v}</p>
             </div>
           ))}
@@ -247,7 +247,7 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
             {incidente.acciones.map((a, i) => (
               <li key={i} className="flex items-start gap-3">
                 <span
-                  className={`mt-0.5 shrink-0 rounded border px-1.5 py-0.5 font-mono text-[9.5px] uppercase tracking-wider ${
+                  className={`mt-0.5 shrink-0 rounded border px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wider ${
                     esPendiente(a.estado)
                       ? 'border-warn/30 bg-warn/10 text-warn'
                       : 'border-ok/30 bg-ok/10 text-ok'
@@ -291,7 +291,7 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
               href={incidente.repo}
               target="_blank"
               rel="noreferrer noopener"
-              className="inline-flex items-center gap-1.5 font-mono text-[11.5px] text-slate-400 transition-colors hover:text-accent"
+              className="inline-flex items-center gap-1.5 py-1.5 font-mono text-[11.5px] text-slate-400 transition-colors hover:text-accent"
             >
               {p.verBitacora}
               <ArrowUpRight size={13} />
@@ -299,7 +299,7 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="font-mono text-[10.5px] text-slate-600">
+            <span className="font-mono text-[11px] text-slate-600">
               {posicion.actual} / {posicion.total}
             </span>
             <button

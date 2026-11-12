@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Activity, FlaskConical, Github, Linkedin, Terminal, UserRound } from 'lucide-react'
+import { Activity, FlaskConical, Github, Linkedin, Mail, Terminal, UserRound } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useVista } from '../navegacion/VistaProvider'
 import { useCaos } from '../caos/CaosProvider'
@@ -78,13 +78,12 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => irA('perfil', 'inicio')}
-          className="group flex shrink-0 items-center gap-2.5"
+          className="group hidden shrink-0 items-center gap-2.5 sm:flex"
         >
-          {/* En el teléfono el nombre se oculta y queda solo el ícono: este
-              texto le da nombre al botón para el lector de pantalla. Desde
-              `sm` desaparece y el nombre es el texto visible, como pide
-              WCAG 2.5.3 (el nombre accesible contiene lo que se ve). */}
-          <span className="sr-only sm:hidden">{ui.nav.inicioAria}</span>
+          {/* Abajo de `sm` este botón no se muestra: las tres pestañas, el
+              idioma y el botón de contacto ocupan todo el ancho, y la
+              pestaña Perfil ya lleva al inicio. El nombre lo dice el h1
+              de la portada. */}
           <span className="flex h-8 w-8 items-center justify-center rounded-md border border-accent/40 bg-accent/10 text-accent transition-colors group-hover:bg-accent/20">
             <Terminal size={16} />
           </span>
@@ -125,7 +124,7 @@ export default function Navbar() {
                 aria-label={texto.titulo.includes(texto.nav) ? texto.titulo : `${texto.nav} — ${texto.titulo}`}
                 tabIndex={sel ? 0 : -1}
                 onClick={() => irA(p.id)}
-                className={`relative flex flex-col items-center gap-0.5 whitespace-nowrap rounded-md border px-2 py-1.5 text-[13px] transition-colors md:flex-row md:gap-2 md:px-3 md:py-2 ${
+                className={`relative flex flex-col items-center gap-0.5 whitespace-nowrap rounded-md border px-1.5 py-1.5 sm:px-2 text-[13px] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-base-900 md:flex-row md:gap-2 md:px-3 md:py-2 ${
                   sel
                     ? 'border-accent/40 bg-accent/10 text-accent'
                     : 'border-transparent text-slate-400 hover:bg-base-700/60 hover:text-white'
@@ -136,7 +135,7 @@ export default function Navbar() {
                     apilado bajo el icono en móvil, el completo al lado
                     desde `md`. Ambos `aria-hidden`: el nombre ya lo da el
                     aria-label del botón y no hay que leerlo dos veces. */}
-                <span aria-hidden="true" className="font-mono text-[9.5px] uppercase tracking-wider md:hidden">
+                <span aria-hidden="true" className="font-mono text-[11px] uppercase tracking-wider md:hidden">
                   {texto.navCorto}
                 </span>
                 <span aria-hidden="true" className="hidden md:inline">
@@ -158,7 +157,7 @@ export default function Navbar() {
           })}
         </div>
 
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <LangToggle />
 
           {profile.github && (
@@ -187,6 +186,19 @@ export default function Navbar() {
             className="btn-primary hidden whitespace-nowrap px-4 py-2 text-xs lg:inline-flex"
           >
             {ui.nav.cta}
+          </button>
+          {/* Debajo de `lg` el botón con texto no entra junto a las tres
+              pestañas, pero contactar no puede desaparecer justo en el
+              teléfono: queda como ícono con el mismo peso de acción
+              principal, y el nombre completo va en el aria-label. */}
+          <button
+            type="button"
+            onClick={() => irA('perfil', 'contacto')}
+            aria-label={ui.nav.cta}
+            title={ui.nav.cta}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-accent text-base-900 transition-colors hover:bg-accent/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-base-900 lg:hidden"
+          >
+            <Mail size={16} aria-hidden="true" />
           </button>
         </div>
       </nav>

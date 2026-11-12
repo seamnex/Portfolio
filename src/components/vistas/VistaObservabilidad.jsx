@@ -1,5 +1,6 @@
 import { useContenido } from '../../i18n/LanguageProvider'
 import Vista, { EncabezadoVista } from '../ui/Vista'
+import CierreContacto from '../ui/CierreContacto'
 import SystemStatus from '../SystemStatus'
 import Telemetry from '../Telemetry'
 import Topology from '../Topology'
@@ -46,6 +47,7 @@ export default function VistaObservabilidad() {
         <Topology />
         <SloCalculator />
         <LabMetrics />
+        <CierreContacto />
       </div>
     </Vista>
   )

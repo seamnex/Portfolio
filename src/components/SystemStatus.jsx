@@ -113,14 +113,14 @@ export default function SystemStatus() {
                 <p className={`font-mono text-[13px] font-semibold ${tono.texto}`} aria-live="polite">
                   {ui.estado.banner[agregado] ?? ui.estado.banner.desconocido}
                 </p>
-                <p className="mt-0.5 font-mono text-[10.5px] text-slate-600">
+                <p className="mt-0.5 font-mono text-[11px] text-slate-600">
                   {ui.estado.label}
                   {antiguedad != null && ` · ${ui.estado.chequeadoEn} ${ui.estado.hace(antiguedad)}`}
                 </p>
               </div>
 
               {escenario && (
-                <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-warn/40 bg-warn/10 px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-warn">
+                <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-warn/40 bg-warn/10 px-2 py-1 font-mono text-[11px] uppercase tracking-wider text-warn">
                   <FlaskConical size={11} aria-hidden="true" />
                   {ui.caos.simulacro}
                 </span>
@@ -174,7 +174,7 @@ export default function SystemStatus() {
                         <p className={`font-mono text-[11.5px] font-medium ${SERVICIO[r.estado] ?? SERVICIO.desconocido}`}>
                           {etiquetaEstado(r.estado, ui)}
                         </p>
-                        <p className="mt-0.5 font-mono text-[10.5px] text-slate-600">{detalle(r, ui)}</p>
+                        <p className="mt-0.5 font-mono text-[11px] text-slate-600">{detalle(r, ui)}</p>
                       </div>
                     </li>
                   )

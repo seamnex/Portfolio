@@ -86,7 +86,7 @@ function Aviso({ aviso, onCerrar }) {
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <span
-              className={`inline-flex items-center gap-1.5 rounded border px-1.5 py-0.5 font-mono text-[9.5px] font-semibold uppercase tracking-[0.16em] ${e.chip}`}
+              className={`inline-flex items-center gap-1.5 rounded border px-1.5 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] ${e.chip}`}
             >
               <span className="relative flex h-1.5 w-1.5" aria-hidden="true">
                 {e.pulso && <span className={`absolute inline-flex h-full w-full animate-pulse-dot rounded-full ${e.punto}`} />}
@@ -96,14 +96,14 @@ function Aviso({ aviso, onCerrar }) {
             </span>
             {aviso.severidad && (
               <span
-                className={`rounded border px-1.5 py-0.5 font-mono text-[9.5px] font-semibold uppercase tracking-wider ${
+                className={`rounded border px-1.5 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-wider ${
                   SEVERIDAD[aviso.severidad] ?? SEVERIDAD.P3
                 }`}
               >
                 {aviso.severidad}
               </span>
             )}
-            <span className="ml-auto font-mono text-[10px] text-slate-500">{reloj(aviso.ts)}</span>
+            <span className="ml-auto font-mono text-[11px] text-slate-500">{reloj(aviso.ts)}</span>
           </div>
 
           <p className="mt-1.5 text-[13px] font-semibold leading-snug text-white">{aviso.titulo}</p>
@@ -111,7 +111,7 @@ function Aviso({ aviso, onCerrar }) {
             <p className="mt-1 break-words font-mono text-[11px] leading-relaxed text-slate-400">{aviso.detalle}</p>
           )}
           {aviso.meta && (
-            <p className="mt-1.5 font-mono text-[10px] uppercase tracking-wider text-slate-600">{aviso.meta}</p>
+            <p className="mt-1.5 font-mono text-[11px] uppercase tracking-wider text-slate-600">{aviso.meta}</p>
           )}
         </div>
 

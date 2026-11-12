@@ -71,13 +71,13 @@ function Tile({
           <span className={`flex h-7 w-7 items-center justify-center rounded-md border ${tono.icono}`}>
             {Icono && <Icono size={13} />}
           </span>
-          <h3 className="font-mono text-[10.5px] uppercase leading-tight tracking-[0.14em] text-slate-400">
+          <h3 className="font-mono text-[11px] uppercase leading-tight tracking-[0.14em] text-slate-400">
             {titulo}
           </h3>
         </div>
         {veredicto != null && (
           <span
-            className={`shrink-0 rounded border px-1.5 py-0.5 font-mono text-[9.5px] uppercase tracking-wider ${
+            className={`shrink-0 rounded border px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wider ${
               veredicto ? 'border-ok/30 bg-ok/10 text-ok' : 'border-warn/30 bg-warn/10 text-warn'
             }`}
           >
@@ -108,16 +108,16 @@ function Tile({
           de la serie que está justo arriba, y separarla la dejaría flotando
           como una afirmación suelta sin el dibujo que la respalda. */}
       {anotacion && (
-        <p className={`mt-2 flex items-start gap-1.5 font-mono text-[10px] leading-relaxed ${tonos[anotacion.tone]?.valor ?? tonos.muted.valor}`}>
+        <p className={`mt-2 flex items-start gap-1.5 font-mono text-[11px] leading-relaxed ${tonos[anotacion.tone]?.valor ?? tonos.muted.valor}`}>
           {IconoAnotacion && <IconoAnotacion size={11} className="mt-px shrink-0" aria-hidden="true" />}
           {anotacion.texto}
         </p>
       )}
 
-      <p className="mt-2 font-mono text-[10px] leading-relaxed text-slate-600">{detalle}</p>
+      <p className="mt-2 font-mono text-[11px] leading-relaxed text-slate-600">{detalle}</p>
 
       <div className="mt-auto flex items-baseline justify-between gap-2 border-t border-base-600/50 pt-3">
-        <span className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-slate-600">{t.objetivo}</span>
+        <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-slate-600">{t.objetivo}</span>
         <span className="font-mono text-[11px] text-slate-400">{objetivo}</span>
       </div>
     </article>
@@ -213,7 +213,7 @@ export default function Telemetry() {
             <span className="font-mono text-[11px] text-slate-300">{t.tablero}</span>
             <span className="pill">{t.ventana(ventanaDias)}</span>
           </div>
-          <span className="truncate font-mono text-[10.5px] text-slate-600">
+          <span className="truncate font-mono text-[11px] text-slate-600">
             {t.fuenteActions} · {repo}
           </span>
         </div>
@@ -222,7 +222,7 @@ export default function Telemetry() {
           // El simulacro no toca estos números y conviene decirlo justo acá:
           // alguien que acaba de inyectar un fallo espera ver el tablero en
           // rojo, y el silencio se leería como que el tablero está roto.
-          <p className="border-b border-warn/20 bg-warn/[0.06] px-5 py-2 font-mono text-[10.5px] text-warn">
+          <p className="border-b border-warn/20 bg-warn/[0.06] px-5 py-2 font-mono text-[11px] text-warn">
             {t.duranteSimulacro}
           </p>
         )}
@@ -326,14 +326,20 @@ export default function Telemetry() {
             {/* Sexta celda: el pie del tablero. Explica de dónde sale cada
                 cosa, que es lo que hace verificable a las otras cinco. */}
             <div className="flex h-full flex-col justify-center gap-2.5 rounded-lg border border-base-600/60 bg-base-800/40 p-5">
-              <p className="flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.14em] text-accent">
+              <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
                 <Radio size={12} /> {t.comoSeMide}
               </p>
               <p className="text-[12px] leading-relaxed text-slate-500">{t.aviso}</p>
-              {sinFuente && <p className="font-mono text-[10.5px] text-warn">{sinDato}</p>}
+              {sinFuente && <p className="font-mono text-[11px] text-warn">{sinDato}</p>}
             </div>
           </div>
         </div>
+
+        {/* Lee "fuera" como lo que es: una meta exigente mostrada tal
+            cual, no un error del sitio. */}
+        <p className="border-t border-base-600 bg-base-800/40 px-5 py-3 text-[13px] leading-relaxed text-slate-400">
+          {t.notaObjetivos}
+        </p>
       </div>
     </Bloque>
   )

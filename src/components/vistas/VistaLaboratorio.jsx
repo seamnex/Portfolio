@@ -1,5 +1,6 @@
 import { useContenido } from '../../i18n/LanguageProvider'
 import Vista, { EncabezadoVista } from '../ui/Vista'
+import CierreContacto from '../ui/CierreContacto'
 import ChaosPanel from '../ChaosPanel'
 import Playbooks from '../Playbooks'
 import Console from '../Console'
@@ -37,6 +38,7 @@ export default function VistaLaboratorio() {
         <Console />
         <Incidents />
         <Projects />
+        <CierreContacto />
       </div>
     </Vista>
   )

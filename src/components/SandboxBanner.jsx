@@ -41,7 +41,7 @@ export default function SandboxBanner() {
               {t.etiqueta}
             </p>
             {vivo && (
-              <span className="flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-wider text-warn">
+              <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-warn">
                 <span className="relative flex h-2 w-2" aria-hidden="true">
                   <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-warn" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-warn" />
@@ -75,7 +75,7 @@ export default function SandboxBanner() {
                         <span className="block truncate text-[13px] font-semibold text-slate-200">
                           {texto.titulo}
                         </span>
-                        <span className="mt-0.5 block truncate font-mono text-[10px] text-slate-500">
+                        <span className="mt-0.5 block truncate font-mono text-[11px] text-slate-500">
                           {texto.resumen}
                         </span>
                       </span>

@@ -48,6 +48,52 @@
   }
 }
 
+/* Movimiento reducido. No es un "apagar todo" a 0,01 ms: los cambios de
+   estado (avisos que entran, el spinner de carga, los colores de hover)
+   siguen comunicando. Lo que se va es lo decorativo y en bucle —scanline,
+   pulsos, cursor que parpadea, el paquete de la topología— y los
+   desplazamientos: las entradas pasan a ser solo de opacidad y las
+   tarjetas dejan de levantarse al pasar el mouse. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-scanline,
+  .animate-pulse-dot,
+  .animate-blink,
+  .animate-flow-x,
+  .animate-flow-y {
+    animation: none !important;
+  }
+
+  .animate-scanline,
+  .animate-flow-x,
+  .animate-flow-y {
+    visibility: hidden;
+  }
+
+  .animate-fade-up,
+  .animate-slide-in {
+    animation-name: soloOpacidad !important;
+  }
+
+  .card-hover:hover,
+  [class*='hover:-translate-y']:hover,
+  .group:hover [class*='group-hover:translate-x'] {
+    transform: none !important;
+  }
+}
+
+@keyframes soloOpacidad {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @layer components {
   .container-x {
     @apply mx-auto w-full max-w-6xl px-5 sm:px-8;

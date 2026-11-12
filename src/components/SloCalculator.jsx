@@ -109,7 +109,7 @@ export default function SloCalculator() {
             real no es "cuánto permite 99,9" sino "cuánto cuesta el nueve
             que sigue", y eso solo se ve comparando. */}
         {desborde.hay && (
-          <p className="flex items-center gap-1.5 px-5 pt-3 font-mono text-[10px] text-slate-600" aria-hidden="true">
+          <p className="flex items-center gap-1.5 px-5 pt-3 font-mono text-[11px] text-slate-600" aria-hidden="true">
             <MoveHorizontal size={12} className="text-accent/70" />
             {t.deslizarTabla}
           </p>
@@ -130,14 +130,14 @@ export default function SloCalculator() {
               <caption className="sr-only">{t.tablaAria}</caption>
               <thead>
                 <tr className="border-b border-base-600/70">
-                  <th scope="col" className="px-5 py-3 font-mono text-[9.5px] uppercase tracking-[0.14em] text-slate-600">
+                  <th scope="col" className="px-5 py-3 font-mono text-[11px] uppercase tracking-[0.14em] text-slate-600">
                     {t.periodo}
                   </th>
                   {OBJETIVOS_SLO.map((o) => (
                     <th
                       key={o}
                       scope="col"
-                      className={`px-4 py-3 text-right font-mono text-[10.5px] ${
+                      className={`px-4 py-3 text-right font-mono text-[11px] ${
                         o === objetivo ? 'bg-accent/[0.06] text-accent' : 'text-slate-500'
                       }`}
                     >
@@ -193,7 +193,7 @@ export default function SloCalculator() {
               <p className={`font-mono text-[13px] font-semibold ${tono.texto}`} aria-live="polite">
                 {t.niveles[budget?.nivel ?? 'sano']}
               </p>
-              <p className="mt-0.5 font-mono text-[10.5px] text-slate-600">
+              <p className="mt-0.5 font-mono text-[11px] text-slate-600">
                 {t.presupuestoDe(formatearObjetivo(objetivo, lang), t.periodos[periodo.id])}
               </p>
             </div>
@@ -206,7 +206,7 @@ export default function SloCalculator() {
                 type="button"
                 onClick={() => setPeriodoId(p.id)}
                 aria-pressed={p.id === periodoId}
-                className={`rounded-md border px-2.5 py-1.5 font-mono text-[10.5px] transition-colors ${
+                className={`rounded-md border px-2.5 py-1.5 font-mono text-[11px] transition-colors ${
                   p.id === periodoId
                     ? 'border-accent/60 bg-accent/10 text-accent'
                     : 'border-base-600 text-slate-500 hover:border-accent/40 hover:text-accent'
@@ -220,26 +220,26 @@ export default function SloCalculator() {
 
         <div className="grid gap-px bg-base-600/40 sm:grid-cols-3">
           <div className="bg-base-700/40 px-5 py-4">
-            <p className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-slate-600">{t.tiles.presupuesto}</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-slate-600">{t.tiles.presupuesto}</p>
             <p className="mt-2 font-mono text-[20px] font-bold leading-none tracking-tight text-slate-300">
               {caida(presupuestoSegundos)}
             </p>
           </div>
           <div className="bg-base-700/40 px-5 py-4">
-            <p className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-slate-600">{t.tiles.consumido}</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-slate-600">{t.tiles.consumido}</p>
             <p className={`mt-2 font-mono text-[20px] font-bold leading-none tracking-tight ${tono.texto}`}>
               {caida(consumo.segundos)}
             </p>
-            <p className="mt-1.5 font-mono text-[10px] text-slate-600">
+            <p className="mt-1.5 font-mono text-[11px] text-slate-600">
               {consumo.cantidad ? t.simulacrosCorridos(consumo.cantidad) : t.sinSimulacros}
             </p>
           </div>
           <div className="bg-base-700/40 px-5 py-4">
-            <p className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-slate-600">{t.tiles.restante}</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-slate-600">{t.tiles.restante}</p>
             <p className="mt-2 font-mono text-[20px] font-bold leading-none tracking-tight text-slate-300">
               {budget ? caida(budget.restante) : t.sinDatos}
             </p>
-            <p className="mt-1.5 font-mono text-[10px] text-slate-600">
+            <p className="mt-1.5 font-mono text-[11px] text-slate-600">
               {budget ? t.porcentajeGastado(num(budget.porcentaje.toFixed(2), lang)) : ''}
             </p>
           </div>
@@ -256,7 +256,7 @@ export default function SloCalculator() {
         </div>
 
         {/* Desglose: caída contra degradación */}
-        <div className="flex flex-wrap gap-x-6 gap-y-1.5 px-5 py-4 font-mono text-[10.5px] text-slate-600">
+        <div className="flex flex-wrap gap-x-6 gap-y-1.5 px-5 py-4 font-mono text-[11px] text-slate-600">
           <span className="inline-flex items-center gap-1.5">
             <span className="h-1.5 w-1.5 rounded-full bg-crit" aria-hidden="true" />
             {t.desglose.caido(caida(consumo.caido))}

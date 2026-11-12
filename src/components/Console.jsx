@@ -327,7 +327,7 @@ export default function Console() {
             autoComplete="off"
             autoCapitalize="off"
             autoCorrect="off"
-            className="min-w-0 flex-1 bg-transparent font-mono text-[12.5px] text-slate-200 outline-none placeholder:text-slate-700"
+            className="min-w-0 flex-1 bg-transparent font-mono text-[12.5px] py-1.5 text-slate-200 outline-none placeholder:text-slate-500"
             placeholder="help"
           />
           <button

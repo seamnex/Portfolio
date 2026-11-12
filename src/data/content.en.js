@@ -42,6 +42,7 @@ export const profile = {
 
 export const hero = {
   headline: ['From the critical incident', 'to resilience by design.'],
+  transicion: 'moving into',
   subtitle:
     'I run P1/P2 incidents in high-volume environments — Fintech and Telco — leading War Rooms, restoring service and closing the loop with RCAs that stop the same failure from coming back. Today I am taking that operational discipline into SRE and DevOps: observability, automation and systems that fail rarely and recover fast.',
   terminal: {
@@ -524,6 +525,12 @@ export const ui = {
     },
   },
 
+  cierre: {
+    titulo: 'Looking for this mindset on your team?',
+    texto:
+      'What you just saw is how I work: measure before giving an opinion, break things on purpose to learn, and write it all down. If that fits what you need, let’s talk.',
+  },
+
   nav: {
     cta: 'Get in touch',
     volverArriba: 'Back to top',
@@ -710,6 +717,8 @@ export const ui = {
     objetivo: 'Target',
     cumple: 'met',
     noCumple: 'missed',
+    notaObjetivos:
+      'The targets are goals I set for this site, stricter than a portfolio needs. When a number is “missed”, the dashboard shows it instead of hiding it: the same principle as a blameless postmortem.',
     sinDatos: 'no data',
     midiendo: 'measuring…',
     comoSeMide: 'How it is measured',

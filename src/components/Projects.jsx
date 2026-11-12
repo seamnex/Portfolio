@@ -42,7 +42,7 @@ function ProjectCard({ p, meta, pipeline }) {
           </h3>
         </div>
         <span
-          className={`shrink-0 rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider ${
+          className={`shrink-0 rounded-full border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider ${
             activo ? 'border-ok/30 bg-ok/10 text-ok' : 'border-warn/30 bg-warn/10 text-warn'
           }`}
         >

@@ -323,10 +323,10 @@ export default function Contact() {
               )}
             </div>
 
-            <p className="text-center font-mono text-[10.5px] text-slate-600">
+            <p className="text-center font-mono text-[11px] text-slate-600">
               {ENDPOINT ? ui.form.pieFormspree(profile.email) : ui.form.pieMailto(profile.email)}
             </p>
-            <p className="text-center font-mono text-[10.5px] text-slate-600">
+            <p className="text-center font-mono text-[11px] text-slate-600">
               {ui.form.privacidadAntes}{' '}
               <button type="button" onClick={() => abrirAviso('privacidad')} className="underline underline-offset-2 hover:text-accent">
                 {ui.footer.privacidad}

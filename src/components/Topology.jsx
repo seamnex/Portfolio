@@ -149,7 +149,7 @@ function Nodo({ nodo, resultado, latencia, simulado, abierto, onAbrir, onCerrar,
           </span>
           <div className="min-w-0 flex-1">
             <p className="truncate text-[13px] font-semibold text-white">{texto.titulo}</p>
-            <p className="truncate font-mono text-[10px] text-slate-500">{texto.sub}</p>
+            <p className="truncate font-mono text-[11px] text-slate-500">{texto.sub}</p>
           </div>
           <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
             <span className={`absolute inline-flex h-full w-full animate-pulse-dot rounded-full ${tono.punto}`} />
@@ -161,13 +161,13 @@ function Nodo({ nodo, resultado, latencia, simulado, abierto, onAbrir, onCerrar,
           <span className={`font-mono text-[19px] font-bold leading-none tracking-tight ${tono.valor}`}>
             {metrica.valor}
           </span>
-          {metrica.unidad && <span className="font-mono text-[10px] text-slate-500">{metrica.unidad}</span>}
+          {metrica.unidad && <span className="font-mono text-[11px] text-slate-500">{metrica.unidad}</span>}
         </p>
 
-        <p className={`mt-1.5 font-mono text-[10px] ${tono.texto}`}>{t.estados[resultado.estado] ?? t.estados.desconocido}</p>
+        <p className={`mt-1.5 font-mono text-[11px] ${tono.texto}`}>{t.estados[resultado.estado] ?? t.estados.desconocido}</p>
 
         {simulado && (
-          <span className="mt-2 inline-flex w-fit items-center gap-1.5 rounded-md border border-warn/40 bg-warn/10 px-2 py-0.5 font-mono text-[9.5px] uppercase tracking-wider text-warn">
+          <span className="mt-2 inline-flex w-fit items-center gap-1.5 rounded-md border border-warn/40 bg-warn/10 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider text-warn">
             <FlaskConical size={10} aria-hidden="true" />
             {ui.caos.simulacro}
           </span>
@@ -184,14 +184,14 @@ function Nodo({ nodo, resultado, latencia, simulado, abierto, onAbrir, onCerrar,
           <dl className="mt-3 space-y-1.5 border-t border-base-600/60 pt-3">
             {camposDe(nodo, resultado, latencia, t, lang).map((f) => (
               <div key={f.etiqueta} className="flex items-baseline justify-between gap-3">
-                <dt className="shrink-0 font-mono text-[9.5px] uppercase tracking-[0.12em] text-slate-600">
+                <dt className="shrink-0 font-mono text-[11px] uppercase tracking-[0.12em] text-slate-600">
                   {f.etiqueta}
                 </dt>
-                <dd className="truncate font-mono text-[10.5px] text-slate-300">{f.valor}</dd>
+                <dd className="truncate font-mono text-[11px] text-slate-300">{f.valor}</dd>
               </div>
             ))}
           </dl>
-          {simulado && <p className="mt-3 font-mono text-[10px] leading-relaxed text-warn">{t.simulado}</p>}
+          {simulado && <p className="mt-3 font-mono text-[11px] leading-relaxed text-warn">{t.simulado}</p>}
         </div>
       )}
     </article>
@@ -222,7 +222,7 @@ function Conector({ enlace, estadoDestino, t }) {
           className={`absolute left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full animate-flow-y md:left-0 md:top-1/2 md:translate-x-0 md:-translate-y-1/2 md:animate-flow-x ${tono.paquete}`}
         />
       )}
-      <span className="relative rounded border border-base-600 bg-base-800 px-2 py-0.5 font-mono text-[9.5px] text-slate-500">
+      <span className="relative rounded border border-base-600 bg-base-800 px-2 py-0.5 font-mono text-[11px] text-slate-500">
         {t.enlaces[enlace.id] ?? enlace.peticion}
       </span>
     </div>
@@ -283,7 +283,7 @@ export default function Topology() {
             <Waypoints size={13} className="text-accent" aria-hidden="true" />
             {t.tablero}
           </p>
-          <span className="font-mono text-[10.5px] text-slate-600">{t.pista}</span>
+          <span className="font-mono text-[11px] text-slate-600">{t.pista}</span>
         </div>
 
         {/* En escritorio el cliente ocupa las dos filas y de él salen las dos
@@ -306,7 +306,7 @@ export default function Topology() {
           })}
         </div>
 
-        <p className="border-t border-base-600/60 px-5 py-3 font-mono text-[10px] leading-relaxed text-slate-600">
+        <p className="border-t border-base-600/60 px-5 py-3 font-mono text-[11px] leading-relaxed text-slate-600">
           {t.leyenda}
         </p>
       </div>

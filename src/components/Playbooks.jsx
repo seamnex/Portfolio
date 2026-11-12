@@ -35,13 +35,13 @@ function TarjetaPlaybook({ playbook, texto, activo, onElegir, t }) {
         <span className={`flex h-8 w-8 items-center justify-center rounded-lg border ${tono.icono}`}>
           {Icono && <Icono size={15} />}
         </span>
-        <span className={`pill font-mono text-[10px] ${tono.pill}`}>{playbook.severidad}</span>
+        <span className={`pill font-mono text-[11px] ${tono.pill}`}>{playbook.severidad}</span>
       </div>
 
       <h3 className="mt-4 text-sm font-semibold text-white">{texto.titulo}</h3>
       <p className="mt-2 text-[13px] leading-relaxed text-slate-400">{texto.descripcion}</p>
 
-      <p className="mt-3 w-full whitespace-pre-wrap break-all font-mono text-[10px] text-slate-600">
+      <p className="mt-3 w-full whitespace-pre-wrap break-all font-mono text-[11px] text-slate-600">
         {playbook.senal}
       </p>
 
@@ -115,7 +115,7 @@ export default function Playbooks() {
               <p className={`font-mono text-[13px] font-semibold ${activo ? 'text-accent' : 'text-slate-500'}`} aria-live="polite">
                 {activo ? texto.titulo : t.sinPlaybook}
               </p>
-              <p className="mt-0.5 font-mono text-[10.5px] text-slate-600">
+              <p className="mt-0.5 font-mono text-[11px] text-slate-600">
                 {activo
                   ? paso < 0
                     ? t.listoParaCorrer
@@ -177,7 +177,7 @@ export default function Playbooks() {
                     {/* Columna del hilo: punto y línea vertical */}
                     <div className="flex flex-col items-center">
                       <span
-                        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border font-mono text-[10px] ${tono.punto}`}
+                        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border font-mono text-[11px] ${tono.punto}`}
                       >
                         {i <= paso ? <Check size={11} /> : i + 1}
                       </span>
@@ -193,7 +193,7 @@ export default function Playbooks() {
                           con scroll tiene que poder enfocarse para moverla con el teclado. */}
                       <p
                         tabIndex={0}
-                        className={`mt-2 overflow-x-auto whitespace-pre rounded border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent px-2.5 py-1.5 font-mono text-[10.5px] ${
+                        className={`mt-2 overflow-x-auto whitespace-pre rounded border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent px-2.5 py-1.5 font-mono text-[11px] ${
                           i <= paso
                             ? 'border-base-600 bg-base-900/60 text-slate-400'
                             : 'border-base-600/50 bg-base-900/30 text-slate-600'
@@ -207,7 +207,7 @@ export default function Playbooks() {
               })}
             </ol>
 
-            <p className="mt-2 flex items-center gap-2 border-t border-base-600/50 pt-4 font-mono text-[10.5px] text-slate-600">
+            <p className="mt-2 flex items-center gap-2 border-t border-base-600/50 pt-4 font-mono text-[11px] text-slate-600">
               <SquareTerminal size={12} aria-hidden="true" />
               {completado ? t.completado : t.salidaEnConsola}
             </p>

@@ -26,11 +26,11 @@ function IncidentCard({ incidente, cta, onAbrir }) {
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <span className="font-mono text-[11px] tracking-wider text-slate-500">{incidente.codigo}</span>
-          <span className={`rounded-md border px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider ${sev.chip}`}>
+          <span className={`rounded-md border px-2 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-wider ${sev.chip}`}>
             {incidente.severidad}
           </span>
         </div>
-        <span className="font-mono text-[10.5px] text-slate-600">{incidente.lab}</span>
+        <span className="font-mono text-[11px] text-slate-600">{incidente.lab}</span>
       </div>
 
       <h3 className="mt-3 text-base font-semibold leading-snug text-white transition-colors group-hover:text-accent">
@@ -42,7 +42,7 @@ function IncidentCard({ incidente, cta, onAbrir }) {
       <dl className="mt-5 grid grid-cols-3 gap-2 border-t border-base-600/60 pt-4">
         {incidente.metricas.map((m) => (
           <div key={m.k} className="min-w-0">
-            <dt className="truncate font-mono text-[9.5px] uppercase tracking-wider text-slate-600" title={m.k}>
+            <dt className="truncate font-mono text-[11px] uppercase tracking-wider text-slate-600" title={m.k}>
               {m.k}
             </dt>
             <dd className={`mt-1 font-mono text-[13px] font-bold ${TONO_METRICA[m.tone] ?? TONO_METRICA.muted}`}>

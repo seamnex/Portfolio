@@ -49,6 +49,8 @@ export const profile = {
 
 export const hero = {
   headline: ['Del incidente crítico', 'a la resiliencia por diseño.'],
+  // Lo lee el lector de pantalla en lugar de la flecha entre los dos roles.
+  transicion: 'en transición a',
   subtitle:
     'Gestiono incidentes P1/P2 en entornos de alto volumen —Fintech y Telecomunicaciones— liderando War Rooms, restaurando el servicio y cerrando el ciclo con RCA que evitan la reincidencia. Hoy llevo esa disciplina operacional hacia SRE y DevOps: observabilidad, automatización y sistemas que fallan poco y se recuperan rápido.',
   terminal: {
@@ -655,6 +657,13 @@ export const ui = {
     },
   },
 
+  // Cierre de las vistas Observabilidad y Laboratorio (ui/CierreContacto).
+  cierre: {
+    titulo: '¿Buscás este criterio en tu equipo?',
+    texto:
+      'Lo que viste acá es cómo trabajo: medir antes de opinar, romper a propósito para aprender y dejar todo por escrito. Si encaja con lo que buscás, hablemos.',
+  },
+
   nav: {
     cta: 'Contactar',
     volverArriba: 'Volver arriba',
@@ -865,6 +874,11 @@ export const ui = {
     objetivo: 'Objetivo',
     cumple: 'cumple',
     noCumple: 'fuera',
+    // Debajo del tablero: un "fuera" no es una falla escondida, es una
+    // meta exigente que se muestra igual. Sin esto, alguien que no es
+    // técnico lee el ámbar como un error del sitio.
+    notaObjetivos:
+      'Los objetivos son metas que me puse para este sitio, más exigentes de lo que necesita un portfolio. Cuando un número queda «fuera», el tablero lo muestra en vez de esconderlo: es el mismo criterio de un postmortem sin culpables.',
     sinDatos: 'sin datos',
     midiendo: 'midiendo…',
     comoSeMide: 'Cómo se mide',

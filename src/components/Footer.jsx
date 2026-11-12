@@ -20,10 +20,10 @@ export default function Footer() {
             © {new Date().getFullYear()} — {ui.footer.construido}
           </p>
           <p className="mt-2 flex justify-center gap-4 font-mono text-[11px] sm:justify-start">
-            <button type="button" onClick={() => abrirAviso('privacidad')} className="text-slate-500 underline-offset-2 transition-colors hover:text-accent hover:underline">
+            <button type="button" onClick={() => abrirAviso('privacidad')} className="py-1.5 text-slate-500 underline-offset-2 transition-colors hover:text-accent hover:underline">
               {ui.footer.privacidad}
             </button>
-            <button type="button" onClick={() => abrirAviso('aviso')} className="text-slate-500 underline-offset-2 transition-colors hover:text-accent hover:underline">
+            <button type="button" onClick={() => abrirAviso('aviso')} className="py-1.5 text-slate-500 underline-offset-2 transition-colors hover:text-accent hover:underline">
               {ui.footer.legal}
             </button>
           </p>
