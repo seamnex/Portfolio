@@ -135,7 +135,7 @@ export default function SystemStatus() {
                 onClick={() => refrescar({ usarCache: false })}
                 disabled={cargando}
                 aria-label={ui.estado.reintentar}
-                className="rounded-md border border-base-600 p-2 text-slate-500 transition-colors hover:border-accent/40 hover:text-accent disabled:opacity-50"
+                className="toque inline-flex items-center justify-center rounded-md border border-base-600 p-2 text-slate-500 transition-colors hover:border-accent/40 hover:text-accent disabled:opacity-50"
               >
                 <RefreshCw size={13} className={cargando ? 'animate-spin' : ''} />
               </button>
@@ -144,7 +144,7 @@ export default function SystemStatus() {
                 onClick={() => setAbierto((v) => !v)}
                 aria-expanded={abierto}
                 aria-controls="estado-detalle"
-                className="inline-flex items-center gap-1.5 rounded-md border border-base-600 px-3 py-2 font-mono text-xs text-slate-400 transition-colors hover:border-accent/40 hover:text-accent"
+                className="toque inline-flex items-center gap-1.5 rounded-md border border-base-600 px-3 py-2 font-mono text-xs text-slate-400 transition-colors hover:border-accent/40 hover:text-accent"
               >
                 {abierto ? ui.estado.ocultarDetalle : ui.estado.verDetalle}
                 <ChevronDown size={13} className={`transition-transform ${abierto ? 'rotate-180' : ''}`} />

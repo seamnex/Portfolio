@@ -56,7 +56,7 @@ function IncidentCard({ incidente, cta, onAbrir }) {
         <button
           type="button"
           onClick={onAbrir}
-          className="btn-ghost w-full px-3 py-2 text-xs"
+          className="btn-ghost toque w-full px-3 py-2 text-xs"
           // El código del incidente en la etiqueta accesible: cuatro botones
           // que dicen "Abrir post-mortem" son indistinguibles en un lector de
           // pantalla que los recorre fuera de contexto.

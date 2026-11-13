@@ -207,6 +207,15 @@ export default function Console() {
     ])
   }, [playbook.registro])
 
+  // ¿Queda salida a la derecha de lo que se ve? Se mide al escribir una
+  // entrada nueva y en cada scroll.
+  const [sigueDerecha, setSigueDerecha] = useState(false)
+  const medirDesborde = () => {
+    const n = scrollRef.current
+    if (n) setSigueDerecha(n.scrollWidth - n.clientWidth - n.scrollLeft > 4)
+  }
+  useEffect(medirDesborde, [entradas])
+
   const onSubmit = (e) => {
     e.preventDefault()
     const entrada = valor.trim()
@@ -272,7 +281,7 @@ export default function Console() {
             type="button"
             onClick={() => setEntradas([])}
             aria-label={ui.consola.limpiar}
-            className="-my-2 ml-auto flex h-10 w-10 items-center justify-center rounded-md border border-base-600 text-slate-500 transition-colors hover:border-accent/40 hover:text-accent"
+            className="-my-2 ml-auto flex h-11 w-11 items-center justify-center rounded-md border border-base-600 text-slate-500 transition-colors hover:border-accent/40 hover:text-accent"
           >
             <Eraser size={14} aria-hidden="true" />
           </button>
@@ -285,10 +294,15 @@ export default function Console() {
         </p>
 
         {/* Salida */}
+        {/* Vacía es baja: el alto de terminal aparece con el primer comando.
+            `overscroll-contain`: al llegar al borde de una tabla ancha, el
+            gesto no se le escapa a la página. */}
+        <div className="relative">
         <div
           ref={scrollRef}
           onClick={() => inputRef.current?.focus()}
-          className="h-[24rem] overflow-auto p-4 font-mono text-xs leading-relaxed sm:text-[13px]"
+          onScroll={medirDesborde}
+          className={`overflow-auto overscroll-contain p-4 font-mono text-xs leading-relaxed sm:text-[13px] ${entradas.length ? 'h-[24rem]' : 'h-28'}`}
         >
           <p className="text-slate-600">{ui.consola.ayudaInicial}</p>
 
@@ -314,10 +328,24 @@ export default function Console() {
             {entradas.at(-1)?.lineas.map((l) => l.texto ?? `${l.k}: ${l.v}`).join('. ')}
           </span>
         </div>
+          {/* Aviso de que la salida sigue hacia la derecha: en el teléfono
+              una tabla de kubectl no entra y sin esto parece cortada. */}
+          <span
+            className={`pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-base-800 to-transparent transition-opacity duration-200 ${
+              sigueDerecha ? 'opacity-100' : 'opacity-0'
+            }`}
+            aria-hidden="true"
+          />
+        </div>
 
         {/* Entrada */}
         <form onSubmit={onSubmit} className="flex items-center gap-2 border-t border-base-600 bg-base-900/50 px-4 py-3">
-          <span className="shrink-0 font-mono text-[13px] text-ok">{ui.consola.prompt}</span>
+          {/* En el teléfono el prompt completo se comía el renglón y dejaba
+              el campo en unos pocos píxeles: queda solo el signo. */}
+          <span className="shrink-0 font-mono text-[13px] text-ok" aria-hidden="true">
+            <span className="hidden sm:inline">{ui.consola.prompt}</span>
+            <span className="sm:hidden">$</span>
+          </span>
           <input
             ref={inputRef}
             value={valor}
@@ -328,13 +356,13 @@ export default function Console() {
             autoComplete="off"
             autoCapitalize="off"
             autoCorrect="off"
-            className="min-w-0 flex-1 bg-transparent font-mono text-[13px] py-1.5 text-slate-200 outline-none placeholder:text-slate-500"
+            className="min-h-[44px] min-w-0 flex-1 bg-transparent py-1.5 font-mono text-base text-slate-200 outline-none placeholder:text-slate-500 sm:min-h-0 sm:text-[13px]"
             placeholder="help"
           />
           <button
             type="submit"
             aria-label={ui.consola.ejecutar}
-            className="-my-1.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-base-600 text-slate-500 transition-colors hover:border-accent/40 hover:text-accent"
+            className="-my-1.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-base-600 text-slate-500 transition-colors hover:border-accent/40 hover:text-accent"
           >
             <CornerDownLeft size={15} aria-hidden="true" />
           </button>
@@ -353,7 +381,7 @@ export default function Console() {
               correr(cmd)
               setHistorial((prev) => (prev[prev.length - 1] === cmd ? prev : [...prev, cmd]))
             }}
-            className="min-h-[40px] rounded-md border border-base-600 bg-base-800/60 px-3 font-mono text-xs text-slate-300 transition-colors hover:border-accent/50 hover:text-accent"
+            className="min-h-[44px] rounded-md border border-base-600 bg-base-800/60 px-3 font-mono text-xs text-slate-300 transition-colors hover:border-accent/50 hover:text-accent"
           >
             {cmd}
           </button>

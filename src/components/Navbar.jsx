@@ -139,7 +139,7 @@ export default function Navbar() {
                 aria-label={texto.titulo.includes(texto.nav) ? texto.titulo : `${texto.nav} — ${texto.titulo}`}
                 tabIndex={sel ? 0 : -1}
                 onClick={() => irA(p.id)}
-                className={`relative flex flex-col items-center gap-0.5 whitespace-nowrap rounded-md border px-1 py-1.5 max-[359px]:px-0.5 sm:px-2 text-[13px] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-base-900 md:flex-row md:gap-2 md:px-3 md:py-2 ${
+                className={`relative flex flex-col items-center justify-center gap-0.5 whitespace-nowrap rounded-md border px-1 py-1.5 min-[360px]:max-md:min-h-[44px] min-[360px]:max-md:min-w-[44px] max-[359px]:px-0.5 sm:px-2 text-[13px] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-base-900 md:flex-row md:gap-2 md:px-3 md:py-2 ${
                   sel
                     ? 'border-white/10 bg-white/[0.07] text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.06)] [&>svg]:text-accent'
                     : 'border-transparent text-slate-400 hover:bg-white/[0.04] hover:text-white'
@@ -211,7 +211,7 @@ export default function Navbar() {
             onClick={() => irA('perfil', 'contacto')}
             aria-label={ui.nav.cta}
             title={ui.nav.cta}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-accent text-base-900 transition-colors hover:bg-accent/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-base-900 lg:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-md bg-accent text-base-900 max-[359px]:h-9 max-[359px]:w-9 transition-colors hover:bg-accent/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-base-900 lg:hidden"
           >
             <Mail size={16} aria-hidden="true" />
           </button>

@@ -92,7 +92,7 @@ export default function SloCalculator() {
                 type="button"
                 onClick={() => setObjetivo(o)}
                 aria-pressed={o === objetivo}
-                className={`rounded-md border px-3 py-1.5 font-mono text-xs transition-colors ${
+                className={`toque rounded-md border px-3 py-1.5 font-mono text-xs transition-colors ${
                   o === objetivo
                     ? 'border-accent/60 bg-accent/10 text-accent'
                     : 'border-base-600 text-slate-500 hover:border-accent/40 hover:text-accent'
@@ -206,7 +206,7 @@ export default function SloCalculator() {
                 type="button"
                 onClick={() => setPeriodoId(p.id)}
                 aria-pressed={p.id === periodoId}
-                className={`rounded-md border px-2.5 py-1.5 font-mono text-xs transition-colors ${
+                className={`toque rounded-md border px-2.5 py-1.5 font-mono text-xs transition-colors ${
                   p.id === periodoId
                     ? 'border-accent/60 bg-accent/10 text-accent'
                     : 'border-base-600 text-slate-500 hover:border-accent/40 hover:text-accent'

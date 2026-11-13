@@ -320,7 +320,7 @@ function PanelVivo() {
             e.preventDefault()
             irA(null, 'hallazgo')
           }}
-          className="inline-flex items-center gap-1.5 py-1.5 text-[13px] font-medium text-accent transition-colors hover:text-white"
+          className="toque inline-flex items-center gap-1.5 py-1.5 text-[13px] font-medium text-accent transition-colors hover:text-white"
         >
           {p.diagnostico} <ArrowRight size={14} aria-hidden="true" />
         </a>
@@ -329,7 +329,7 @@ function PanelVivo() {
             href={bitacora}
             target="_blank"
             rel="noreferrer noopener"
-            className="inline-flex items-center gap-1.5 py-1.5 text-[13px] font-medium text-accent transition-colors hover:text-white"
+            className="toque inline-flex items-center gap-1.5 py-1.5 text-[13px] font-medium text-accent transition-colors hover:text-white"
           >
             {p.bitacora} <ArrowUpRight size={14} aria-hidden="true" />
           </a>
@@ -364,7 +364,7 @@ function PanelVivo() {
               e.preventDefault()
               irA('laboratorio')
             }}
-            className="inline-flex min-h-[40px] items-center gap-1.5 self-start text-[13px] font-medium text-slate-400 transition-colors hover:text-white"
+            className="inline-flex min-h-[44px] items-center gap-1.5 self-start text-[13px] font-medium text-slate-400 transition-colors hover:text-white"
           >
             {p.simulacro.masSimulacros} <ArrowRight size={14} aria-hidden="true" />
           </a>
@@ -429,7 +429,7 @@ export default function Hero() {
                 aria-expanded="false"
                 aria-controls="hero-subtitulo"
                 onClick={() => setSubtituloEntero(true)}
-                className="mt-1 py-1.5 text-[13px] font-medium text-accent transition-colors hover:text-white lg:hidden"
+                className="toque mt-1 inline-flex items-center py-1.5 text-[13px] font-medium text-accent transition-colors hover:text-white lg:hidden"
               >
                 {hero.seguirLeyendo}
               </button>
@@ -461,7 +461,7 @@ export default function Hero() {
                 href={profile.linkedin}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="inline-flex items-center gap-1.5 py-1.5 transition-colors hover:text-accent lg:hidden"
+                className="toque inline-flex items-center gap-1.5 py-1.5 transition-colors hover:text-accent lg:hidden"
               >
                 <Linkedin size={13} /> LinkedIn
               </a>
@@ -470,7 +470,7 @@ export default function Hero() {
                   href={profile.github}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="inline-flex items-center gap-1.5 py-1.5 transition-colors hover:text-accent lg:hidden"
+                  className="toque inline-flex items-center gap-1.5 py-1.5 transition-colors hover:text-accent lg:hidden"
                 >
                   <Github size={13} /> GitHub
                 </a>

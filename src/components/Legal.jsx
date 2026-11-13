@@ -39,7 +39,7 @@ function Dialogo({ id, datos, cerrar, actualizado }) {
             type="button"
             onClick={(e) => e.currentTarget.closest('dialog').close()}
             aria-label={cerrar}
-            className="rounded-md border border-base-600 p-2 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent"
+            className="toque inline-flex items-center justify-center rounded-md border border-base-600 p-2 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent"
           >
             <X size={16} />
           </button>

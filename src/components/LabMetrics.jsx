@@ -56,7 +56,7 @@ function MetricCard({ m, verBitacora }) {
           href={m.repo}
           target="_blank"
           rel="noreferrer noopener"
-          className="mt-2 inline-flex items-center gap-1.5 py-1.5 font-mono text-xs text-slate-400 transition-colors hover:text-accent"
+          className="toque mt-2 inline-flex items-center gap-1.5 py-1.5 font-mono text-xs text-slate-400 transition-colors hover:text-accent"
         >
           {verBitacora}
           <ArrowUpRight size={13} className="transition-transform group-hover:translate-x-0.5" />

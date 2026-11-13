@@ -132,7 +132,7 @@ export default function Playbooks() {
               type="button"
               onClick={correrPaso}
               disabled={!activo || completado}
-              className="inline-flex items-center gap-1.5 rounded-md border border-accent/40 bg-accent/10 px-3 py-2 font-mono text-xs text-accent transition-colors hover:border-accent/70 hover:bg-accent/15 disabled:opacity-40 disabled:hover:border-accent/40 disabled:hover:bg-accent/10"
+              className="toque inline-flex items-center gap-1.5 rounded-md border border-accent/40 bg-accent/10 px-3 py-2 font-mono text-xs text-accent transition-colors hover:border-accent/70 hover:bg-accent/15 disabled:opacity-40 disabled:hover:border-accent/40 disabled:hover:bg-accent/10"
             >
               {paso < 0 ? <Play size={12} /> : <ChevronRight size={12} />}
               {paso < 0 ? t.correrPrimero : completado ? t.finalizado : t.correrSiguiente}
@@ -142,7 +142,7 @@ export default function Playbooks() {
               onClick={reiniciar}
               disabled={!activo || paso < 0}
               aria-label={t.reiniciar}
-              className="rounded-md border border-base-600 p-2 text-slate-500 transition-colors hover:border-warn/40 hover:text-warn disabled:opacity-40 disabled:hover:border-base-600 disabled:hover:text-slate-500"
+              className="toque inline-flex items-center justify-center rounded-md border border-base-600 p-2 text-slate-500 transition-colors hover:border-warn/40 hover:text-warn disabled:opacity-40 disabled:hover:border-base-600 disabled:hover:text-slate-500"
             >
               <RotateCcw size={13} />
             </button>
@@ -151,7 +151,7 @@ export default function Playbooks() {
               onClick={cerrar}
               disabled={!activo}
               aria-label={t.cerrar}
-              className="rounded-md border border-base-600 p-2 text-slate-500 transition-colors hover:border-crit/40 hover:text-crit disabled:opacity-40 disabled:hover:border-base-600 disabled:hover:text-slate-500"
+              className="toque inline-flex items-center justify-center rounded-md border border-base-600 p-2 text-slate-500 transition-colors hover:border-crit/40 hover:text-crit disabled:opacity-40 disabled:hover:border-base-600 disabled:hover:text-slate-500"
             >
               <X size={13} />
             </button>
@@ -214,9 +214,7 @@ export default function Playbooks() {
               {completado ? t.completado : t.salidaEnConsola}
             </p>
           </div>
-        ) : (
-          <p className="px-5 py-8 text-center text-[13px] text-slate-600">{t.elegiUno}</p>
-        )}
+        ) : null}
       </div>
     </Bloque>
   )

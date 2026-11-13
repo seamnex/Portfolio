@@ -17,10 +17,10 @@ export default function Footer() {
             © {new Date().getFullYear()} — {ui.footer.construido}
           </p>
           <p className="mt-2 flex justify-center gap-4 font-mono text-xs sm:justify-start">
-            <button type="button" onClick={() => abrirAviso('privacidad')} className="py-1.5 text-slate-500 underline-offset-2 transition-colors hover:text-accent hover:underline">
+            <button type="button" onClick={() => abrirAviso('privacidad')} className="toque inline-flex items-center py-1.5 text-slate-500 underline-offset-2 transition-colors hover:text-accent hover:underline">
               {ui.footer.privacidad}
             </button>
-            <button type="button" onClick={() => abrirAviso('aviso')} className="py-1.5 text-slate-500 underline-offset-2 transition-colors hover:text-accent hover:underline">
+            <button type="button" onClick={() => abrirAviso('aviso')} className="toque inline-flex items-center py-1.5 text-slate-500 underline-offset-2 transition-colors hover:text-accent hover:underline">
               {ui.footer.legal}
             </button>
           </p>
@@ -30,7 +30,7 @@ export default function Footer() {
           <a
             href={`mailto:${profile.email}`}
             aria-label="Email"
-            className="rounded-md border border-base-600 p-2.5 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent"
+            className="toque inline-flex items-center justify-center rounded-md border border-base-600 p-2.5 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent"
           >
             <Mail size={16} />
           </a>
@@ -39,7 +39,7 @@ export default function Footer() {
             target="_blank"
             rel="noreferrer noopener"
             aria-label="LinkedIn"
-            className="rounded-md border border-base-600 p-2.5 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent"
+            className="toque inline-flex items-center justify-center rounded-md border border-base-600 p-2.5 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent"
           >
             <Linkedin size={16} />
           </a>
@@ -49,7 +49,7 @@ export default function Footer() {
               target="_blank"
               rel="noreferrer noopener"
               aria-label="GitHub"
-              className="rounded-md border border-base-600 p-2.5 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent"
+              className="toque inline-flex items-center justify-center rounded-md border border-base-600 p-2.5 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent"
             >
               <Github size={16} />
             </a>
@@ -61,7 +61,7 @@ export default function Footer() {
             type="button"
             onClick={() => window.scrollTo({ top: 0 })}
             aria-label={ui.nav.volverArriba}
-            className="rounded-md border border-base-600 p-2.5 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent"
+            className="toque inline-flex items-center justify-center rounded-md border border-base-600 p-2.5 text-slate-400 transition-colors hover:border-accent/50 hover:text-accent"
           >
             <ArrowUp size={16} />
           </button>

@@ -276,6 +276,17 @@ html.revelar [data-revelar='2'][data-visto] {
     @apply btn border-2 border-accent/80 text-accent hover:border-accent hover:bg-accent/10;
   }
 
+  /* Zona táctil: en pantallas chicas o con puntero grueso, todo control
+     suelto mide al menos 44 px de lado. En escritorio conserva su tamaño
+     compacto. Los que van centrados usan `inline-flex items-center`, así
+     el contenido queda en el medio del área que crece. */
+  @media (pointer: coarse), (max-width: 639px) {
+    .toque {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+
   /* Rótulo de sección en gris: el cian queda para lo que se toca y lo que
      está en vivo, y así vuelve a señalar algo. */
   .section-label {

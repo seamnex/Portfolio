@@ -30,7 +30,7 @@ export default function About() {
             onClick={() => setCompleto((v) => !v)}
             aria-expanded={completo}
             aria-controls={idResto}
-            className="inline-flex items-center gap-1.5 py-1.5 text-sm font-medium text-accent transition-colors hover:text-white"
+            className="toque inline-flex items-center gap-1.5 py-1.5 text-sm font-medium text-accent transition-colors hover:text-white"
           >
             {completo ? about.leerMenos : about.leerMas}
             <ChevronDown size={15} className={`transition-transform duration-200 ${completo ? 'rotate-180' : ''}`} aria-hidden="true" />

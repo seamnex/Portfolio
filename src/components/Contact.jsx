@@ -142,7 +142,7 @@ export default function Contact() {
 
   return (
     <Section id="contacto" label={contacto.label} titulo={contacto.titulo} bajada={contacto.bajada}>
-      <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
+      <div className="grid gap-6 [&>*]:min-w-0 lg:grid-cols-[1fr_1fr]">
         {/* Datos directos */}
         <div className="space-y-4">
           <div className="card p-6">
@@ -158,7 +158,7 @@ export default function Contact() {
                 href={profile.linkedin}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="flex items-center justify-between gap-3 border-b border-base-600 pb-4 text-sm text-slate-300 transition-colors hover:text-accent"
+                className="toque flex items-center justify-between gap-3 border-b border-base-600 pb-4 text-sm text-slate-300 transition-colors hover:text-accent"
               >
                 <span className="flex items-center gap-3">
                   <Linkedin size={16} className="text-slate-500" aria-hidden="true" /> /in/samuel-garcia-baciliadis
@@ -171,7 +171,7 @@ export default function Contact() {
                   href={profile.github}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="flex items-center justify-between gap-3 border-b border-base-600 pb-4 text-sm text-slate-300 transition-colors hover:text-accent"
+                  className="toque flex items-center justify-between gap-3 border-b border-base-600 pb-4 text-sm text-slate-300 transition-colors hover:text-accent"
                 >
                   <span className="flex items-center gap-3">
                     <Github size={16} className="text-slate-500" aria-hidden="true" /> {ui.form.githubLinea}

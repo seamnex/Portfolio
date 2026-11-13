@@ -56,6 +56,7 @@ function Tile({
   objetivo,
   veredicto,
   serie,
+  grafico,
   tipoSerie,
   referencias,
   ventana,
@@ -97,6 +98,7 @@ function Tile({
       </p>
 
       <div className="mt-3">
+        {grafico ?? (
         <Sparkline
           datos={serie}
           tone={valor == null ? 'muted' : tone}
@@ -105,6 +107,7 @@ function Tile({
           referencias={referencias}
           ventana={ventana}
         />
+        )}
       </div>
 
       {/* La anotación va pegada al gráfico y no al número: es una lectura
@@ -124,6 +127,33 @@ function Tile({
         <span className="font-mono text-xs text-slate-400">{objetivo}</span>
       </div>
     </article>
+  )
+}
+
+/**
+ * Dos medidas lado a lado, a la misma escala y con su valor escrito.
+ * Ocupa el alto de un sparkline para que los tiles de la fila alineen.
+ * Es decorativa para el lector de pantalla: los dos números ya están en
+ * el valor y en el objetivo del tile.
+ */
+function Comparacion({ valores, lang }) {
+  const max = Math.max(...valores)
+  return (
+    <div className="grid h-[34px] content-between" aria-hidden="true">
+      {valores.map((v, i) => (
+        <div key={i} className="flex items-center gap-2">
+          <span className="h-2 flex-1 overflow-hidden rounded-[2px] bg-base-600/40">
+            <span
+              className={`block h-full rounded-[2px] ${i === 0 ? 'bg-accent/80' : 'bg-slate-500/70'}`}
+              style={{ width: `${(v / max) * 100}%` }}
+            />
+          </span>
+          <span className={`w-12 shrink-0 text-right font-mono text-xs ${i === 0 ? 'text-slate-300' : 'text-slate-500'}`}>
+            {num(v, lang)} s
+          </span>
+        </div>
+      ))}
+    </div>
   )
 }
 
@@ -317,10 +347,10 @@ export default function Telemetry() {
               unidad="s"
               tone="accent"
               veredicto={cumple(MEDIDAS.mttd, OBJETIVOS.mttd)}
-              // Dos barras: la regla por defecto y la sensible. Son las dos
-              // corridas que efectivamente se midieron en el lab, no una serie.
-              serie={[MEDIDAS.mttd, MEDIDAS.mttdSensible]}
-              tipoSerie="barras"
+              // Dos corridas medidas en el lab —la regla por defecto y la
+              // sensible— no son una serie: van como comparación, cada barra
+              // con su número, y no como un sparkline de dos columnas.
+              grafico={<Comparacion valores={[MEDIDAS.mttd, MEDIDAS.mttdSensible]} lang={lang} />}
               detalle={t.mttdDetalle(MEDIDAS.ventanaSegundos, MEDIDAS.umbralPorcentaje)}
               objetivo={`< ${num(MEDIDAS.mttdSensible, lang)} s`}
             />

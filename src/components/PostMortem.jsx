@@ -177,7 +177,7 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
               type="button"
               onClick={onCerrar}
               aria-label={p.cerrar}
-              className="shrink-0 rounded-md border border-base-600 p-2 text-slate-400 transition-colors hover:border-crit/40 hover:text-crit"
+              className="toque inline-flex shrink-0 items-center justify-center rounded-md border border-base-600 p-2 text-slate-400 transition-colors hover:border-crit/40 hover:text-crit"
             >
               <X size={16} />
             </button>
@@ -275,7 +275,7 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
               onClick={exportar}
               disabled={exportando}
               aria-busy={exportando}
-              className="btn-ghost px-3.5 py-2 text-xs disabled:cursor-wait disabled:opacity-70"
+              className="btn-ghost toque px-3.5 py-2 text-xs disabled:cursor-wait disabled:opacity-70"
             >
               {exportando ? (
                 <>
@@ -306,7 +306,7 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
               type="button"
               onClick={onAnterior}
               aria-label={p.anterior}
-              className="rounded-md border border-base-600 p-2 text-slate-400 transition-colors hover:border-accent/40 hover:text-accent"
+              className="toque inline-flex items-center justify-center rounded-md border border-base-600 p-2 text-slate-400 transition-colors hover:border-accent/40 hover:text-accent"
             >
               <ChevronLeft size={14} />
             </button>
@@ -314,7 +314,7 @@ export default function PostMortem({ incidente, posicion, onCerrar, onAnterior, 
               type="button"
               onClick={onSiguiente}
               aria-label={p.siguiente}
-              className="rounded-md border border-base-600 p-2 text-slate-400 transition-colors hover:border-accent/40 hover:text-accent"
+              className="toque inline-flex items-center justify-center rounded-md border border-base-600 p-2 text-slate-400 transition-colors hover:border-accent/40 hover:text-accent"
             >
               <ChevronRight size={14} />
             </button>

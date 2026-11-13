@@ -78,7 +78,7 @@ function ProjectCard({ p, meta, pipeline }) {
         onClick={() => setAbierta((v) => !v)}
         aria-expanded={abierta}
         aria-controls={idDetalle}
-        className="mt-4 inline-flex items-center gap-1.5 self-start py-1.5 font-mono text-xs text-accent transition-colors hover:text-white"
+        className="toque mt-4 inline-flex items-center gap-1.5 self-start py-1.5 font-mono text-xs text-accent transition-colors hover:text-white"
       >
         {abierta ? meta.verMenos : meta.verMas}
         <ChevronDown size={14} className={`transition-transform duration-200 ${abierta ? 'rotate-180' : ''}`} aria-hidden="true" />
@@ -129,7 +129,7 @@ function ProjectCard({ p, meta, pipeline }) {
               href={p.links.repo}
               target="_blank"
               rel="noreferrer noopener"
-              className="btn-ghost flex-1 px-3 py-2 text-xs"
+              className="btn-ghost toque flex-1 px-3 py-2 text-xs"
             >
               <Github size={14} /> {meta.codigo}
             </a>
@@ -139,7 +139,7 @@ function ProjectCard({ p, meta, pipeline }) {
               href={p.links.demo}
               target="_blank"
               rel="noreferrer noopener"
-              className="btn-ghost flex-1 px-3 py-2 text-xs"
+              className="btn-ghost toque flex-1 px-3 py-2 text-xs"
             >
               <ExternalLink size={14} /> {meta.demo}
             </a>

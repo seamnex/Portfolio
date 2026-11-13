@@ -180,7 +180,7 @@ export default function ChaosPanel() {
               type="button"
               onClick={() => restaurar()}
               disabled={!activo}
-              className="rounded-md border border-base-600 px-3 py-2 font-mono text-xs text-slate-400 transition-colors hover:border-ok/40 hover:text-ok disabled:opacity-40 disabled:hover:border-base-600 disabled:hover:text-slate-400"
+              className="toque rounded-md border border-base-600 px-3 py-2 font-mono text-xs text-slate-400 transition-colors hover:border-ok/40 hover:text-ok disabled:opacity-40 disabled:hover:border-base-600 disabled:hover:text-slate-400"
             >
               {t.restaurar}
             </button>
@@ -197,7 +197,9 @@ export default function ChaosPanel() {
 
         {/* Bitácora. Es la misma que se escribe en la consola del sitio:
             un simulacro sin registro no deja nada que revisar después. */}
-        <div className="h-52 overflow-y-auto p-4 font-mono text-xs leading-relaxed">
+        {/* Vacía ocupa una línea; el alto fijo aparece con el primer registro,
+            que es cuando hay algo que recorrer. */}
+        <div className={`overflow-y-auto p-4 font-mono text-xs leading-relaxed ${registro.length ? 'h-52' : ''}`}>
           {registro.length === 0 ? (
             <p className="text-slate-600">{t.bitacoraVacia}</p>
           ) : (
