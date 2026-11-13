@@ -8,6 +8,7 @@
     "build": "node scripts/generar-cv.mjs && node scripts/generar-snapshot-github.mjs && vite build",
     "preview": "vite preview",
     "og": "node scripts/generar-og.mjs",
+    "iconos": "node scripts/generar-iconos.mjs",
     "tarjetas": "node scripts/generar-tarjetas.mjs",
     "cv": "node scripts/generar-cv.mjs",
     "snapshot": "node scripts/generar-snapshot-github.mjs",
