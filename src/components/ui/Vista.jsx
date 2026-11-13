@@ -22,10 +22,11 @@ export default function Vista({ id, titulo, children }) {
     <div
       id={`vista-${id}`}
       role="tabpanel"
-      // `aria-label` y no `aria-labelledby`: las pestañas se renderizan en
-      // la barra y en la fila compacta de móvil según el ancho, así que no
-      // hay un id de pestaña que esté garantizado en el DOM.
-      aria-label={titulo}
+      // El panel se nombra por su pestaña (`pestana-…` en la barra): hay
+      // una sola lista de pestañas en todos los anchos, así que el id
+      // está siempre en el DOM. `titulo` queda como respaldo del nombre.
+      aria-labelledby={`pestana-${id}`}
+      data-titulo={titulo}
       hidden={vista !== id}
     >
       {children}

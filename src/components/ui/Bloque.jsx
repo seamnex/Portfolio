@@ -1,4 +1,5 @@
 import Marca from './Marca'
+import { useRevelar } from '../../lib/revelar'
 /**
  * Cabecera de un bloque dentro de una vista del laboratorio.
  *
@@ -19,9 +20,12 @@ import Marca from './Marca'
  * la barra fija, que es donde están las pestañas desde las que se llegó.
  */
 export default function Bloque({ id, label, titulo, bajada, children, className = '' }) {
+  const cabecera = useRevelar()
+  const cuerpo = useRevelar()
+
   return (
     <section id={id} aria-labelledby={`${id}-titulo`} className={`scroll-mt-28 ${className}`}>
-      <header className="max-w-3xl">
+      <header ref={cabecera} data-revelar="1" className="max-w-3xl">
         {label && (
           <p className="section-label flex items-center gap-2.5 text-xs tracking-[0.12em]">
             <Marca className="w-6" />
@@ -33,7 +37,7 @@ export default function Bloque({ id, label, titulo, bajada, children, className 
         </h2>
         {bajada && <p className="mt-3 max-w-[70ch] text-sm leading-relaxed text-slate-400">{bajada}</p>}
       </header>
-      <div className="mt-6">{children}</div>
+      <div ref={cuerpo} data-revelar="2" className="mt-6">{children}</div>
     </section>
   )
 }

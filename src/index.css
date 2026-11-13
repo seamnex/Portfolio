@@ -6,14 +6,41 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 5rem;
+    /* Controles nativos, barras de scroll y autocompletado en oscuro. */
+    color-scheme: dark;
   }
 
+  /* Una sola luz, fría y desde arriba, en vez de dos manchas de color:
+     ilumina la barra y la portada y se apaga hacia abajo, donde el fondo
+     se oscurece un punto para que las tarjetas tengan contra qué pararse. */
   body {
     @apply bg-base-800 text-slate-300 antialiased;
     background-image:
-      radial-gradient(60rem 40rem at 78% -10%, rgba(6, 182, 212, 0.09), transparent 60%),
-      radial-gradient(50rem 36rem at 8% 8%, rgba(16, 185, 129, 0.06), transparent 60%);
+      radial-gradient(120% 34rem at 50% -12rem, rgba(6, 182, 212, 0.13), transparent 70%),
+      linear-gradient(180deg, transparent 0, rgba(7, 10, 18, 0.9) 100%);
     background-attachment: fixed;
+    caret-color: theme('colors.accent.DEFAULT');
+  }
+
+  /* Grano fino sobre el fondo: rompe el degradado liso (y su banding) y
+     le da superficie. Va detrás del contenido y no recibe eventos. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.055;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  }
+
+  /* Los números de un tablero no bailan cuando cambian. */
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+  }
+
+  a {
+    text-underline-offset: 0.2em;
   }
 
   /* Anillo de foco único para todo lo que no trae el suyo (selector de
@@ -95,8 +122,15 @@
   }
 
   .animate-fade-up,
-  .animate-slide-in {
+  .animate-slide-in,
+  .entrada > * {
     animation-name: soloOpacidad !important;
+  }
+
+  [data-revelar],
+  .btn:active,
+  .btn:hover > svg {
+    transform: none !important;
   }
 
   .card-hover:hover,
@@ -104,6 +138,48 @@
   .group:hover [class*='group-hover:translate-x'] {
     transform: none !important;
   }
+}
+
+/* ── Movimiento ──────────────────────────────────────────────
+   Una sola curva para todo lo que entra: sale rápido y frena largo. */
+:root {
+  --salida: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* La portada entra por partes y en orden de lectura: disponibilidad,
+   nombre, rol, tesis, acciones. Es la única entrada coreografiada. */
+.entrada > * {
+  animation: fadeUp 0.8s var(--salida) both;
+}
+.entrada > :nth-child(2) { animation-delay: 60ms; }
+.entrada > :nth-child(3) { animation-delay: 120ms; }
+.entrada > :nth-child(4) { animation-delay: 170ms; }
+.entrada > :nth-child(5) { animation-delay: 220ms; }
+.entrada > :nth-child(6) { animation-delay: 270ms; }
+.entrada > :nth-child(n + 7) { animation-delay: 320ms; }
+
+/* Cambiar de pestaña funde la vista que llega. Solo opacidad: un
+   transform acá convertiría a la vista en contenedor de lo `fixed`. */
+[role='tabpanel']:not([hidden]) {
+  animation: soloOpacidad 0.4s ease-out backwards;
+}
+
+/* Bloques que aparecen al llegar con el scroll. El estado oculto solo
+   existe si el script marcó `html.revelar` (hay IntersectionObserver y
+   no se pidió menos movimiento): sin eso, todo está a la vista. */
+html.revelar [data-revelar] {
+  opacity: 0;
+  transform: translateY(14px);
+}
+html.revelar [data-revelar][data-visto] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.8s var(--salida),
+    transform 0.8s var(--salida);
+}
+html.revelar [data-revelar='2'][data-visto] {
+  transition-delay: 90ms;
 }
 
 @keyframes soloOpacidad {
@@ -120,12 +196,40 @@
     @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
   }
 
+  /* La tarjeta es una superficie, no un vidrio: color propio, un velo
+     más claro arriba, un filo de luz en el borde superior y sombra con
+     caída. Sin desenfoque de fondo, que acá no tenía nada que desenfocar
+     y costaba en cada scroll. */
   .card {
-    @apply relative rounded-xl border border-base-600 bg-base-700/50 backdrop-blur-sm transition-all duration-300;
+    @apply relative rounded-xl border border-base-600 transition-[border-color,box-shadow,transform,background-color] duration-300;
+    background-color: rgb(17 24 39 / 0.78);
+    background-image: linear-gradient(180deg, rgb(255 255 255 / 0.04), rgb(255 255 255 / 0.008) 9rem);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.045),
+      0 1px 2px rgb(0 0 0 / 0.28),
+      0 18px 36px -28px rgb(0 0 0 / 0.9);
+  }
+
+  /* Brillo que sigue al puntero (lo posiciona `lib/brillo.js`). Solo con
+     mouse: en táctil no hay puntero que seguir. */
+  @media (hover: hover) {
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s ease-out;
+      background: radial-gradient(22rem circle at var(--mx, 50%) var(--my, 0%), rgb(125 211 252 / 0.07), transparent 65%);
+    }
+    .card:hover::before {
+      opacity: 1;
+    }
   }
 
   .card-hover {
-    @apply hover:-translate-y-1 hover:border-accent/50 hover:shadow-glow;
+    @apply hover:-translate-y-0.5 hover:border-base-500 hover:shadow-glow;
   }
 
   .pill {
@@ -137,11 +241,29 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-base-800;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-[background-color,border-color,color,box-shadow,transform] duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-base-800 active:scale-[0.98];
   }
 
+  /* El ícono del final (la flecha) avanza un paso al pasar el mouse. */
+  .btn > svg {
+    transition: transform 0.25s var(--salida);
+  }
+  .btn:hover > svg:last-child:not(:first-child) {
+    transform: translateX(3px);
+  }
+
+  /* Relleno con filo de luz arriba y sombra abajo: se lee como una tecla,
+     no como un rectángulo de color. Al pasar el mouse aclara, no se apaga. */
   .btn-primary {
-    @apply btn bg-accent text-base-900 hover:bg-accent/85 hover:shadow-glow;
+    @apply btn bg-accent text-base-900;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.32),
+      inset 0 -1px 0 rgb(0 0 0 / 0.12),
+      0 1px 2px rgb(0 0 0 / 0.4),
+      0 10px 24px -14px rgb(6 182 212 / 0.7);
+  }
+  .btn-primary:hover {
+    background-color: #22c7e2;
   }
 
   .btn-ghost {
@@ -161,6 +283,6 @@
   }
 
   .heading-2 {
-    @apply mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl;
+    @apply mt-3 text-3xl font-bold tracking-[-0.028em] text-white sm:text-4xl;
   }
 }

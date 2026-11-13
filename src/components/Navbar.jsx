@@ -72,7 +72,7 @@ export default function Navbar() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled ? 'border-b border-base-600/80 bg-base-900/85 backdrop-blur-lg' : 'border-b border-transparent'
+        scrolled ? 'border-b border-white/[0.07] bg-base-900/80 shadow-[0_12px_32px_-20px_rgb(0_0_0/0.9)] backdrop-blur-lg backdrop-saturate-150' : 'border-b border-transparent'
       }`}
     >
       {/* Saltar al contenido: invisible hasta que recibe foco con teclado.
@@ -127,6 +127,7 @@ export default function Navbar() {
                 }}
                 type="button"
                 role="tab"
+                id={`pestana-${p.id}`}
                 aria-selected={sel}
                 aria-controls={`vista-${p.id}`}
                 // El rótulo visible se abrevia abajo de `md`, así que el
@@ -140,8 +141,8 @@ export default function Navbar() {
                 onClick={() => irA(p.id)}
                 className={`relative flex flex-col items-center gap-0.5 whitespace-nowrap rounded-md border px-1 py-1.5 max-[359px]:px-0.5 sm:px-2 text-[13px] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-base-900 md:flex-row md:gap-2 md:px-3 md:py-2 ${
                   sel
-                    ? 'border-accent/40 bg-accent/10 text-accent'
-                    : 'border-transparent text-slate-400 hover:bg-base-700/60 hover:text-white'
+                    ? 'border-white/10 bg-white/[0.07] text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.06)] [&>svg]:text-accent'
+                    : 'border-transparent text-slate-400 hover:bg-white/[0.04] hover:text-white'
                 }`}
               >
                 <Icono size={15} aria-hidden="true" />

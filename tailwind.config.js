@@ -4,6 +4,9 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Blanco apenas frío: el #FFF puro sobre este azul vibraba en los
+        // titulares. Es el mismo matiz del fondo, casi sin croma.
+        white: '#F4F7FB',
         base: {
           900: '#070A12', // fondo profundo
           800: '#0B0F19', // fondo principal
@@ -34,9 +37,12 @@ export default {
         mono: ['JetBrains Mono Variable', 'JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Consolas', 'monospace'],
       },
       keyframes: {
+        // El punto de estado emite un anillo, como un sondeo que sale: el
+        // punto sólido de encima no cambia, así el estado se lee igual en
+        // cualquier cuadro de la animación.
         pulseDot: {
-          '0%, 100%': { opacity: '1', transform: 'scale(1)' },
-          '50%': { opacity: '.35', transform: 'scale(.85)' },
+          '0%': { opacity: '.55', transform: 'scale(1)' },
+          '70%, 100%': { opacity: '0', transform: 'scale(2.6)' },
         },
         fadeUp: {
           '0%': { opacity: '0', transform: 'translateY(16px)' },
@@ -77,8 +83,8 @@ export default {
         },
       },
       animation: {
-        'pulse-dot': 'pulseDot 1.6s ease-in-out infinite',
-        'fade-up': 'fadeUp .7s ease-out both',
+        'pulse-dot': 'pulseDot 2.2s cubic-bezier(0,0,.2,1) infinite',
+        'fade-up': 'fadeUp .8s cubic-bezier(.16,1,.3,1) both',
         scanline: 'scanline 6s linear infinite',
         blink: 'blink 1.1s step-end infinite',
         'slide-in': 'slideIn .35s cubic-bezier(.2,.8,.2,1) both',
@@ -89,7 +95,9 @@ export default {
         'flow-y': 'flowY 2.4s linear infinite',
       },
       boxShadow: {
-        glow: '0 0 0 1px rgba(6,182,212,.25), 0 12px 40px -12px rgba(6,182,212,.35)',
+        // Ya no es un halo cian: una sombra con caída, que es lo que
+        // despega la tarjeta del fondo, y un filo de luz arriba.
+        glow: 'inset 0 1px 0 rgba(255,255,255,.06), 0 2px 4px rgba(0,0,0,.3), 0 24px 48px -24px rgba(0,0,0,.85)',
       },
     },
   },

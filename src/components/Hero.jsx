@@ -294,7 +294,13 @@ function PanelVivo() {
   }, [setCaosEnPanel])
 
   return (
-    <div id="panel-vivo" className="card scroll-mt-24 p-6 shadow-2xl shadow-black/40">
+    <div id="panel-vivo" className="card scroll-mt-24 p-6 shadow-2xl shadow-black/50">
+      {/* Filo de luz en el borde superior: el panel es la pieza de la
+          portada y es la única tarjeta que lo lleva. */}
+      <span
+        className="pointer-events-none absolute inset-x-8 -top-px h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent"
+        aria-hidden="true"
+      />
       {/* ── Un caso del lab ─────────────────────────────────── */}
       <p className="text-[13px] text-slate-400">{p.hallazgoEtiqueta}</p>
       <p className="mt-2 text-balance text-2xl font-bold leading-[1.15] tracking-tight text-white sm:text-[2rem]">
@@ -377,13 +383,13 @@ export default function Hero() {
       <div className="container-x">
         <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_.95fr]">
           {/* Columna izquierda — mensaje */}
-          <div className="animate-fade-up">
+          <div className="entrada">
             <StatusBadge texto={profile.disponibilidad} tone="ok" />
 
             {/* El nombre es el h1: quien llega desde un link de LinkedIn o
                 el mail de un reclutador tiene que saber de quién es esto en
                 el primer segundo. El eslogan va debajo, como tesis. */}
-            <h1 className="mt-7 text-5xl font-extrabold leading-[1.02] tracking-tight text-white sm:text-6xl">
+            <h1 className="mt-7 text-5xl font-extrabold leading-[1.02] tracking-[-0.035em] text-white sm:text-6xl">
               {profile.alias}
             </h1>
 
@@ -474,7 +480,7 @@ export default function Hero() {
           </div>
 
           {/* Columna derecha — el sitio en vivo */}
-          <div className="animate-fade-up [animation-delay:120ms]">
+          <div className="animate-fade-up [animation-delay:180ms]">
             <PanelVivo />
           </div>
         </div>

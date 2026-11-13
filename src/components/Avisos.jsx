@@ -74,7 +74,8 @@ function Aviso({ aviso: crudo, ultimo, onCerrar }) {
 
   return (
     <div
-      role="status"
+      // Sin `role="status"`: la región que contiene la pila ya es
+      // `aria-live`, y anidar las dos hacía que se anunciara dos veces.
       // En el teléfono la pila tapaba un tercio de la pantalla, justo encima
       // del panel que el simulacro quiere que mires: ahí se ve solo el
       // último aviso, sin la línea técnica. Desde `sm`, la pila completa.
