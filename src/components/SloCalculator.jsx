@@ -253,7 +253,7 @@ export default function SloCalculator() {
         <div className="px-5 pb-1 pt-4">
           <div className="h-2 w-full overflow-hidden rounded-full bg-base-900/70" aria-hidden="true">
             <div
-              className={`h-full rounded-full transition-[width] duration-300 ease-out ${tono.barra}`}
+              className={`h-full rounded-full transition-[width] duration-300 ease-out ${consumo.enCurso > 0 ? `rayado ${tono.texto}` : tono.barra}`}
               style={{ width: `${Math.min(100, budget?.porcentaje ?? 0)}%` }}
             />
           </div>

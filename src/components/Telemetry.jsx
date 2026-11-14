@@ -21,6 +21,7 @@ import { arranqueLatencia, rachaCfr, tendenciaLeadTime, VENTANA_CORTA } from '..
 import Bloque from './ui/Bloque'
 import Sparkline from './ui/Sparkline'
 import Sigla from './ui/Sigla'
+import Cifra from './ui/Cifra'
 
 const iconos = { Rocket, GitCommitHorizontal, ShieldAlert, Timer, Activity }
 
@@ -91,9 +92,9 @@ function Tile({
       </div>
 
       <p className="mt-4 flex items-baseline gap-1.5">
-        <span className={`font-mono text-[27px] font-bold leading-none tracking-tight ${tono.valor}`}>
+        <Cifra className={`font-mono text-[27px] font-bold leading-none tracking-tight ${tono.valor}`}>
           {valor ?? vacio ?? t.sinDatos}
-        </span>
+        </Cifra>
         {valor != null && unidad && <span className="font-mono text-xs text-slate-500">{unidad}</span>}
       </p>
 

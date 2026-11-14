@@ -58,6 +58,17 @@ export function CaosProvider({ children }) {
   )
 
   const [escenario, setEscenario] = useState(null)
+
+  // Modo incidente: mientras corre un simulacro, <html> lleva el impacto
+  // del escenario y el CSS tiñe la luz del fondo. Es un atributo y no una
+  // clase por componente porque lo que cambia es el sitio entero, y así
+  // ninguna vista tiene que enterarse.
+  useEffect(() => {
+    const raiz = document.documentElement
+    if (escenario) raiz.dataset.incidente = escenario.impacto
+    else delete raiz.dataset.incidente
+    return () => delete raiz.dataset.incidente
+  }, [escenario])
   const [fase, setFase] = useState(null)
   const [terminaEn, setTerminaEn] = useState(null)
   const [registro, setRegistro] = useState([])

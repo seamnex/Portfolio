@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Activity, FlaskConical, Github, Linkedin, Mail, UserRound } from 'lucide-react'
 import Marca from './ui/Marca'
 import { useContenido } from '../i18n/LanguageProvider'
@@ -42,6 +42,24 @@ export default function Navbar() {
   }
 
   const botonesRef = useRef({})
+
+  // La pastilla de la pestaña activa es un solo elemento que se desliza
+  // de una pestaña a otra: cambiar de vista se lee como moverse, no como
+  // apagar una luz y prender otra. Se mide del DOM porque el ancho de
+  // cada pestaña depende del idioma, del breakpoint y del punto de aviso.
+  const listaRef = useRef(null)
+  const [pastilla, setPastilla] = useState(null)
+  useLayoutEffect(() => {
+    const medir = () => {
+      const b = botonesRef.current[vista]
+      if (b) setPastilla({ x: b.offsetLeft, y: b.offsetTop, w: b.offsetWidth, h: b.offsetHeight })
+    }
+    medir()
+    const obs = new ResizeObserver(medir)
+    if (listaRef.current) obs.observe(listaRef.current)
+    Object.values(botonesRef.current).forEach((b) => b && obs.observe(b))
+    return () => obs.disconnect()
+  }, [vista])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -108,11 +126,19 @@ export default function Navbar() {
         </button>
 
         <div
+          ref={listaRef}
           role="tablist"
           aria-label={ui.vistas.aria}
           onKeyDown={alTeclear}
-          className="flex min-w-0 items-center gap-0.5 sm:gap-1"
+          className="relative flex min-w-0 items-center gap-0.5 sm:gap-1"
         >
+          {pastilla && (
+            <span
+              aria-hidden="true"
+              className="pastilla pointer-events-none absolute left-0 top-0 rounded-md border border-white/10 bg-white/[0.07] shadow-[inset_0_1px_0_rgb(255_255_255/0.06)]"
+              style={{ width: pastilla.w, height: pastilla.h, transform: `translate(${pastilla.x}px, ${pastilla.y}px)` }}
+            />
+          )}
           {PESTANAS.map((p) => {
             const texto = ui.vistas[p.id]
             const Icono = p.icono
@@ -141,7 +167,7 @@ export default function Navbar() {
                 onClick={() => irA(p.id)}
                 className={`relative flex flex-col items-center justify-center gap-0.5 whitespace-nowrap rounded-md border px-1 py-1.5 min-[360px]:max-md:min-h-[44px] min-[360px]:max-md:min-w-[44px] max-[359px]:px-0.5 sm:px-2 text-[13px] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-base-900 md:flex-row md:gap-2 md:px-3 md:py-2 ${
                   sel
-                    ? 'border-white/10 bg-white/[0.07] text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.06)] [&>svg]:text-accent'
+                    ? 'border-transparent text-white [&>svg]:text-accent'
                     : 'border-transparent text-slate-400 hover:bg-white/[0.04] hover:text-white'
                 }`}
               >

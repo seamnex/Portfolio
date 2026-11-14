@@ -203,7 +203,10 @@ export default function ChaosPanel() {
         </div>
 
         {/* Barra de progreso del auto-healing */}
-        <div className="h-0.5 w-full bg-base-600/40" aria-hidden="true">
+        {/* Lo que falta para que vuelva va rayado en el tono del fallo —el
+            mismo rayado de la barra del incidente de la marca—, y el verde
+            lo va tapando. */}
+        <div className={`h-1 w-full ${activo ? `rayado ${tono.texto}` : 'bg-base-600/40'}`} aria-hidden="true">
           <div
             className={`h-full transition-[width] duration-200 ease-linear ${activo ? 'bg-ok' : 'w-0'}`}
             style={{ width: activo ? `${progreso}%` : 0 }}

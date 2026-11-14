@@ -34,6 +34,36 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
   }
 
+  /* Modo incidente. La misma luz de arriba, en ámbar si el simulacro
+     degrada y en coral si tira el servicio: el sitio entero acusa el
+     fallo, no solo el panel que lo inyectó. Entra en menos de un segundo
+     —una alerta no se anuncia despacio— y se va más lento, que es como
+     vuelve la calma. Va por encima del contenido y en modo `screen`: solo
+     aclara, así tiñe también la barra y las tarjetas sin tapar texto ni
+     recibir clics. Es color y opacidad, sin movimiento: se conserva con
+     movimiento reducido. */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    pointer-events: none;
+    opacity: 0;
+    mix-blend-mode: screen;
+    transition: opacity 1.8s ease-out;
+    background-image: radial-gradient(120% 32rem at 50% -7rem, var(--luz-incidente, transparent), transparent 72%);
+  }
+  html[data-incidente] body::after {
+    opacity: 1;
+    transition-duration: 0.7s;
+  }
+  html[data-incidente='degradado'] {
+    --luz-incidente: rgb(245 158 11 / 0.26);
+  }
+  html[data-incidente='caido'] {
+    --luz-incidente: rgb(251 113 133 / 0.28);
+  }
+
   /* Los números de un tablero no bailan cuando cambian. */
   .font-mono {
     font-variant-numeric: tabular-nums;
@@ -121,8 +151,13 @@
     visibility: hidden;
   }
 
+  .pastilla {
+    transition: none !important;
+  }
+
   .animate-fade-up,
   .animate-slide-in,
+  .cifra-nueva,
   .entrada > * {
     animation-name: soloOpacidad !important;
   }
@@ -164,6 +199,13 @@
   animation: soloOpacidad 0.4s ease-out backwards;
 }
 
+/* La pastilla de la pestaña activa se desliza. */
+.pastilla {
+  transition:
+    transform 0.45s var(--salida),
+    width 0.45s var(--salida);
+}
+
 /* Bloques que aparecen al llegar con el scroll. El estado oculto solo
    existe si el script marcó `html.revelar` (hay IntersectionObserver y
    no se pidió menos movimiento): sin eso, todo está a la vista. */
@@ -180,6 +222,25 @@ html.revelar [data-revelar][data-visto] {
 }
 html.revelar [data-revelar='2'][data-visto] {
   transition-delay: 90ms;
+}
+
+/* Una cifra que cambia entra desde abajo: el dato nuevo llega, no
+   aparece. Corta, porque en el tablero pasa cada pocos segundos. */
+.cifra-nueva {
+  display: inline-block;
+  animation: cifra 0.42s var(--salida) both;
+}
+@keyframes cifra {
+  from {
+    opacity: 0.25;
+    transform: translateY(0.28em);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
 }
 
 @keyframes soloOpacidad {
@@ -202,8 +263,10 @@ html.revelar [data-revelar='2'][data-visto] {
      y costaba en cada scroll. */
   .card {
     @apply relative rounded-xl border border-base-600 transition-[border-color,box-shadow,transform,background-color] duration-300;
-    background-color: rgb(17 24 39 / 0.78);
-    background-image: linear-gradient(180deg, rgb(255 255 255 / 0.04), rgb(255 255 255 / 0.008) 9rem);
+    /* Un escalón claro por encima del fondo: con el tono anterior la
+       tarjeta y la página quedaban casi en el mismo plano. */
+    background-color: rgb(19 27 44 / 0.9);
+    background-image: linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.01) 9rem);
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.045),
       0 1px 2px rgb(0 0 0 / 0.28),

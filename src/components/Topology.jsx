@@ -8,6 +8,7 @@ import { ENLACES, NODOS, nodoAfectado } from '../data/topologia.js'
 import { resultadoSimulado } from '../lib/caos.js'
 import { num } from '../data/medidas.js'
 import Bloque from './ui/Bloque'
+import Cifra from './ui/Cifra'
 
 // ─────────────────────────────────────────────────────────────
 //  Diagrama de topología en vivo.
@@ -158,9 +159,9 @@ function Nodo({ nodo, resultado, latencia, simulado, abierto, onAbrir, onCerrar,
         </div>
 
         <p className="mt-3 flex items-baseline gap-1.5">
-          <span className={`font-mono text-xl font-bold leading-none tracking-tight ${tono.valor}`}>
+          <Cifra className={`font-mono text-xl font-bold leading-none tracking-tight ${tono.valor}`}>
             {metrica.valor}
-          </span>
+          </Cifra>
           {metrica.unidad && <span className="font-mono text-xs text-slate-500">{metrica.unidad}</span>}
         </p>
 
@@ -206,9 +207,13 @@ function Nodo({ nodo, resultado, latencia, simulado, abierto, onAbrir, onCerrar,
  * el paquete no sale y la línea queda punteada: un tráfico que sigue
  * fluyendo hacia un nodo caído sería una animación mintiendo.
  */
-function Conector({ enlace, estadoDestino, t }) {
+function Conector({ enlace, estadoDestino, latencia, t }) {
   const tono = tonoDe(estadoDestino)
   const fluye = estadoDestino === 'ok' || estadoDestino === 'corriendo'
+  // El paquete tarda más en cruzar cuanto más tardó la petición real: un
+  // origen de 70 ms y una API de 400 ms no se mueven igual. Es una escala
+  // visual (1,3 a 3,7 s), no el tiempo medido, y sin dato va al medio.
+  const duracion = latencia != null ? 1.3 + (Math.min(latencia, 600) / 600) * 2.4 : 2.4
 
   return (
     <div className="relative flex h-14 items-center justify-center md:h-16" aria-hidden="true">
@@ -217,11 +222,16 @@ function Conector({ enlace, estadoDestino, t }) {
           fluye ? '' : 'border-dashed'
         }`}
       />
-      {fluye && (
-        <span
-          className={`absolute left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full animate-flow-y md:left-0 md:top-1/2 md:translate-x-0 md:-translate-y-1/2 md:animate-flow-x ${tono.paquete}`}
-        />
-      )}
+      {/* Dos paquetes a medio ciclo de distancia: se lee como tráfico y
+          no como un punto que va y vuelve. */}
+      {fluye &&
+        [0, 0.5].map((desfase) => (
+          <span
+            key={desfase}
+            className={`absolute left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full animate-flow-y md:left-0 md:top-1/2 md:translate-x-0 md:-translate-y-1/2 md:animate-flow-x ${tono.paquete}`}
+            style={{ animationDuration: `${duracion}s`, animationDelay: `-${duracion * desfase}s` }}
+          />
+        ))}
       <span className="relative rounded border border-base-600 bg-base-800 px-2 py-0.5 font-mono text-xs text-slate-500">
         {t.enlaces[enlace.id] ?? enlace.peticion}
       </span>
@@ -299,7 +309,7 @@ export default function Topology() {
             const destino = NODOS.find((n) => n.id === enlace.a)
             return (
               <Fragment key={enlace.id}>
-                <Conector enlace={enlace} estadoDestino={porId[destino.id].estado} t={t} />
+                <Conector enlace={enlace} estadoDestino={porId[destino.id].estado} latencia={porId[destino.id].latencia} t={t} />
                 <Nodo {...nodoProps(destino)} />
               </Fragment>
             )
