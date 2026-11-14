@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { HeartPulse, PlugZap, ServerCrash, ShieldCheck, Timer, TriangleAlert, Zap } from 'lucide-react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { useCaos } from '../caos/CaosProvider'
@@ -80,13 +80,10 @@ function BotonEscenario({ escenario, texto, activo, onInyectar, ui }) {
       </div>
 
       <h3 className="mt-4 text-sm font-semibold text-white">{texto.titulo}</h3>
-      <p className="mt-2 text-[13px] leading-relaxed text-slate-400">{texto.descripcion}</p>
+      <p className="mb-4 mt-2 text-[13px] leading-relaxed text-slate-400">{texto.descripcion}</p>
 
-      {/* La regla de alerta queda como detalle para quien es técnico:
-          rotulada en lenguaje simple y en segundo plano. */}
-      <p className="mt-3 w-full text-xs text-slate-500">{ui.caos.reglaAlerta}</p>
-      <p className="mb-4 mt-1 w-full whitespace-pre-wrap break-all font-mono text-xs text-slate-600">{escenario.senal}</p>
-
+      {/* La regla de alerta no va en la tarjeta: se escribe en la bitácora
+          en el momento en que dispara, que es donde dice algo. */}
       <span
         className={`mt-auto inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-[13px] font-semibold ${
           activo
@@ -118,6 +115,20 @@ export default function ChaosPanel() {
   const indiceFase = fase ? FASES.findIndex((f) => f.id === fase) : -1
   const progreso = restante != null ? Math.min(100, 100 - (restante * 1000 * 100) / autohealingMs) : 0
 
+  // El panel del simulacro aparece con el primer fallo y se queda: antes de
+  // eso era una caja que solo decía "no pasa nada" debajo de tres botones
+  // que ya lo dicen. Después conserva la bitácora, que es lo que se revisa.
+  const hayPanel = activo || registro.length > 0
+
+  // En el teléfono las tarjetas van apiladas y el panel queda fuera de
+  // pantalla: inyectar desde acá lo trae a la vista, si no el botón parece
+  // no haber hecho nada. `nearest` no mueve nada cuando ya se ve.
+  const panel = useRef(null)
+  const inyectarAca = (id) => {
+    inyectar(id)
+    requestAnimationFrame(() => panel.current?.scrollIntoView({ block: 'nearest' }))
+  }
+
   return (
     <Bloque id="caos" label={t.label} titulo={t.titulo} bajada={t.bajada}>
       {/* Aviso primero, no al pie: el visitante tiene que saber que esto es
@@ -135,14 +146,21 @@ export default function ChaosPanel() {
             escenario={e}
             texto={t.escenarios[e.id]}
             activo={escenario?.id === e.id}
-            onInyectar={inyectar}
+            onInyectar={inyectarAca}
             ui={ui}
           />
         ))}
       </div>
 
+      {/* La región viva existe desde el principio: una que nace junto con
+          su primer texto no se anuncia. */}
+      <span className="sr-only" aria-live="polite">
+        {registro.length > 0 && textoDe(registro.at(-1))}
+      </span>
+
       {/* Consola del simulacro: estado, cuenta regresiva y bitácora */}
-      <div className={`card mt-5 overflow-hidden ${activo ? tono.caja : ''}`}>
+      {hayPanel && (
+      <div ref={panel} className={`card mt-5 scroll-mb-28 scroll-mt-28 overflow-hidden ${activo ? tono.caja : ''}`}>
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-b border-base-600/70 px-5 py-4">
           <div className="flex min-w-0 items-center gap-3">
             {activo ? (
@@ -155,10 +173,7 @@ export default function ChaosPanel() {
             )}
 
             <div className="min-w-0">
-              <p
-                className={`font-mono text-[13px] font-semibold ${activo ? tono.texto : 'text-ok'}`}
-                aria-live="polite"
-              >
+              <p className={`font-mono text-[13px] font-semibold ${activo ? tono.texto : 'text-ok'}`}>
                 {activo ? t.activo(t.escenarios[escenario.id].titulo) : t.listo}
               </p>
               <p className="mt-0.5 font-mono text-xs text-slate-600">
@@ -197,24 +212,18 @@ export default function ChaosPanel() {
 
         {/* Bitácora. Es la misma que se escribe en la consola del sitio:
             un simulacro sin registro no deja nada que revisar después. */}
-        {/* Vacía ocupa una línea; el alto fijo aparece con el primer registro,
-            que es cuando hay algo que recorrer. */}
-        <div className={`overflow-y-auto p-4 font-mono text-xs leading-relaxed ${registro.length ? 'h-52' : ''}`}>
-          {registro.length === 0 ? (
-            <p className="text-slate-600">{t.bitacoraVacia}</p>
-          ) : (
-            registro.map((l) => (
-              <p key={l.id} className="flex gap-3">
-                <span className="shrink-0 text-slate-600">{reloj(l.ts)}</span>
-                <span className={NIVEL[l.nivel] ?? 'text-slate-400'}>{textoDe(l)}</span>
-              </p>
-            ))
-          )}
-          <span className="sr-only" aria-live="polite">
-            {registro.length > 0 && textoDe(registro.at(-1))}
-          </span>
+        {/* Alto fijo desde que nace: si creciera línea a línea, el panel
+            recién traído a la vista se iría saliendo por abajo. */}
+        <div className="h-52 overflow-y-auto p-4 font-mono text-xs leading-relaxed">
+          {registro.map((l) => (
+            <p key={l.id} className="flex gap-3">
+              <span className="shrink-0 text-slate-600">{reloj(l.ts)}</span>
+              <span className={NIVEL[l.nivel] ?? 'text-slate-400'}>{textoDe(l)}</span>
+            </p>
+          ))}
         </div>
       </div>
+      )}
     </Bloque>
   )
 }

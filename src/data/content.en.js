@@ -656,7 +656,6 @@ export const ui = {
     avisoPanel:
       'A chaos engineering drill is running: the flagged service is showing a deliberately fabricated value. The others are still real checks, and the measured value comes back as soon as the drill ends.',
     inyectar: 'Inject fault',
-    reglaAlerta: 'Alert rule that catches it (PromQL):',
     enCurso: 'Injected',
     activo: (titulo) => `Drill running · ${titulo}`,
     listo: 'No drill running',
@@ -664,8 +663,6 @@ export const ui = {
     fase: 'Phase',
     restaurar: 'Restore now',
     autoHealing: (s) => `Auto-healing in ${s}s`,
-    bitacoraVacia:
-      'The drill log is written here. The same lines also land in the console further down.',
     nombresFase: {
       inyeccion: 'injection',
       deteccion: 'detection',
@@ -789,7 +786,6 @@ export const ui = {
       optimizado: (antes, ahora, dias) =>
         `Optimized: ${antes} → ${ahora} (median by halves of the ${dias}d window)`,
       arranque: (primera, estable) => `Cold start ${primera} ms → ${estable} ms once warm`,
-      referenciaP50: (p50) => `Dashed line: measured p50, ${p50} ms`,
     },
     tiles: {
       despliegues: 'Deployment frequency',
@@ -826,8 +822,6 @@ export const ui = {
     abrir: 'Open runbook',
     abierto: 'Open',
     pasosCount: (n) => `${n} steps`,
-    sinPlaybook: 'No runbook open',
-    sinPlaybookDetalle: 'Pick a symptom to open its procedure.',
     elegiUno: 'Pick one of the three runbooks above to open it here.',
     listoParaCorrer: 'Open, no step executed yet.',
     paso: 'Step',
@@ -980,7 +974,7 @@ export const ui = {
       anio: 'per year',
     },
     notaTabla:
-      'Pure arithmetic: (1 − target) × period. A month is 30 days and a year 365, which is the convention these tables are published with. The highlighted column is the chosen target; the other three sit beside it on purpose, because the question that matters is not how much 99.9% allows but what the next nine costs.',
+      'Pure arithmetic: (1 − target) × period, with 30-day months and 365-day years. The other columns are there to compare: what matters is what the next nine costs.',
     presupuestoDe: (objetivo, periodo) => `${objetivo} budget ${periodo}`,
     tiles: {
       presupuesto: 'Budget',

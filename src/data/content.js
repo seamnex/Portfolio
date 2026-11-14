@@ -811,7 +811,6 @@ export const ui = {
     avisoPanel:
       'Hay un simulacro de chaos engineering en curso: el servicio marcado muestra un valor inventado a propósito. Los demás siguen siendo chequeos reales, y al terminar el simulacro vuelve a verse el valor medido.',
     inyectar: 'Inyectar fallo',
-    reglaAlerta: 'Regla de alerta que lo detecta (PromQL):',
     enCurso: 'Inyectado',
     activo: (titulo) => `Simulacro en curso · ${titulo}`,
     listo: 'Sin simulacro activo',
@@ -819,8 +818,6 @@ export const ui = {
     fase: 'Fase',
     restaurar: 'Restaurar ahora',
     autoHealing: (s) => `Auto-healing en ${s} s`,
-    bitacoraVacia:
-      'Acá se escribe la bitácora del simulacro. Las mismas líneas salen en la consola de más abajo.',
     nombresFase: {
       inyeccion: 'inyección',
       deteccion: 'detección',
@@ -964,7 +961,6 @@ export const ui = {
       optimizado: (antes, ahora, dias) =>
         `Optimizado: ${antes} → ${ahora} (mediana por mitades de la ventana de ${dias} d)`,
       arranque: (primera, estable) => `Arranque en frío ${primera} ms → ${estable} ms ya estabilizado`,
-      referenciaP50: (p50) => `Línea punteada: p50 medido, ${p50} ms`,
     },
     tiles: {
       despliegues: 'Deployment frequency',
@@ -1001,8 +997,6 @@ export const ui = {
     abrir: 'Abrir runbook',
     abierto: 'Abierto',
     pasosCount: (n) => `${n} pasos`,
-    sinPlaybook: 'Ningún runbook abierto',
-    sinPlaybookDetalle: 'Elegí un síntoma para abrir su procedimiento.',
     elegiUno: 'Elegí uno de los tres runbooks de arriba para abrirlo acá.',
     listoParaCorrer: 'Abierto, sin ejecutar ningún paso todavía.',
     paso: 'Paso',
@@ -1155,7 +1149,7 @@ export const ui = {
       anio: 'por año',
     },
     notaTabla:
-      'Aritmética pura: (1 − objetivo) × período. El mes son 30 días y el año 365, que es la convención con la que se publican estas tablas. La columna resaltada es la del objetivo elegido; las otras tres están al lado a propósito, porque la pregunta que importa no es cuánto permite 99,9 sino cuánto cuesta el nueve que sigue.',
+      'Aritmética pura: (1 − objetivo) × período, con meses de 30 días y años de 365. Las otras columnas están para comparar: lo que importa es cuánto cuesta el nueve que sigue.',
     presupuestoDe: (objetivo, periodo) => `presupuesto de ${objetivo} ${periodo}`,
     tiles: {
       presupuesto: 'Presupuesto',

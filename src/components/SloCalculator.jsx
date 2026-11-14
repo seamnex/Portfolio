@@ -245,6 +245,10 @@ export default function SloCalculator() {
           </div>
         </div>
 
+        {/* La barra y el desglose aparecen con el primer simulacro: en cero
+            eran una pista vacía y dos "0,0 s" que el tile de arriba ya dice. */}
+        {consumo.cantidad > 0 && (
+        <>
         {/* Barra del presupuesto */}
         <div className="px-5 pb-1 pt-4">
           <div className="h-2 w-full overflow-hidden rounded-full bg-base-900/70" aria-hidden="true">
@@ -272,6 +276,8 @@ export default function SloCalculator() {
             </span>
           )}
         </div>
+        </>
+        )}
 
         {/* La aclaración que hace honesto todo el panel */}
         <p className="flex items-start gap-2 border-t border-base-600/70 px-5 py-3 text-xs leading-relaxed text-slate-500">

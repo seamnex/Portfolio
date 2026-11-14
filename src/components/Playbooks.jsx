@@ -1,4 +1,5 @@
 import { Check, ChevronRight, Cpu, Database, MemoryStick, Play, RotateCcw, SquareTerminal, TriangleAlert, X } from 'lucide-react'
+import { useRef } from 'react'
 import { useContenido } from '../i18n/LanguageProvider'
 import { usePlaybook } from '../playbooks/PlaybookProvider'
 import Bloque from './ui/Bloque'
@@ -39,11 +40,9 @@ function TarjetaPlaybook({ playbook, texto, activo, onElegir, t }) {
       </div>
 
       <h3 className="mt-4 text-sm font-semibold text-white">{texto.titulo}</h3>
+      {/* La señal que dispara no va en la tarjeta: es la primera línea que
+          el runbook escribe en la consola al abrirse. */}
       <p className="mt-2 text-[13px] leading-relaxed text-slate-400">{texto.descripcion}</p>
-
-      <p className="mt-3 w-full whitespace-pre-wrap break-all font-mono text-xs text-slate-600">
-        {playbook.senal}
-      </p>
 
       <span
         className={`mt-auto inline-flex items-center gap-1.5 pt-4 font-mono text-xs ${
@@ -64,6 +63,7 @@ export default function Playbooks() {
   const { playbooks, activo, paso, total, completado, iniciar, siguiente, reiniciar, cerrar } = usePlaybook()
 
   const texto = activo ? t.escenarios[activo.id] : null
+  const panel = useRef(null)
 
   // Abrir un runbook y correr un paso escriben en la consola de más abajo.
   // Llevar la vista hasta ahí es parte de la acción: si la salida aparece
@@ -76,6 +76,9 @@ export default function Playbooks() {
       return
     }
     iniciar(id)
+    // El Command Center recién existe con un runbook abierto, y en el
+    // teléfono nace debajo de tres tarjetas apiladas: se lo trae a la vista.
+    requestAnimationFrame(() => panel.current?.scrollIntoView({ block: 'nearest' }))
   }
 
   const correrPaso = () => {
@@ -109,20 +112,23 @@ export default function Playbooks() {
       </div>
 
       {/* Command Center: el runbook abierto, paso por paso */}
-      <div className={`card mt-5 overflow-hidden ${activo ? 'border-accent/40' : ''}`}>
+      {/* Sin runbook abierto no hay panel: era una caja con tres botones
+          deshabilitados diciendo lo que las tarjetas ya dicen. La región
+          viva sí existe siempre, para que la apertura se anuncie. */}
+      <span className="sr-only" aria-live="polite">
+        {activo ? texto.titulo : ''}
+      </span>
+      {activo && (
+      <div ref={panel} className="card mt-5 scroll-mb-6 scroll-mt-28 overflow-hidden border-accent/40">
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-b border-base-600/70 px-5 py-4">
           <div className="flex min-w-0 items-center gap-3">
-            <SquareTerminal size={15} className={`shrink-0 ${activo ? 'text-accent' : 'text-slate-600'}`} aria-hidden="true" />
+            <SquareTerminal size={15} className="shrink-0 text-accent" aria-hidden="true" />
             <div className="min-w-0">
-              <p className={`font-mono text-[13px] font-semibold ${activo ? 'text-accent' : 'text-slate-500'}`} aria-live="polite">
-                {activo ? texto.titulo : t.sinPlaybook}
-              </p>
+              <p className="font-mono text-[13px] font-semibold text-accent">{texto.titulo}</p>
               <p className="mt-0.5 font-mono text-xs text-slate-600">
-                {activo
-                  ? paso < 0
-                    ? t.listoParaCorrer
-                    : `${t.paso} ${paso + 1}/${total} · ${t.escenarios[activo.id].pasos[activo.pasos[paso].id].titulo}`
-                  : t.sinPlaybookDetalle}
+                {paso < 0
+                  ? t.listoParaCorrer
+                  : `${t.paso} ${paso + 1}/${total} · ${texto.pasos[activo.pasos[paso].id].titulo}`}
               </p>
             </div>
           </div>
@@ -166,7 +172,6 @@ export default function Playbooks() {
           />
         </div>
 
-        {activo ? (
           <div className="p-5">
             <p className="mb-4 text-[13px] leading-relaxed text-slate-400">{texto.hipotesis}</p>
             <ol className="space-y-0">
@@ -214,8 +219,8 @@ export default function Playbooks() {
               {completado ? t.completado : t.salidaEnConsola}
             </p>
           </div>
-        ) : null}
       </div>
+      )}
     </Bloque>
   )
 }

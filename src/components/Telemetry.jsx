@@ -238,9 +238,9 @@ export default function Telemetry() {
           num(arranque.estable.toFixed(1), lang),
         ),
       }
-    : latencia.p50 != null
-      ? { icono: 'Gauge', tone: 'muted', texto: t.anotaciones.referenciaP50(num(latencia.p50.toFixed(1), lang)) }
-      : null
+    : // Sin arranque en frío que contar no hay anotación: el p50 ya está
+      // escrito en la fila del objetivo, y repetirlo acá era relleno.
+      null
 
   return (
     <Bloque id="telemetria" label={t.label} titulo={t.titulo} bajada={t.bajada}>
