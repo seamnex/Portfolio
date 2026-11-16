@@ -86,6 +86,25 @@ export async function chequearOrigen(recurso = '/favicon.svg') {
 }
 
 /**
+ * Devuelve la URL solo si es una página https de github.com; si no, `null`.
+ *
+ * `html_url` llega de la API, de la foto del build o del cache de sesión, y
+ * termina en un `href`. React no filtra esquemas: un `javascript:` o un
+ * dominio ajeno en ese campo sería un enlace del sitio hacia donde quiera
+ * quien haya alterado el dato. Se valida al guardar y otra vez al pintar,
+ * porque el cache de sesión no pasa por `resultadoDeCorrida`.
+ */
+export function enlaceGitHub(url) {
+  if (typeof url !== 'string') return null
+  try {
+    const u = new URL(url)
+    return u.protocol === 'https:' && u.hostname === 'github.com' ? u.href : null
+  } catch {
+    return null
+  }
+}
+
+/**
  * El resultado de una corrida de la API, con la forma que usan el panel,
  * los badges y la consola. Lo comparte el script que toma la foto en el
  * build, para que el dato de respaldo tenga exactamente la misma forma.
@@ -103,7 +122,7 @@ export function resultadoDeCorrida(corrida, repo) {
     numero: corrida.run_number,
     rama: corrida.head_branch,
     conclusion: corrida.conclusion,
-    url: corrida.html_url,
+    url: enlaceGitHub(corrida.html_url),
     fecha: corrida.updated_at,
   }
 }

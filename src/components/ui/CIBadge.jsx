@@ -1,5 +1,6 @@
 import { CircleDashed, CircleSlash, GitBranch, XCircle, CheckCircle2 } from 'lucide-react'
 import { useContenido } from '../../i18n/LanguageProvider'
+import { enlaceGitHub } from '../../lib/estado'
 
 // Estilo de badge clásico de CI —etiqueta oscura, valor de color— pero armado
 // con el dato de la API en vez de con el SVG que sirve GitHub. Así el badge
@@ -53,7 +54,10 @@ export default function CIBadge({ pipeline, className = '' }) {
 
   // Sin URL de corrida (por ejemplo mientras se consulta) el badge no debe ser
   // un enlace: un <a> sin href es un elemento que no recibe foco ni anuncia rol.
-  if (!pipeline.url) {
+  // La URL viene de la API, de la foto del build o del cache de sesión: solo
+  // se enlaza si es una página https de github.com (ver `enlaceGitHub`).
+  const url = enlaceGitHub(pipeline.url)
+  if (!url) {
     return (
       <span className={claseBase} title={pipeline.repo}>
         {contenido}
@@ -63,7 +67,7 @@ export default function CIBadge({ pipeline, className = '' }) {
 
   return (
     <a
-      href={pipeline.url}
+      href={url}
       target="_blank"
       rel="noreferrer noopener"
       title={

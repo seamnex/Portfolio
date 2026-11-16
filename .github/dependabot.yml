@@ -1,0 +1,29 @@
+# Actualizaciones de dependencias y de las actions del workflow.
+#
+# Los parches de seguridad se abren apenas hay advisory. Las actualizaciones
+# de versión esperan 14 días desde la publicación (`cooldown`): una versión
+# recién salida es justo la que puede venir comprometida, y dos semanas es
+# lo que suele tardar en detectarse.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 14
+    open-pull-requests-limit: 5
+    groups:
+      desarrollo:
+        dependency-type: development
+        update-types: [minor, patch]
+      produccion:
+        dependency-type: production
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 14

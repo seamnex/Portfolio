@@ -19,6 +19,10 @@ const ENDPOINT = FORMSPREE_ID ? `https://formspree.io/f/${FORMSPREE_ID}` : null
 // botón colgado. Se corta y se avisa, con el mailto a mano.
 const TIMEOUT_MS = 12000
 
+// Nadie escribe nombre, mail y un mensaje de diez caracteres en menos de
+// esto. Un envío más rápido es un script, igual que uno con la trampa llena.
+const MINIMO_HUMANO_MS = 3000
+
 export default function Contact() {
   const { contacto, profile, ui } = useContenido()
   const { avisar } = useAvisos()
@@ -29,6 +33,11 @@ export default function Contact() {
   const [tocados, setTocados] = useState({})
   // idle → enviando → ok | error
   const [estado, setEstado] = useState('idle')
+  // Campo trampa y hora de montaje. El envío va por fetch con un cuerpo
+  // armado a mano, así que el honeypot no viaja solo como en un <form>
+  // nativo: hay que leerlo y decidir acá.
+  const [trampa, setTrampa] = useState('')
+  const [montado] = useState(() => Date.now())
 
   const validarCampo = (campo, valor) => {
     if (campo === 'nombre' && valor.trim().length < 2) return ui.form.errores.nombre
@@ -75,6 +84,16 @@ export default function Contact() {
       // Foco al primer campo con error: quien envió con el teclado no
       // tiene por qué buscar cuál fue.
       document.getElementById(Object.keys(e2)[0])?.focus()
+      return
+    }
+
+    // Un bot recibe la misma respuesta que un envío bueno y no se manda
+    // nada: decirle que fue detectado es enseñarle a esquivar la trampa.
+    if (trampa || Date.now() - montado < MINIMO_HUMANO_MS) {
+      setEstado('ok')
+      setForm(inicial)
+      setTocados({})
+      setTimeout(() => setEstado('idle'), 8000)
       return
     }
 
@@ -202,7 +221,7 @@ export default function Contact() {
         <form onSubmit={onSubmit} noValidate className="card order-first p-6 lg:order-none">
           <div className="space-y-4">
             {/* Honeypot: los bots completan todo, las personas no ven este campo.
-                Formspree descarta el envío si viene con contenido. */}
+                Si llega con contenido, `onSubmit` no envía nada. */}
             <input
               type="text"
               name="_gotcha"
@@ -210,6 +229,8 @@ export default function Contact() {
               autoComplete="off"
               aria-hidden="true"
               className="hidden"
+              value={trampa}
+              onChange={(e) => setTrampa(e.target.value)}
             />
 
             <div>

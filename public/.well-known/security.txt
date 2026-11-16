@@ -1,0 +1,6 @@
+# Si encontraste un problema de seguridad en este sitio, escribime.
+# If you found a security issue on this site, please get in touch.
+Contact: mailto:S.egb@hotmail.es
+Expires: 2027-11-01T00:00:00.000Z
+Preferred-Languages: es, en
+Canonical: https://www.samuelsre.com.ar/.well-known/security.txt

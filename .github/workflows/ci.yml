@@ -47,10 +47,17 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        # Las actions van fijadas por SHA y no por tag: un tag se puede mover
+        # a otro commit, un SHA no. Dependabot los actualiza (ver
+        # .github/dependabot.yml).
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # El job no hace push: no hace falta dejar el token en .git/config
+          # al alcance de lo que corra después.
+          persist-credentials: false
 
       - name: Preparar Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           # Misma mayor que usa Vercel para buildear el proyecto.
           node-version: '22'
@@ -61,6 +68,12 @@ jobs:
         # está desincronizado de package.json, en vez de arreglarlo en silencio
         # y dejar que CI pruebe un árbol distinto al del repo.
         run: npm ci
+
+      - name: Auditar dependencias
+        # Falla con una vulnerabilidad alta o crítica conocida en el árbol
+        # instalado. Las moderadas no cortan el build: suelen ser del dev
+        # server y las levanta Dependabot.
+        run: npm audit --audit-level=high
 
       - name: Verificar el contenido y la paridad de idiomas
         # Antes del build: si falta una traducción o hay un link muerto, el
