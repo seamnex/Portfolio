@@ -13,6 +13,12 @@ updates:
     cooldown:
       default-days: 14
     open-pull-requests-limit: 5
+    # Los saltos de versión mayor (React 19, Tailwind 4) son migraciones, no
+    # actualizaciones: se hacen a mano. Los avisos de seguridad no pasan por
+    # este filtro y se siguen abriendo aunque el arreglo sea una mayor.
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
     groups:
       desarrollo:
         dependency-type: development
